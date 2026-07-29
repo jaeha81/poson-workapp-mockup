@@ -16,7 +16,8 @@
   --r:10px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-body{
+html{overflow-x:hidden}
+body{overflow-x:hidden;
   font-family:'Pretendard',-apple-system,'Segoe UI','Malgun Gothic',sans-serif;
   background:var(--bg); color:var(--t1); font-size:14px; line-height:1.5;
   -webkit-font-smoothing:antialiased;
@@ -295,6 +296,22 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .stab tr.low td.tot{color:var(--red)}
 .stab .prc{font-size:11.5px;color:var(--t3);font-weight:500;display:block}
 .scroll{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:var(--r)}
+/* 모바일 재고 카드 */
+.scat{font-size:12px;font-weight:800;color:var(--navy);background:var(--navy-100);
+  padding:7px 12px;border-radius:7px;margin:14px 0 8px}
+.sitem{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.sitem.zero{border-color:#FDA29B;background:#FFFCFC}
+.sitem .sh{display:flex;align-items:baseline;gap:10px}
+.sitem .sh b{font-size:14.5px;font-weight:600;flex:1;min-width:0;line-height:1.35}
+.stot2{font-size:19px;font-weight:800;letter-spacing:-.5px;flex-shrink:0}
+.stot2 small{font-size:11px;font-weight:600;color:var(--t3);margin-left:2px}
+.stot2.z{color:var(--red)}
+.sitem .sp2{font-size:11.5px;color:var(--t3);margin-top:2px}
+.swhere{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.wtag{font-size:11.5px;font-weight:700;background:var(--bg);border:1px solid var(--line);
+  color:var(--t2);padding:3px 9px;border-radius:6px}
+.wtag.wh{background:var(--navy-100);border-color:#C6D3E1;color:var(--navy)}
+.wtag.none{background:#FEF3F2;border-color:#FDA29B;color:var(--red)}
 
 .inrow{
   background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;
@@ -342,7 +359,10 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .fcase .fs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
 .fcase .fs b{font-size:14.5px;font-weight:600}
 .fcase .ff{font-size:13.5px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:5px}
-.fcase .fm{font-size:12px;color:var(--t3)}
+.fcase .fm{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fcase{cursor:pointer;transition:.12s}
+.fcase:hover{border-color:var(--navy);box-shadow:0 2px 10px rgba(16,24,40,.07)}
+.fgo{margin-left:auto;color:var(--navy);font-weight:700;white-space:nowrap}
 
 /* ===== 날짜 · 당직 ===== */
 .datebar{
@@ -548,17 +568,40 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 /* ===== 모바일 ===== */
 .burger{display:none;font-size:19px;padding:5px}
+.only-mo{display:none}
 @media (max-width:900px){
   .side{
     position:fixed;left:0;top:0;z-index:70;transform:translateX(-100%);transition:.22s;
     box-shadow:4px 0 24px rgba(0,0,0,.2)
   }
   .side.open{transform:none}
-  .burger{display:block}
+  .burger{display:block;flex-shrink:0}
   .search{display:none}
   .body{padding:14px 13px 60px}
-  .top{padding:0 13px;gap:9px}
+  .top{padding:0 10px;gap:6px}
   .top .today{display:none}
+  /* 헤더가 화면 폭을 넘겨 본문 전체가 잘리던 문제 */
+  .top h1{font-size:15px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top .sp{display:none}
+  .bell{padding:4px;flex-shrink:0}
+  .who{flex-shrink:0}
+  .who select{max-width:92px;padding:6px 4px;font-size:12px}
+  .rolebadge{font-size:9.5px;padding:3px 6px}
+  /* 목업 배너는 한 줄로 */
+  .mockbar{padding:5px 13px;font-size:11px;flex-wrap:nowrap;overflow:hidden}
+  .mockbar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* 요약 카드 2열 */
+  .stotal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .stot{min-width:0}
+  .lockbar{align-items:flex-start;flex-wrap:wrap}
+  .lockbar span{min-width:0}
+  /* 넓은 표는 감추고 카드형으로 */
+  .only-pc{display:none!important}
+  .only-mo{display:block}
+  .datebar{gap:6px;padding:8px 10px}
+  .datebar input[type=date]{flex:0 0 auto;min-width:132px;padding:7px 8px}
+  .tops{grid-template-columns:1fr}
+  .rank{padding:4px 12px}
   .mn{flex-direction:column}
   .mn-side{width:100%;position:static;display:flex;overflow-x:auto;gap:4px}
   .mn-side .t{display:none}
@@ -822,7 +865,8 @@ const CHAPTERS = [
   {no:10,t:'발주 관리', p:84, sub:'발주 등록 / 일괄 등록 / 발주서 인쇄'},
   {no:11,t:'설정 관리', p:86, sub:'연결·환경설정 / 업데이트 / A/S 업무'}
 ];
-let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null, mq:'', sq:'', date:'2026-07-29'};
+let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null,
+           mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29'};
 function moveDate(d){
   const dt = new Date(cur.date + 'T00:00:00');
   dt.setDate(dt.getDate() + d);
@@ -864,7 +908,7 @@ document.getElementById('nav').addEventListener('click', e => {
   document.querySelectorAll('#nav a').forEach(x=>x.classList.remove('on'));
   a.classList.add('on');
   cur.view = a.dataset.view; cur.filter = a.dataset.filter || null; cur.taskId = null;
-  cur.mchap = null; cur.msec = null; cur.mq = '';
+  cur.mchap = null; cur.msec = null; cur.mq = ''; cur.fcase = null;
   $('#pageTitle').textContent = a.textContent.replace(/\d+$/,'').trim();
   document.getElementById('side').classList.remove('open');
   render();
@@ -895,6 +939,7 @@ function render(){
   window.scrollTo(0, stay ? y : 0);
   lastScreen = screen;
   renderNoti(); renderWho();
+  if(typeof syncHash === 'function') syncHash();
 }
 
 /* ================= 로그인 사용자 · 권한 ================= */
@@ -968,7 +1013,7 @@ function viewStock(){
       : `<button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`}
   </div>
 
-  <div class="scroll"><table class="stab">
+  <div class="scroll only-pc"><table class="stab">
     <tr>
       <th>품목</th>
       ${LOCATIONS.map(l=>`<th class="${l.kind==='창고'?'wh':''}">${l.name}<br><span style="font-weight:400;font-size:10px;opacity:.75">${l.kind}</span></th>`).join('')}
@@ -976,6 +1021,8 @@ function viewStock(){
     </tr>
     ${rows}
   </table></div>
+
+  <div class="only-mo">${stockCards(q)}</div>
   <p style="font-size:12px;color:var(--t3);margin:9px 0 20px">
     구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>
 
@@ -992,6 +1039,33 @@ function viewStock(){
       <span class="m">${esc(u.store||'')} · ${esc(locName(u.loc))} · ${esc(u.by||'')}</span>
     </div>`;
   }).join('')}`;
+}
+
+/* 모바일에서는 8열 표 대신 품목 카드로 봅니다 */
+function stockCards(q){
+  let out = '';
+  for(const cat of ['POS장비','VAN장비','주변기기','용지']){
+    const list = ITEMS.filter(i=> i.cat===cat && (!q || i.name.includes(q)));
+    if(!list.length) continue;
+    out += `<div class="scat">${cat} · ${list.length}품목</div>`;
+    out += list.map(i=>{
+      const t = itemTot(i);
+      const where = LOCATIONS.filter(l=>(i.q[l.id]||0) > 0);
+      return `<div class="sitem ${t===0?'zero':''}">
+        <div class="sh">
+          <b>${esc(i.name)}</b>
+          <span class="stot2 ${t===0?'z':''}">${t}<small>${esc(i.unit)}</small></span>
+        </div>
+        <div class="sp2">${i.price ? i.price.toLocaleString()+'원' : '단가 미등록'}</div>
+        <div class="swhere">
+          ${where.length
+            ? where.map(l=>`<span class="wtag ${l.kind==='창고'?'wh':''}">${esc(l.name)} ${i.q[l.id]}</span>`).join('')
+            : `<span class="wtag none">재고 없음</span>`}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  return out || `<div class="empty"><div class="em">🔍</div><b>검색 결과가 없습니다</b></div>`;
 }
 
 function addItem(){
@@ -1817,7 +1891,99 @@ function viewReport(){
 }
 
 /* ================= 필드 매뉴얼 ================= */
+function openFieldCase(i){ cur.view='field'; cur.fcase = i; render(); }
+
+/* 사례 상세 — 같은 처리로 해결된 다른 건, 같은 매장 이력, 관련 매뉴얼까지 */
+function fieldDetail(){
+  const c = FIELD_CASES[cur.fcase];
+  if(!c){ cur.fcase = null; return viewField(); }
+
+  /* 같은 처리 방법으로 해결된 다른 사례 — 처리 문구 앞부분이 겹치면 같은 처리로 봄 */
+  const key = c.fix.replace(/[.,(].*$/,'').trim().slice(0,6);
+  const same = FIELD_CASES.filter((x,i)=> i!==cur.fcase && x.fix.includes(key));
+  /* 같은 매장에서 있었던 다른 건 */
+  const store = FIELD_CASES.filter((x,i)=> i!==cur.fcase && x.store === c.store);
+  /* 이 분류에 걸린 반복 패턴 */
+  const tops = FIELD_TOPS.filter(t => c.fix.includes(t.fix.replace(/\s*\(.*$/,'').slice(0,4)));
+  /* 관련 TIPS 매뉴얼 항목 */
+  const ids = CAT_LESSONS[c.cat] || [];
+  const lessons = [];
+  for(const ch of Object.keys(LESSONS))
+    for(const s of LESSONS[ch]) if(ids.includes(s.id)) lessons.push({ch:Number(ch), s});
+
+  return `
+  <button class="back" onclick="cur.fcase=null;render()">← 필드 매뉴얼</button>
+
+  <div class="lead">
+    <div class="k">${esc(c.cat)} · ${esc(c.k)} · ${esc(c.d)}</div>
+    <h2 style="font-size:19px;font-weight:700;margin-bottom:8px">${esc(c.sym)}</h2>
+    <p style="font-size:13px;color:#9DB3CC">고객이 이렇게 말했을 때</p>
+  </div>
+
+  <div class="panel">
+    <h4>🛠 이렇게 처리했습니다</h4>
+    <div class="desc" style="color:var(--t1);font-size:14.5px;line-height:1.65">${esc(c.fix)}</div>
+    <div class="tabwrap"><table class="ktab">
+      <tr><td style="width:74px">매장</td><td>${esc(c.store)}</td></tr>
+      <tr><td>처리 담당</td><td>${esc(c.by)}</td></tr>
+      <tr><td>구분</td><td>${esc(c.k)} · ${esc(c.cat)}</td></tr>
+      <tr><td>처리일</td><td>2026-${esc(c.d)}</td></tr>
+    </table></div>
+    <div class="stockbar" style="margin-top:12px">
+      <button class="btn pri" onclick="toast('업무 등록 화면에 이 사례가 첨부됩니다')">🔗 업무에 첨부</button>
+      <button class="btn" onclick="toast('즐겨찾기에 담았습니다 ⭐')">⭐ 즐겨찾기</button>
+    </div>
+  </div>
+
+  ${tops.length ? tops.map(t=>`
+    <div class="note i">
+      <b>🔁 자주 나오는 처리입니다 — 4월에만 ${t.cnt}건</b>
+      ${esc(t.note)}
+    </div>`).join('') : ''}
+
+  ${same.length ? `
+  <div class="panel">
+    <h4>같은 처리로 해결된 다른 증상 <span style="color:var(--t3)">${same.length}건</span></h4>
+    <div class="plist">
+      ${same.slice(0,8).map(x=>`
+        <button class="sec" style="margin-bottom:6px" onclick="openFieldCase(${FIELD_CASES.indexOf(x)})">
+          <span class="ck">🛠</span>
+          <span><span class="t">${esc(x.sym)}</span>
+            <span class="s">${esc(x.store)} · ${esc(x.by)} · ${esc(x.d)}</span></span>
+          <span class="go">›</span>
+        </button>`).join('')}
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:6px">
+      증상은 달라도 처리는 같습니다. 이 묶음을 알고 있으면 전화로 끝낼 수 있는 건이 늘어납니다.</p>
+  </div>` : ''}
+
+  ${store.length ? `
+  <div class="panel">
+    <h4>${esc(c.store)} 다른 이력 <span style="color:var(--t3)">${store.length}건</span></h4>
+    <div class="plist">
+      ${store.slice(0,6).map(x=>`
+        <button class="sec" style="margin-bottom:6px" onclick="openFieldCase(${FIELD_CASES.indexOf(x)})">
+          <span class="ck">🏪</span>
+          <span><span class="t">${esc(x.sym)}</span><span class="s">${esc(x.d)} · ${esc(x.by)}</span></span>
+          <span class="go">›</span>
+        </button>`).join('')}
+    </div>
+  </div>` : ''}
+
+  ${lessons.length ? `
+  <div class="rookie">
+    <b>📖 이 분류에서 같이 보면 좋은 TIPS 매뉴얼</b>
+    <div class="ls">
+      ${lessons.slice(0,5).map(f=>`
+        <button onclick="cur.fcase=null;cur.view='manual';openSec(${f.ch},'${f.s.id}')">
+          ${f.ch}장 ${f.s.no}) ${esc(f.s.title)} <span>· 원문 p.${f.s.page}</span>
+        </button>`).join('')}
+    </div>
+  </div>` : ''}`;
+}
+
 function viewField(){
+  if(cur.fcase !== null && cur.fcase !== undefined) return fieldDetail();
   const q = (cur.fq||'').trim();
   const fc = cur.fcat || '전체';
   let list = FIELD_CASES;
@@ -1859,11 +2025,11 @@ function viewField(){
   </div>
 
   ${list.length ? list.map(c=>`
-    <div class="fcase">
+    <div class="fcase" onclick="openFieldCase(${FIELD_CASES.indexOf(c)})">
       <div class="fs"><span class="cat">${esc(c.cat)}</span><span class="cat">${esc(c.k)}</span>
         <b>${esc(c.sym)}</b></div>
       <div class="ff">→ ${esc(c.fix)}</div>
-      <div class="fm">${esc(c.store)} · ${esc(c.by)} · ${esc(c.d)}</div>
+      <div class="fm">${esc(c.store)} · ${esc(c.by)} · ${esc(c.d)}<span class="fgo">자세히 ›</span></div>
     </div>`).join('')
    : `<div class="empty"><div class="em">🔍</div><b>"${esc(q)}" 결과가 없습니다</b>
       <p>다른 단어로 찾아보세요. 처리 기록이 쌓일수록 검색이 잘 됩니다.</p></div>`}
@@ -1963,8 +2129,79 @@ function toggleRole(id){
   render();
 }
 
+/* ================= 주소(해시) 연동 =================
+   뒤로가기를 누르면 앱이 꺼지는 게 아니라 이전 화면으로 돌아갑니다. */
+let hashLock = false;
+function hashOf(){
+  if(cur.taskId) return `#task/${cur.taskId}`;
+  if(cur.view === 'field' && cur.fcase != null) return `#field/${cur.fcase}`;
+  if(cur.view === 'manual'){
+    if(cur.msec)  return `#manual/${cur.mchap}/${cur.msec}`;
+    if(cur.mchap) return `#manual/${cur.mchap}`;
+    return '#manual';
+  }
+  if(cur.view === 'tasks') return '#' + (cur.filter || 'today');
+  return '#' + cur.view;
+}
+function syncHash(){
+  if(typeof location === 'undefined') return;
+  const h = hashOf();
+  if(location.hash !== h){ hashLock = true; location.hash = h; }
+}
+function applyHash(){
+  if(typeof location === 'undefined') return false;
+  const raw = (location.hash || '').replace(/^#/, '');
+  if(!raw) return false;
+  const p = raw.split('/');
+  cur.taskId = null; cur.mchap = null; cur.msec = null; cur.fcase = null;
+
+  if(p[0] === 'field' && p[1] !== undefined){
+    const i = Number(p[1]);
+    if(FIELD_CASES[i]){ cur.view = 'field'; cur.fcase = i; return true; }
+    cur.view = 'field'; return true;
+  }
+
+  if(p[0] === 'task'){
+    const id = Number(p[1]);
+    if(TASKS.some(t => t.id === id)){ cur.view = 'tasks'; cur.taskId = id; return true; }
+    return false;
+  }
+  if(p[0] === 'manual'){
+    cur.view = 'manual';
+    if(p[1]) cur.mchap = Number(p[1]);
+    if(p[2]) cur.msec = p[2];
+    return true;
+  }
+  if(['today','order','mine','unread'].includes(p[0])){
+    cur.view = 'tasks'; cur.filter = p[0]; return true;
+  }
+  if(['stock','inbound','audit','field','issues','erp','report','members'].includes(p[0])){
+    cur.view = p[0]; return true;
+  }
+  return false;
+}
+function markNav(){
+  document.querySelectorAll('#nav a').forEach(a=>{
+    const on = a.dataset.view === cur.view &&
+               (!a.dataset.filter || a.dataset.filter === cur.filter);
+    a.classList.toggle('on', !!on);
+  });
+  const h1 = document.getElementById('pageTitle');
+  if(h1){
+    const cu = [...document.querySelectorAll('#nav a')].find(a=>a.classList.contains('on'));
+    if(cu) h1.textContent = cu.textContent.replace(/\d+$/,'').trim();
+  }
+}
+if(typeof window !== 'undefined' && window.addEventListener){
+  window.addEventListener('hashchange', ()=>{
+    if(hashLock){ hashLock = false; return; }
+    if(applyHash()){ markNav(); render(); }
+  });
+}
+
 /* ================= 시작 ================= */
-bump(); render();
+applyHash();
+bump(); render(); markNav();
 </script>
 </body>
 </html>

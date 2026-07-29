@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>모바일 폭 검수용 프레임</title>
+<style>
+  html,body{margin:0;padding:0;background:#fff}
+  iframe{display:block;border:0;width:390px;height:2400px}
+</style>
+</head>
+<body>
+<iframe id="f"></iframe>
+<script>
+  /* Edge 헤드리스가 --window-size 를 무시하고 492px 로 렌더하므로,
+     정확히 390px 뷰포트를 만들기 위해 iframe 에 넣어 캡처한다. */
+  const hash = location.hash || '#today';
+  const w = new URLSearchParams(location.search).get('w');
+  if (w) document.getElementById('f').style.width = w + 'px';
+  document.getElementById('f').src = 'index.html' + hash;
+</script>
+</body>
+</html>
