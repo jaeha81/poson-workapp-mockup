@@ -311,6 +311,26 @@ input,select,textarea{font-family:inherit;font-size:14px}
   margin-top:9px;background:#F2F4F7;border:1px dashed #D0D5DD;border-radius:7px;
   padding:20px;text-align:center;color:var(--t3);font-size:12px
 }
+/* 원문 화면캡처 */
+.shots{margin-bottom:14px}
+.shots .cap{font-size:12px;color:var(--t3);margin:0 2px 7px;display:flex;align-items:center;gap:6px}
+.shots .cap b{color:var(--t2);font-size:12.5px}
+.shotimg{
+  display:block;width:100%;border:1px solid var(--line);border-radius:9px;background:#fff;
+  margin-bottom:9px;cursor:zoom-in
+}
+.shotimg:hover{border-color:var(--navy)}
+.zoomhint{
+  display:inline-block;background:var(--navy-100);color:var(--navy);font-size:11px;font-weight:700;
+  padding:2px 8px;border-radius:5px
+}
+.lbox{
+  position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;
+  place-items:center;padding:12px;overflow:auto;cursor:zoom-out
+}
+.lbox.on{display:grid}
+.lbox img{max-width:100%;height:auto;border-radius:5px}
+.lbh{position:fixed;bottom:16px;left:0;right:0;text-align:center;color:#9AA4B2;font-size:12px}
 .note{border-radius:var(--r);padding:13px 15px;margin-bottom:11px;font-size:13.5px;line-height:1.6}
 .note.w{background:#FEF3F2;border:1px solid #FDA29B;color:#B42318}
 .note.i{background:#FFFAEB;border:1px solid #FEC84B;color:#B54708}
@@ -508,6 +528,13 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 <div class="toast" id="toast"></div>
 
+<!-- 원문 화면캡처 확대 보기 -->
+<div class="lbox" id="lbox" onclick="closeShot()">
+  <img id="lboxImg" alt="">
+  <div class="lbh">화면을 터치하면 닫힙니다 · 손가락으로 확대할 수 있습니다</div>
+</div>
+
+<script src="manual-images.js"></script>
 <script>
 /* ================= 목업 데이터 ================= */
 const ME = '김대리';
@@ -1037,8 +1064,16 @@ function manualSection(){
       <b>${esc(st.t)}</b>
       <p>${esc(st.d)}</p>
       ${st.mark?`<span class="mk">화면 표시 ${esc(st.mark)}</span>`:''}
-      ${st.shot?`<div class="shot">🖼 원문 p.${s.page} 화면 캡처 — 실제 앱에서는 이 자리에 캡처가 들어갑니다</div>`:''}
     </div>`).join('');
+
+  const files = (typeof MANUAL_IMG !== 'undefined' && MANUAL_IMG[String(s.page)]) || [];
+  const shots = files.length ? `
+    <div class="shots">
+      <div class="cap"><b>원문 화면</b><span>p.${s.page} · ${files.length}장</span>
+        <span class="zoomhint">눌러서 확대</span></div>
+      ${files.map(f=>`<img class="shotimg" loading="lazy" src="assets/manual/${f}"
+         alt="${esc(s.title)} 화면 ${esc(f)}" onclick="openShot('${f}')">`).join('')}
+    </div>` : '';
 
   const table = s.table ? `
     <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:18px 0 9px">${esc(s.table.title)}</h4>
@@ -1055,6 +1090,7 @@ function manualSection(){
     <p>${esc(s.summary)}</p>
   </div>
 
+  ${shots}
   ${table}
 
   <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 9px">따라하기</h4>
@@ -1085,6 +1121,11 @@ function manualSection(){
   </div>`;
 }
 
+function openShot(f){
+  document.getElementById('lboxImg').src = 'assets/manual/' + f;
+  document.getElementById('lbox').classList.add('on');
+}
+function closeShot(){ document.getElementById('lbox').classList.remove('on'); }
 function openChap(no){ cur.mchap = no; cur.msec = null; render(); }
 function openSec(no, id){ cur.mchap = no; cur.msec = id; render(); }
 function answer(id, pick){
