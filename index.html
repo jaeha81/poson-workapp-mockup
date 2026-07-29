@@ -300,6 +300,47 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .inrow .q{background:var(--green-50);color:var(--green);font-weight:800;font-size:13px;padding:3px 10px;border-radius:6px}
 .inrow .m{font-size:12.5px;color:var(--t3)}
 
+/* ===== 날짜 · 당직 ===== */
+.datebar{
+  display:flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r);padding:9px 12px;margin-bottom:12px;flex-wrap:wrap
+}
+.datebar input[type=date]{border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-weight:600;outline:none}
+.datebar .sp{flex:1}
+.chip.duty{background:#FEF3F2;color:var(--red)}
+
+/* ===== 체크리스트 ===== */
+.cklist{display:flex;flex-direction:column;gap:2px}
+.ck{
+  display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-radius:8px;
+  font-size:13.5px;cursor:pointer;border:1px solid transparent
+}
+.ck:hover{background:var(--bg)}
+.ck.on{background:var(--green-50);border-color:#B7E4D2}
+.ck.on span{color:var(--green);text-decoration:line-through;text-decoration-color:#9ad3bd}
+.ck input{width:17px;height:17px;flex-shrink:0;margin-top:1px;accent-color:#0E9F6E}
+
+/* ===== 경비 · 영수증 ===== */
+.rcpt{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:5px}
+.rcpt.ok{background:var(--green-50);color:var(--green)}
+.rcpt.no{background:#FEF3F2;color:var(--red)}
+.shot-btn{
+  display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;
+  padding:9px 12px;font-size:12.5px;font-weight:600;color:var(--t2);background:#fff;cursor:pointer
+}
+.shot-btn:has(input:checked){background:var(--green-50);color:var(--green);border-color:#B7E4D2}
+.shot-btn input{width:15px;height:15px;accent-color:#0E9F6E}
+.rcp{font-size:13px}
+.rcp-h{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--navy);padding-bottom:9px;margin-bottom:12px}
+.rcp-h b{font-size:17px;color:var(--navy)}
+.rcp-h span{font-size:12px;color:var(--t3)}
+.rcp-f{margin-top:14px;padding-top:11px;border-top:1px solid var(--line);text-align:right;font-weight:800;font-size:15px;color:var(--navy)}
+@media print{
+  .side,.top,.mockbar,.mfoot,.mhead button{display:none!important}
+  .mask{position:static;background:none;display:block;padding:0}
+  .modal{box-shadow:none;max-width:100%}
+}
+
 /* ===== 업무 프로세스 ===== */
 .flow{display:flex;gap:6px;margin:14px 0}
 .fstep{
@@ -499,8 +540,8 @@ input,select,textarea{font-family:inherit;font-size:14px}
     <nav class="nav" id="nav">
       <div class="nav-label">업무</div>
       <a href="#" data-view="tasks" data-filter="today" class="on"><span class="ic">📋</span>오늘 업무</a>
+      <a href="#" data-view="tasks" data-filter="order"><span class="ic">📨</span>내 오더<span class="cnt" id="navShared">3</span></a>
       <a href="#" data-view="tasks" data-filter="mine"><span class="ic">✍️</span>내가 등록</a>
-      <a href="#" data-view="tasks" data-filter="shared"><span class="ic">📨</span>공유받음<span class="cnt" id="navShared">3</span></a>
       <a href="#" data-view="tasks" data-filter="unread"><span class="ic">🔴</span>미확인</a>
       <div class="nav-label">재고</div>
       <a href="#" data-view="stock"><span class="ic">📦</span>재고 현황</a>
@@ -595,12 +636,12 @@ input,select,textarea{font-family:inherit;font-size:14px}
       <div class="f">
         <label>공유 대상</label>
         <div class="shareBox">
-          <label class="opt"><input type="radio" name="aud" value="all" checked onchange="togglePeople()">
-            <span><b>전체 공유</b> — 직원 모두에게 (기본값)</span></label>
-          <label class="opt"><input type="radio" name="aud" value="sel" onchange="togglePeople()">
-            <span><b>선택 공유</b> — 지정한 직원만</span></label>
-          <div class="people" id="people" style="display:none"></div>
-          <label class="opt" style="margin:4px 0 0"><input type="checkbox" id="fAck" checked>
+          <p style="font-size:12.5px;color:var(--t2);margin-bottom:9px">
+            <b>내용은 전원이 봅니다</b> (기본값). 아래에서 <b>이 업무를 실제로 맡을 사람</b>을 고르면 그 사람들에게만 알림이 갑니다.
+            여러 명 동시에 고를 수 있습니다.</p>
+          <label style="font-size:12px;font-weight:700;color:var(--t2);display:block;margin-bottom:6px">오더 담당자 (복수 선택)</label>
+          <div class="people" id="people"></div>
+          <label class="opt" style="margin:10px 0 0"><input type="checkbox" id="fAck" checked>
             <span>확인 요청 — 확인 안 하면 리마인드 알림</span></label>
         </div>
       </div>
@@ -614,6 +655,18 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 <div class="toast" id="toast"></div>
 
+<!-- 현장 경비 정산서 -->
+<div class="mask" id="sheetMask">
+  <div class="modal" style="max-width:640px">
+    <div class="mhead"><b>현장 경비 정산서</b><button onclick="closeSheet()">✕</button></div>
+    <div class="mbody" id="sheetBody"></div>
+    <div class="mfoot">
+      <button class="btn" onclick="closeSheet()">닫기</button>
+      <button class="btn pri" onclick="window.print()">인쇄 · PDF 저장</button>
+    </div>
+  </div>
+</div>
+
 <!-- 원문 화면캡처 확대 보기 -->
 <div class="lbox" id="lbox" onclick="closeShot()">
   <img id="lboxImg" alt="">
@@ -623,6 +676,8 @@ input,select,textarea{font-family:inherit;font-size:14px}
 <script src="manual-images.js"></script>
 <script src="manual-lessons.js"></script>
 <script src="data-inventory.js"></script>
+<script src="data-field.js"></script>
+<script src="data-checklist.js"></script>
 <script>
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
@@ -638,13 +693,14 @@ let TASKS = [
     id:1, store:'산타아울렛모드니 (시흥)', kind:'AS방문', cat:'신규/교육/오픈',
     title:'오픈 지원 — 캐셔 교육 및 단축키 설정',
     body:'상품 진열 시 샘플 표기 안내.\n미등록 상품 등록 및 수정, 단축키 실시간 수정.\n핸드터미널 사용방법 안내 → 개점 및 정산마감 확인까지.',
-    author:'김두혁', due:'오늘 14:00', pri:'긴급', status:'urgent', audience:'all', mine:false,
+    author:'김두혁', date:'2026-07-29', due:'오늘 14:00', pri:'긴급', status:'doing', audience:'all', mine:false,
     acks:[
       {n:'김기홍',t:'09:15',note:''},
       {n:'장두환',t:'09:41',note:'오후에 지원 나가겠습니다'},
       {n:'김동화',t:'10:02',note:''}
     ],
     targets:['김기홍','김두혁','임영준','장두환','김동화'],
+    owners:['김두혁','장두환'], checked:{0:true,1:true,2:true},
     comments:[
       {n:'임영준',t:'09:50',b:'포스1 계산대 컨베이어벨트 불량입니다. 장애 접수 넣었습니다.'},
       {n:'김두혁',t:'10:05',b:'봉투걸이도 같이 설치하고 오겠습니다.'}
@@ -655,12 +711,13 @@ let TASKS = [
     id:2, store:'한국유통 단대점', kind:'AS방문', cat:'POS',
     title:'핸드터미널 스캔 장애',
     body:'핸드터미널 초기화 및 캘리브레이션 했으나 스캔 불가.\n중고 장비 930으로 교체 → 판매버전 7.0.8 변경 → MDB 초기화 실시.',
-    author:'김두혁', due:'오늘 11:00', pri:'높음', status:'doing', audience:'sel', mine:false,
+    author:'김두혁', date:'2026-07-29', due:'오늘 11:00', pri:'높음', status:'doing', audience:'all', mine:false,
     acks:[
       {n:'임영준',t:'08:30',note:''},{n:'장두환',t:'08:44',note:''},
       {n:'김동화',t:'09:10',note:''},{n:'김기홍',t:'09:12',note:''}
     ],
     targets:['임영준','장두환','김동화','김기홍'],
+    owners:['임영준'], checked:{0:true,1:true},
     comments:[{n:'장두환',t:'09:20',b:'매뉴얼 8장 핸디터미널 전송 대응표 보고 처리했습니다.'}],
     used:[{itemId:'A14', qty:1, loc:'lyj'}], expenses:[]
   },
@@ -668,25 +725,30 @@ let TASKS = [
     id:3, store:'OK마트 (수내)', kind:'AS방문', cat:'NETWORK',
     title:'서버PC 및 네트워크 점검',
     body:'서버PC 하드디스크 상태 불량 — 교체 필요.\n모뎀·공유기·허브가 오랫동안 겹쳐져 있어 현장 점검이 어려움. 추후 방문 일정 잡고 안내.',
-    author:'임영준', due:'내일 18:00', pri:'보통', status:'doing', audience:'all', mine:true,
+    author:'임영준', date:'2026-07-30', due:'내일 18:00', pri:'보통', status:'doing', audience:'all', mine:true,
     acks:[{n:'김두혁',t:'10:20',note:'제가 장비 챙겨서 같이 가겠습니다'}],
     targets:['김기홍','김두혁','장두환','김동화'],
+    owners:['김두혁'], checked:{},
     comments:[],
     used:[], expenses:[]
   },
   {
-    id:4, store:'하나아이스크림 망우 6호점', kind:'AS방문', cat:'POS',
+    id:4, store:'하나아이스크림 망우 6호점', kind:'당직', cat:'POS',
     title:'열쇠뭉치 고장 교체',
     body:'주소 변경 — 용마산로 96길 33 으로 방문.\n출장비 5만원 안내 완료 (입금 확인 완료).',
-    author:'김동화', due:'07-30 15:00', pri:'보통', status:'done', audience:'all', mine:false,
+    author:'김동화', date:'2026-07-25', due:'07-25 15:00', pri:'보통', status:'done', audience:'all', mine:false,
     acks:[
-      {n:'김기홍',t:'어제 16:00',note:''},{n:'김두혁',t:'어제 16:10',note:''},
-      {n:'장두환',t:'어제 16:22',note:''},{n:'임영준',t:'어제 17:30',note:''}
+      {n:'김기홍',t:'16:00',note:''},{n:'김두혁',t:'16:10',note:''},
+      {n:'장두환',t:'16:22',note:''},{n:'임영준',t:'17:30',note:''}
     ],
     targets:['김기홍','김두혁','장두환','임영준'],
+    owners:['김동화'], checked:{0:true,1:true,5:true,6:true},
     comments:[],
     used:[{itemId:'P13', qty:1, loc:'kdw'}],
-    expenses:[{kind:'출장비', amt:50000, memo:'입금 확인 완료'}]
+    expenses:[
+      {kind:'출장비', amt:50000, memo:'입금 확인 완료', receipt:true},
+      {kind:'주차/톨비', amt:8000, memo:'', receipt:true}
+    ]
   }
 ];
 
@@ -711,7 +773,15 @@ const CHAPTERS = [
   {no:10,t:'발주 관리', p:84, sub:'발주 등록 / 일괄 등록 / 발주서 인쇄'},
   {no:11,t:'설정 관리', p:86, sub:'연결·환경설정 / 업데이트 / A/S 업무'}
 ];
-let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null, mq:'', sq:''};
+let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null, mq:'', sq:'', date:'2026-07-29'};
+function moveDate(d){
+  const dt = new Date(cur.date + 'T00:00:00');
+  dt.setDate(dt.getDate() + d);
+  /* toISOString 은 UTC 로 바꿔버려서 한국시간 기준 날짜가 하루 밀린다 */
+  const p = n => String(n).padStart(2,'0');
+  cur.date = `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
+  render();
+}
 
 /* ================= 유틸 ================= */
 const $ = s => document.querySelector(s);
@@ -727,10 +797,9 @@ function iAcked(t){ return t.acks.some(a => a.n === ME); }
 function isTarget(t){ return t.targets.includes(ME); }
 function unreadNames(t){ return t.targets.filter(n => !t.acks.some(a => a.n === n)); }
 
+/* 마감임박·진행중 배지는 요청에 따라 제거. 완료만 표시 */
 function chipOf(t){
-  if(t.status==='done')  return '<span class="chip done">완료</span>';
-  if(t.status==='urgent')return '<span class="chip urgent">🔴 마감임박</span>';
-  return '<span class="chip doing">🟡 진행중</span>';
+  return t.status==='done' ? '<span class="chip done">완료</span>' : '';
 }
 function dotsOf(t){
   const total = ackTotal(t), done = ackDone(t);
@@ -939,19 +1008,32 @@ function viewAudit(){
 
 /* ================= 업무 목록 ================= */
 function filtered(){
-  if(cur.filter==='mine')   return TASKS.filter(t=>t.mine);
-  if(cur.filter==='shared') return TASKS.filter(t=>!t.mine && isTarget(t));
+  const onDate = TASKS.filter(t => !t.date || t.date === cur.date);
+  if(cur.filter==='mine')   return onDate.filter(t=>t.mine);
+  if(cur.filter==='order')  return onDate.filter(t=>(t.owners||[]).includes(ME));
   if(cur.filter==='unread') return TASKS.filter(t=>isTarget(t) && !iAcked(t) && !t.mine);
-  return TASKS;
+  return onDate;
 }
 function viewTasks(){
+  const onD = TASKS.filter(t=>!t.date || t.date===cur.date);
   const F = [
-    {k:'today', l:'전체', n:TASKS.length},
-    {k:'mine',  l:'내가 등록', n:TASKS.filter(t=>t.mine).length},
-    {k:'shared',l:'나에게 공유', n:TASKS.filter(t=>!t.mine&&isTarget(t)).length},
-    {k:'unread',l:'미확인', n:TASKS.filter(t=>isTarget(t)&&!iAcked(t)&&!t.mine).length}
+    {k:'today', l:'전체', n:onD.length},
+    {k:'order', l:'내 오더', n:onD.filter(t=>(t.owners||[]).includes(ME)).length},
+    {k:'mine',  l:'내가 등록', n:onD.filter(t=>t.mine).length},
+    {k:'unread',l:'미확인(전체 날짜)', n:TASKS.filter(t=>isTarget(t)&&!iAcked(t)&&!t.mine).length}
   ];
-  let h = '<div class="tabs">' + F.map(f =>
+  const hol = isHoliday(cur.date);
+  let h = `<div class="datebar">
+    <button class="btn" onclick="moveDate(-1)">◀</button>
+    <input type="date" id="dpick" value="${cur.date}" onchange="cur.date=this.value;render()">
+    <button class="btn" onclick="moveDate(1)">▶</button>
+    <button class="btn" onclick="cur.date='2026-07-29';render()">오늘</button>
+    ${hol?`<span class="chip duty">🗓 휴일 — 이 날 업무는 당직비 대상</span>`:''}
+    <span class="sp"></span>
+    <span style="font-size:12.5px;color:var(--t3)">${WORK_KINDS.join(' · ')}</span>
+  </div>`;
+
+  h += '<div class="tabs">' + F.map(f =>
     `<button class="tab ${cur.filter===f.k?'on':''}" onclick="setFilter('${f.k}')">${f.l}<span class="n">${f.n}</span></button>`
   ).join('') + '</div>';
 
@@ -965,13 +1047,14 @@ function viewTasks(){
     <div class="card">
       <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span>
         <span class="cat">${esc(t.kind||'')}</span><span class="cat">${esc(t.cat)}</span>
+        ${dutyBadge(t)}
         ${(t.used||[]).length?`<span class="cat">📦 ${t.used.length}</span>`:''}
         ${(t.expenses||[]).length?`<span class="cat">💳 ${t.expenses.reduce((s,e)=>s+e.amt,0).toLocaleString()}원</span>`:''}</div>
       <h3>${esc(t.title)}</h3>
       <div class="meta">
         <span>⏰ ${esc(t.due)}</span><span class="sep">·</span>
-        <span>${t.audience==='all'?'전체 공유':'<span class="to-me">🔵 나에게 공유</span>'}</span>
-        <span class="sep">·</span><span>등록 ${esc(t.author)}${t.mine?' (나)':''}</span>
+        <span>오더 <b style="color:${(t.owners||[]).includes(ME)?'var(--orange)':'var(--navy)'}">${
+          (t.owners||[]).length ? t.owners.map(n=>esc(n)+(n===ME?' (나)':'')).join(', ') : '미지정'}</b></span>
       </div>
       <div class="ackrow">
         ${dotsOf(t)}
@@ -1020,22 +1103,23 @@ function viewDetail(id){
 
   return `
   <button class="back" onclick="cur.taskId=null;render()">← 목록으로</button>
-  ${flowOf(t)}
   ${rookieBox(t)}
   <div class="panel">
     <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span>
-      <span class="cat">${esc(t.kind||'')}</span><span class="cat">${esc(t.cat)}</span></div>
+      <span class="cat">${esc(t.kind||'')}</span><span class="cat">${esc(t.cat)}</span>
+      ${dutyBadge(t)}</div>
     <h2>${esc(t.title)}</h2>
     <div class="meta">
       <span>⏰ ${esc(t.due)}</span><span class="sep">·</span>
-      <span>${t.audience==='all'?'전체 공유':'선택 공유'}</span><span class="sep">·</span>
-      <span>등록 ${esc(t.author)}</span><span class="sep">·</span><span>중요도 ${esc(t.pri)}</span>
+      <span>오더 담당 <b style="color:var(--navy)">${t.owners&&t.owners.length?t.owners.map(esc).join(', '):'미지정'}</b></span>
     </div>
     <div class="desc">${esc(t.body)}</div>
     ${t.mine ? '' : (iAcked(t)
       ? `<button class="btn ok" disabled>확인함 ✓</button>`
       : `<button class="btn pri" onclick="doAck(${t.id})">확인함 ✓</button>`)}
   </div>
+
+  ${checklistBox(t)}
 
   <div class="panel">
     <h4>확인 진행률 &nbsp;<span style="color:var(--green)">${done}/${total} (${pct}%)</span></h4>
@@ -1047,12 +1131,12 @@ function viewDetail(id){
   ${expenseBox(t)}
 
   <div class="panel">
-    <h4>💬 댓글 ${t.comments.length}</h4>
+    <h4>📝 현장 메모 ${t.comments.length}</h4>
     ${cmts}
     <div class="cmtform">
-      <input id="cmtIn" placeholder="댓글을 입력하세요 (단톡 대신 여기서 공론화)"
+      <input id="cmtIn" placeholder="현장에서 확인한 것 / 다음 방문 때 챙길 것"
              onkeydown="if(event.key==='Enter')addCmt(${t.id})">
-      <button class="btn pri" onclick="addCmt(${t.id})">등록</button>
+      <button class="btn pri" onclick="addCmt(${t.id})">남기기</button>
     </div>
   </div>
 
@@ -1061,24 +1145,54 @@ function viewDetail(id){
   </div>` : ''}`;
 }
 
-/* ===== 4단계 프로세스 : 오더 등록 → 담당자 확인 → 사용 재고 → 경비 ===== */
-function flowOf(t){
-  const s1 = true;
-  const s2 = ackDone(t) > 0;
-  const s3 = (t.used||[]).length > 0;
-  const s4 = (t.expenses||[]).length > 0;
-  const done = [s1,s2,s3,s4];
-  const curIdx = done.findIndex(x=>!x);
-  const L = [['📝','오더 등록'],['✅','담당자 확인'],['📦','사용 재고'],['💳','경비 등록']];
-  return `<div class="flow">${L.map((l,i)=>`
-    <div class="fstep ${done[i]?'on':(i===curIdx?'cur':'')}">
-      <span class="ic">${l[0]}</span><b>${l[1]}</b>
-    </div>`).join('')}</div>`;
+/* ===== 주중 / 공휴일 — 공휴일이면 당직비 대상 ===== */
+function isHoliday(dstr){
+  if(!dstr) return false;
+  if(HOLIDAYS_2026.includes(dstr)) return true;
+  const dt = new Date(dstr + 'T00:00:00');
+  if(isNaN(dt)) return false;
+  const w = dt.getDay();
+  return w === 0 || w === 6;
+}
+function dutyBadge(t){
+  if(!t.date) return '';
+  return isHoliday(t.date)
+    ? `<span class="chip duty">🗓 휴일 · 당직비 대상</span>`
+    : `<span class="cat">주중</span>`;
+}
+
+/* ===== 분류별 현장 체크리스트 ===== */
+function checklistBox(t){
+  const items = CHECKLISTS[t.cat];
+  if(!items) return '';
+  t.checked = t.checked || {};
+  const done = items.filter((_,i)=>t.checked[i]).length;
+  const pct = Math.round(done/items.length*100);
+  return `<div class="panel">
+    <h4>✅ ${esc(t.cat)} 현장 체크리스트
+      <span style="color:${done===items.length?'var(--green)':'var(--t3)'}">${done}/${items.length}</span></h4>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="cklist">
+      ${items.map((c,i)=>`
+        <label class="ck ${t.checked[i]?'on':''}">
+          <input type="checkbox" ${t.checked[i]?'checked':''} onchange="tickCheck(${t.id},${i})">
+          <span>${esc(c)}</span>
+        </label>`).join('')}
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:9px">
+      업무 분류를 "${esc(t.cat)}"로 고르면 이 목록이 자동으로 붙습니다. 신입도 빠뜨리는 것 없이 돌 수 있습니다.</p>
+  </div>`;
+}
+function tickCheck(id, i){
+  const t = TASKS.find(x=>x.id===id);
+  t.checked = t.checked || {};
+  t.checked[i] = !t.checked[i];
+  render();
 }
 
 /* ===== 신입 담당자에게 붙는 매뉴얼 추천 ===== */
 function rookieBox(t){
-  const rookieTargets = t.targets.filter(n => ROOKIES.has(n));
+  const rookieTargets = (t.owners||[]).filter(n => ROOKIES.has(n));
   if(!rookieTargets.length) return '';
   const ids = CAT_LESSONS[t.cat] || [];
   const found = [];
@@ -1152,31 +1266,83 @@ function expenseBox(t){
       <span class="st">💳</span>
       <span class="nm" style="min-width:70px">${esc(e.kind)}</span>
       <span class="cat">${e.amt.toLocaleString()}원</span>
+      <span class="rcpt ${e.receipt?'ok':'no'}">${e.receipt?'📎 영수증 첨부됨':'영수증 없음'}</span>
       <span class="tm">${esc(e.memo||'')}</span>
       ${t.mine||isAdmin() ? `<span class="rm"><button class="btn sm" onclick="delExp(${t.id},${i})">삭제</button></span>`:''}
     </div>`).join('') || '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 등록된 경비가 없습니다.</p>';
 
+  const noRcpt = (t.expenses||[]).filter(e=>!e.receipt).length;
+
   return `<div class="panel">
     <h4>💳 경비 ${sum ? `<span style="color:var(--orange)">합계 ${sum.toLocaleString()}원</span>` : ''}</h4>
     <div class="plist">${rows}</div>
+    ${sum ? `<div class="stockbar" style="margin:12px 0 0">
+      <button class="btn pri" onclick="settleSheet(${t.id})">🧾 현장 경비 정산서</button>
+      <button class="btn" onclick="toast('엑셀로 내려받습니다')">엑셀 내려받기</button>
+      ${noRcpt?`<span style="font-size:12.5px;color:var(--red)">영수증 미첨부 ${noRcpt}건</span>`:''}
+    </div>`:''}
     ${t.mine||isAdmin() ? `
-    <div class="cmtform" style="flex-wrap:wrap">
+    <div class="cmtform" style="flex-wrap:wrap;margin-top:12px">
       <select id="eKind" style="flex:0 0 120px;border:1px solid var(--line);border-radius:8px;padding:9px">
         ${EXPENSE_KINDS.map(k=>`<option>${k}</option>`).join('')}
       </select>
       <input id="eAmt" style="flex:0 0 110px" placeholder="금액(원)">
       <input id="eMemo" placeholder="비고 (선택)">
+      <label class="shot-btn">📷 영수증 촬영<input type="checkbox" id="eRcpt"></label>
       <button class="btn pri" onclick="addExp(${t.id})">경비 등록</button>
-    </div>` : ''}
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:8px">
+      실제 앱에서는 📷을 누르면 카메라가 열리고, 찍은 영수증이 스캔처럼 보정돼 첨부됩니다.</p>` : ''}
   </div>`;
 }
 function addExp(id){
   const t = TASKS.find(x=>x.id===id);
   const amt = Number(($('#eAmt').value||'').replace(/[^0-9]/g,''));
   if(!amt){ toast('금액을 입력해주세요'); return; }
-  t.expenses.push({kind:$('#eKind').value, amt, memo:$('#eMemo').value});
+  t.expenses.push({kind:$('#eKind').value, amt, memo:$('#eMemo').value, receipt:$('#eRcpt').checked});
   toast(`경비 등록 — ${amt.toLocaleString()}원`); render();
 }
+
+/* 현장 경비 정산서 */
+function settleSheet(id){
+  const t = TASKS.find(x=>x.id===id);
+  const sum = t.expenses.reduce((s,e)=>s+e.amt,0);
+  const matSum = (t.used||[]).reduce((s,u)=>{
+    const it = itemOf(u.itemId); return s + (it && it.price ? it.price*u.qty : 0);
+  },0);
+  $('#sheetBody').innerHTML = `
+    <div class="rcp">
+      <div class="rcp-h">
+        <b>현장 경비 정산서</b>
+        <span>포스온 AS부서</span>
+      </div>
+      <table class="ktab" style="margin-bottom:12px">
+        <tr><td style="width:88px">일자</td><td>${esc(t.date||'')} ${isHoliday(t.date)?'(휴일 · 당직비 대상)':'(주중)'}</td></tr>
+        <tr><td>매장</td><td>${esc(t.store)}</td></tr>
+        <tr><td>업무</td><td>${esc(t.kind)} · ${esc(t.cat)} — ${esc(t.title)}</td></tr>
+        <tr><td>담당</td><td>${(t.owners||[]).map(esc).join(', ')}</td></tr>
+      </table>
+      <div class="tabwrap"><table class="ktab">
+        <tr><th>항목</th><th>금액</th><th>영수증</th><th>비고</th></tr>
+        ${t.expenses.map(e=>`<tr>
+          <td>${esc(e.kind)}</td><td>${e.amt.toLocaleString()}원</td>
+          <td>${e.receipt?'첨부':'없음'}</td><td>${esc(e.memo||'')}</td></tr>`).join('')}
+        <tr><td class="tot">경비 합계</td><td class="tot">${sum.toLocaleString()}원</td><td colspan="2"></td></tr>
+      </table></div>
+      ${(t.used||[]).length?`
+      <h4 style="margin:16px 0 8px;font-size:13px;color:var(--t2)">사용 자재</h4>
+      <div class="tabwrap"><table class="ktab">
+        <tr><th>품목</th><th>수량</th><th>출고 위치</th><th>금액</th></tr>
+        ${t.used.map(u=>{const it=itemOf(u.itemId)||{name:'?',unit:'',price:null};
+          return `<tr><td>${esc(it.name)}</td><td>${u.qty}${esc(it.unit||'')}</td>
+            <td>${esc(locName(u.loc))}</td><td>${it.price?(it.price*u.qty).toLocaleString()+'원':'단가 미등록'}</td></tr>`;}).join('')}
+        <tr><td class="tot">자재 합계</td><td colspan="2"></td><td class="tot">${matSum?matSum.toLocaleString()+'원':'단가 미등록'}</td></tr>
+      </table></div>`:''}
+      <div class="rcp-f">경비 ${sum.toLocaleString()}원${matSum?` + 자재 ${matSum.toLocaleString()}원 = 총 ${(sum+matSum).toLocaleString()}원`:''}</div>
+    </div>`;
+  $('#sheetMask').classList.add('on');
+}
+function closeSheet(){ $('#sheetMask').classList.remove('on'); }
 function delExp(id,i){
   const t = TASKS.find(x=>x.id===id);
   t.expenses.splice(i,1); toast('경비 삭제'); render();
@@ -1222,35 +1388,30 @@ function openNew(){
   $('#mask').classList.add('on');
 }
 function closeNew(){ $('#mask').classList.remove('on'); }
-function togglePeople(){
-  const sel = document.querySelector('input[name=aud]:checked').value === 'sel';
-  $('#people').style.display = sel ? 'flex' : 'none';
-}
 function createTask(){
   const title = $('#fTitle').value.trim() || '제목 없는 업무';
-  const aud = document.querySelector('input[name=aud]:checked').value;
-  let targets;
-  if(aud === 'all') targets = STAFF.filter(n=>n!==ME);
-  else {
-    targets = [...document.querySelectorAll('#people input:checked')].map(i=>i.value);
-    if(!targets.length){ toast('공유할 직원을 1명 이상 선택해주세요'); return; }
-  }
+  const owners = [...document.querySelectorAll('#people input:checked')].map(i=>i.value);
+  if(!owners.length){ toast('오더 담당자를 1명 이상 선택해주세요'); return; }
+  const targets = STAFF.filter(n => n !== ME);   // 내용은 전원 공유
   const recv = $('#fRecv').value.trim();
+  const date = $('#fDate').value;
   TASKS.unshift({
     id: Date.now(), store: $('#fStore').value || '(매장 미지정)',
     kind: $('#fKind').value, cat: $('#fCat').value, title,
     body: (recv ? `[접수내역] ${recv}\n` : '') + ($('#fBody').value.trim() || '(내용 없음)'),
-    author: ME, due: `${$('#fDate').value} ${$('#fTime').value}`,
+    author: ME, date, due: `${date} ${$('#fTime').value}`,
     pri: document.querySelector('input[name=pri]:checked').value,
-    status: 'doing', audience: aud === 'all' ? 'all' : 'sel', mine: true,
-    acks: [], targets, comments: [], used: [], expenses: []
+    status: 'doing', audience: 'all', mine: true,
+    acks: [], targets, owners, comments: [], used: [], expenses: [], checked: {}
   });
   closeNew();
   $('#fTitle').value=''; $('#fBody').value=''; $('#fRecv').value=''; $('#fStore').value='';
-  const rk = targets.filter(n=>ROOKIES.has(n));
+  const rk = owners.filter(n=>ROOKIES.has(n));
+  const holNote = isHoliday(date) ? ' · 휴일 업무라 당직비 대상입니다' : '';
   toast(rk.length
-    ? `등록 완료 — ${targets.length}명 알림 발송 · 신입 ${rk.join(',')}에게 매뉴얼 자동 첨부 🎓`
-    : `등록 완료 — ${targets.length}명에게 푸시 알림 발송 🔔`);
+    ? `등록 완료 — 오더 ${owners.join(', ')} 알림 발송 · 신입 ${rk.join(',')}에게 매뉴얼 자동 첨부 🎓${holNote}`
+    : `등록 완료 — 오더 ${owners.join(', ')}에게 알림 발송 🔔${holNote}`);
+  cur.date = date;
   setFilter('today');
 }
 
