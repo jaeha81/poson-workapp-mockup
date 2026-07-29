@@ -247,6 +247,83 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .vbar .sp{flex:1}
 .mn-info{font-size:12px;color:var(--t3);margin-top:9px;padding:0 3px}
 
+/* ===== 로그인 사용자 / 권한 ===== */
+.who{display:flex;align-items:center;gap:7px}
+.who select{
+  border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px;
+  font-weight:600;background:#fff;outline:none;max-width:150px
+}
+.rolebadge{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.rolebadge.adm{background:var(--navy);color:#fff}
+.rolebadge.viw{background:#F2F4F7;color:var(--t2)}
+.lockbar{
+  background:#FFFAEB;border:1px solid #FEC84B;color:#B54708;border-radius:9px;
+  padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px
+}
+
+/* ===== 재고 ===== */
+.stockbar{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.stockbar .sp{flex:1}
+.stotal{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}
+.stot{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:12px 15px;flex:1;min-width:118px
+}
+.stot .k{font-size:11.5px;color:var(--t3);font-weight:700;margin-bottom:3px}
+.stot .v{font-size:20px;font-weight:800;letter-spacing:-.5px}
+.stot .v small{font-size:12px;font-weight:600;color:var(--t3);margin-left:3px}
+.stot.car{border-color:#C6D3E1;background:#FAFCFF}
+
+.stab{width:100%;border-collapse:collapse;font-size:13px;background:#fff;min-width:640px}
+.stab th{
+  background:var(--navy);color:#fff;padding:9px 8px;font-size:12px;white-space:nowrap;
+  position:sticky;top:0;z-index:2;text-align:center
+}
+.stab th:first-child{text-align:left;min-width:180px}
+.stab th.wh{background:#16304f}
+.stab td{padding:8px;border-bottom:1px solid #F2F4F7;text-align:center;white-space:nowrap}
+.stab td:first-child{text-align:left;font-weight:600;white-space:normal}
+.stab td.z{color:#D0D5DD}
+.stab td.tot{font-weight:800;background:#F9FAFB}
+.stab tr.catrow td{
+  background:var(--navy-100);color:var(--navy);font-weight:800;font-size:12px;text-align:left
+}
+.stab tr.low td.tot{color:var(--red)}
+.stab .prc{font-size:11.5px;color:var(--t3);font-weight:500;display:block}
+.scroll{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:var(--r)}
+
+.inrow{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;
+  margin-bottom:9px;display:flex;align-items:center;gap:12px;flex-wrap:wrap
+}
+.inrow .d{font-size:12.5px;color:var(--t3);font-weight:700;min-width:82px}
+.inrow .n{font-weight:600;font-size:14px}
+.inrow .q{background:var(--green-50);color:var(--green);font-weight:800;font-size:13px;padding:3px 10px;border-radius:6px}
+.inrow .m{font-size:12.5px;color:var(--t3)}
+
+/* ===== 업무 프로세스 ===== */
+.flow{display:flex;gap:6px;margin:14px 0}
+.fstep{
+  flex:1;background:#fff;border:1px solid var(--line);border-radius:9px;padding:10px 8px;
+  text-align:center;font-size:12px;color:var(--t3);position:relative
+}
+.fstep b{display:block;font-size:12.5px;margin-top:3px;color:var(--t2)}
+.fstep .ic{font-size:15px}
+.fstep.on{border-color:var(--green);background:var(--green-50)}
+.fstep.on b, .fstep.on{color:var(--green)}
+.fstep.cur{border-color:var(--orange);background:var(--orange-50)}
+.fstep.cur b, .fstep.cur{color:#B45309}
+.rookie{
+  background:#EFF8FF;border:1px solid #B2DDFF;border-radius:var(--r);padding:14px 16px;margin-bottom:14px
+}
+.rookie b{display:block;font-size:14px;color:#175CD3;margin-bottom:8px}
+.rookie .ls{display:flex;flex-direction:column;gap:6px}
+.rookie .ls button{
+  background:#fff;border:1px solid #B2DDFF;border-radius:8px;padding:9px 12px;text-align:left;
+  font-size:13px;color:#175CD3;font-weight:600;width:100%
+}
+.rookie .ls button:hover{background:#F5FAFF}
+.rookie .ls button span{color:var(--t3);font-weight:500;font-size:12px}
+
 /* ===== 매뉴얼 학습형 ===== */
 .mprog{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;margin-bottom:14px}
 .mprog .r{display:flex;align-items:center;gap:10px;margin-bottom:9px;flex-wrap:wrap}
@@ -425,12 +502,16 @@ input,select,textarea{font-family:inherit;font-size:14px}
       <a href="#" data-view="tasks" data-filter="mine"><span class="ic">✍️</span>내가 등록</a>
       <a href="#" data-view="tasks" data-filter="shared"><span class="ic">📨</span>공유받음<span class="cnt" id="navShared">3</span></a>
       <a href="#" data-view="tasks" data-filter="unread"><span class="ic">🔴</span>미확인</a>
+      <div class="nav-label">재고</div>
+      <a href="#" data-view="stock"><span class="ic">📦</span>재고 현황</a>
+      <a href="#" data-view="inbound"><span class="ic">📥</span>입고 등록</a>
+      <a href="#" data-view="audit"><span class="ic">📋</span>재고 실사</a>
       <div class="nav-label">자료</div>
       <a href="#" data-view="issues"><span class="ic">💬</span>이슈 공유</a>
       <a href="#" data-view="manual"><span class="ic">📖</span>TIPS 매뉴얼</a>
       <a href="#" data-view="erp"><span class="ic">📊</span>ERP 주간요약</a>
       <div class="nav-label">관리</div>
-      <a href="#" data-view="members"><span class="ic">👥</span>직원 관리</a>
+      <a href="#" data-view="members"><span class="ic">👥</span>직원 · 권한</a>
     </nav>
     <div class="side-foot">
       <button class="btn-new" onclick="openNew()">+ 업무 등록</button>
@@ -446,7 +527,7 @@ input,select,textarea{font-family:inherit;font-size:14px}
       <span class="sp"></span>
       <div class="search"><span>🔍</span><input placeholder="업무·매장·매뉴얼 검색"></div>
       <button class="bell" onclick="toggleNoti(event)">🔔<span class="dot" id="notiCnt">3</span></button>
-      <button class="me"><span class="av">김</span>김대리 ▾</button>
+      <span class="who" id="who"></span>
 
       <div class="noti" id="noti">
         <div class="nh">알림</div>
@@ -467,18 +548,29 @@ input,select,textarea{font-family:inherit;font-size:14px}
         <label>제목</label>
         <input type="text" id="fTitle" placeholder="예) 홈플러스 성남점 POS 3대 교체">
       </div>
+      <div class="f">
+        <label>매장 / 거래처</label>
+        <input type="text" id="fStore" placeholder="예) 산타아울렛모드니 (시흥)" list="storeList">
+        <datalist id="storeList">
+          <option>산타아울렛모드니 (시흥)</option><option>OK마트 (수내)</option>
+          <option>스마일유통</option><option>한국유통 단대점</option>
+          <option>암사큐마트</option><option>영광물류 명륜점</option>
+          <option>디데이산타아울렛 춘천</option><option>만종리퍼마켓 (제천)</option>
+        </datalist>
+      </div>
       <div class="grid2">
         <div class="f">
-          <label>매장 / 거래처</label>
-          <select id="fStore">
-            <option>홈플러스 성남점</option><option>CU 일산점</option>
-            <option>이마트 분당점</option><option>GS25 천안점</option><option>직접 입력…</option>
-          </select>
+          <label>구분</label>
+          <select id="fKind"></select>
         </div>
         <div class="f">
           <label>분류</label>
-          <select id="fCat"><option>설치</option><option>A/S</option><option>영업</option><option>정산</option><option>기타</option></select>
+          <select id="fCat"></select>
         </div>
+      </div>
+      <div class="f">
+        <label>접수내역 (고객이 말한 증상)</label>
+        <input type="text" id="fRecv" placeholder="예) 핸드터미널 스캔이 안 됩니다">
       </div>
       <div class="grid2">
         <div class="f"><label>마감일</label><input type="date" id="fDate" value="2026-07-29"></div>
@@ -507,13 +599,7 @@ input,select,textarea{font-family:inherit;font-size:14px}
             <span><b>전체 공유</b> — 직원 모두에게 (기본값)</span></label>
           <label class="opt"><input type="radio" name="aud" value="sel" onchange="togglePeople()">
             <span><b>선택 공유</b> — 지정한 직원만</span></label>
-          <div class="people" id="people" style="display:none">
-            <label><input type="checkbox" value="김실장">김실장</label>
-            <label><input type="checkbox" value="박과장">박과장</label>
-            <label><input type="checkbox" value="이기사">이기사</label>
-            <label><input type="checkbox" value="최주임">최주임</label>
-            <label><input type="checkbox" value="정사원">정사원</label>
-          </div>
+          <div class="people" id="people" style="display:none"></div>
           <label class="opt" style="margin:4px 0 0"><input type="checkbox" id="fAck" checked>
             <span>확인 요청 — 확인 안 하면 리마인드 알림</span></label>
         </div>
@@ -536,65 +622,79 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 <script src="manual-images.js"></script>
 <script src="manual-lessons.js"></script>
+<script src="data-inventory.js"></script>
 <script>
 /* ================= 목업 데이터 ================= */
-const ME = '김대리';
-const STAFF = ['김실장','박과장','이기사','최주임','정사원','김대리'];
+/* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
+let ME = '임영준';
+const STAFF = TEAM.map(t => t.name);
+const meObj  = () => TEAM.find(t => t.name === ME);
+const isAdmin = () => meObj().role === 'admin';
+/* 신입 지정 — 관리자가 직원별로 켜는 값 (목업에서는 데모 버튼으로 토글) */
+let ROOKIES = new Set();
 
 let TASKS = [
   {
-    id:1, store:'홈플러스 성남점', cat:'설치', title:'POS 3대 교체 설치 + VAN 재등록',
-    body:'기존 단말 3대 회수 후 신규 POS 설치.\nVAN 재등록 필요(KIS → 나이스 전환).\n※ 매장 영업 종료 후 14시 이후 진행',
-    author:'김실장', due:'오늘 14:00', pri:'긴급', status:'urgent', audience:'all', mine:false,
+    id:1, store:'산타아울렛모드니 (시흥)', kind:'AS방문', cat:'신규/교육/오픈',
+    title:'오픈 지원 — 캐셔 교육 및 단축키 설정',
+    body:'상품 진열 시 샘플 표기 안내.\n미등록 상품 등록 및 수정, 단축키 실시간 수정.\n핸드터미널 사용방법 안내 → 개점 및 정산마감 확인까지.',
+    author:'김두혁', due:'오늘 14:00', pri:'긴급', status:'urgent', audience:'all', mine:false,
     acks:[
-      {n:'김실장',t:'09:15',note:''},
-      {n:'이기사',t:'09:41',note:'오후에 출발하겠습니다'},
-      {n:'최주임',t:'10:02',note:''}
+      {n:'김기홍',t:'09:15',note:''},
+      {n:'장두환',t:'09:41',note:'오후에 지원 나가겠습니다'},
+      {n:'김동화',t:'10:02',note:''}
     ],
-    targets:['김실장','박과장','이기사','최주임','정사원','김대리'],
+    targets:['김기홍','김두혁','임영준','장두환','김동화'],
     comments:[
-      {n:'박과장',t:'09:50',b:'VAN 단말 재고가 1대뿐입니다. 2대 추가 필요합니다.'},
-      {n:'김실장',t:'10:05',b:'본사에 요청 넣었습니다. 오늘 오전 중 입고 예정입니다.'}
-    ]
-  },
-  {
-    id:2, store:'CU 일산점', cat:'A/S', title:'핸디터미널 매입등록 오류 A/S',
-    body:'핸디터미널로 매입(입고) 전송 시 신상품 상품명이 안 넘어옴.\n매뉴얼 8장(핸디터미널) 상품명 수신 절차 확인 후 처리.',
-    author:'박과장', due:'오늘 11:00', pri:'높음', status:'doing', audience:'sel', mine:false,
-    acks:[
-      {n:'김대리',t:'08:30',note:''},{n:'이기사',t:'08:44',note:''},
-      {n:'최주임',t:'09:10',note:''},{n:'김실장',t:'09:12',note:''},{n:'정사원',t:'09:30',note:''}
+      {n:'임영준',t:'09:50',b:'포스1 계산대 컨베이어벨트 불량입니다. 장애 접수 넣었습니다.'},
+      {n:'김두혁',t:'10:05',b:'봉투걸이도 같이 설치하고 오겠습니다.'}
     ],
-    targets:['김대리','이기사','최주임','김실장','정사원'],
-    comments:[{n:'이기사',t:'09:20',b:'상품명 수신 버튼 눌러서 해결했습니다. 매뉴얼 85p 참고.'}]
+    used:[], expenses:[]
   },
   {
-    id:3, store:'이마트 분당점', cat:'정산', title:'수수료 매장 월 정산 자료 발송',
-    body:'7월 수수료 매장 매출 분석 뽑아서 엑셀로 정리 후 점주님께 메일 발송.',
-    author:'김대리', due:'내일 18:00', pri:'보통', status:'doing', audience:'all', mine:true,
-    acks:[{n:'최주임',t:'10:20',note:'제가 자료 뽑겠습니다'}],
-    targets:['김실장','박과장','이기사','최주임','정사원'],
-    comments:[]
-  },
-  {
-    id:4, store:'GS25 천안점', cat:'영업', title:'모바일 쇼핑몰 연동 상담 방문',
-    body:'점주님이 모바일 고객카드/전자영수증 기능 문의. 데모 준비해서 방문.',
-    author:'정사원', due:'07-30 15:00', pri:'보통', status:'done', audience:'all', mine:false,
+    id:2, store:'한국유통 단대점', kind:'AS방문', cat:'POS',
+    title:'핸드터미널 스캔 장애',
+    body:'핸드터미널 초기화 및 캘리브레이션 했으나 스캔 불가.\n중고 장비 930으로 교체 → 판매버전 7.0.8 변경 → MDB 초기화 실시.',
+    author:'김두혁', due:'오늘 11:00', pri:'높음', status:'doing', audience:'sel', mine:false,
     acks:[
-      {n:'김실장',t:'어제 16:00',note:''},{n:'박과장',t:'어제 16:10',note:''},
-      {n:'이기사',t:'어제 16:22',note:''},{n:'최주임',t:'어제 17:01',note:''},
-      {n:'김대리',t:'어제 17:30',note:''}
+      {n:'임영준',t:'08:30',note:''},{n:'장두환',t:'08:44',note:''},
+      {n:'김동화',t:'09:10',note:''},{n:'김기홍',t:'09:12',note:''}
     ],
-    targets:['김실장','박과장','이기사','최주임','김대리'],
-    comments:[]
+    targets:['임영준','장두환','김동화','김기홍'],
+    comments:[{n:'장두환',t:'09:20',b:'매뉴얼 8장 핸디터미널 전송 대응표 보고 처리했습니다.'}],
+    used:[{itemId:'A14', qty:1, loc:'lyj'}], expenses:[]
+  },
+  {
+    id:3, store:'OK마트 (수내)', kind:'AS방문', cat:'NETWORK',
+    title:'서버PC 및 네트워크 점검',
+    body:'서버PC 하드디스크 상태 불량 — 교체 필요.\n모뎀·공유기·허브가 오랫동안 겹쳐져 있어 현장 점검이 어려움. 추후 방문 일정 잡고 안내.',
+    author:'임영준', due:'내일 18:00', pri:'보통', status:'doing', audience:'all', mine:true,
+    acks:[{n:'김두혁',t:'10:20',note:'제가 장비 챙겨서 같이 가겠습니다'}],
+    targets:['김기홍','김두혁','장두환','김동화'],
+    comments:[],
+    used:[], expenses:[]
+  },
+  {
+    id:4, store:'하나아이스크림 망우 6호점', kind:'AS방문', cat:'POS',
+    title:'열쇠뭉치 고장 교체',
+    body:'주소 변경 — 용마산로 96길 33 으로 방문.\n출장비 5만원 안내 완료 (입금 확인 완료).',
+    author:'김동화', due:'07-30 15:00', pri:'보통', status:'done', audience:'all', mine:false,
+    acks:[
+      {n:'김기홍',t:'어제 16:00',note:''},{n:'김두혁',t:'어제 16:10',note:''},
+      {n:'장두환',t:'어제 16:22',note:''},{n:'임영준',t:'어제 17:30',note:''}
+    ],
+    targets:['김기홍','김두혁','장두환','임영준'],
+    comments:[],
+    used:[{itemId:'P13', qty:1, loc:'kdw'}],
+    expenses:[{kind:'출장비', amt:50000, memo:'입금 확인 완료'}]
   }
 ];
 
 let NOTIS = [
-  {em:'📨', b:'김실장', t:'님이 업무를 공유했습니다 — 홈플러스 성남점 POS 3대 교체', time:'10분 전', tid:1, isNew:true},
-  {em:'💬', b:'박과장', t:'님이 댓글을 남겼습니다 — VAN 단말 재고 1대뿐입니다', time:'39분 전', tid:1, isNew:true},
+  {em:'📨', b:'김두혁', t:'님이 업무를 공유했습니다 — 산타아울렛모드니 오픈 지원', time:'10분 전', tid:1, isNew:true},
+  {em:'💬', b:'임영준', t:'님이 댓글을 남겼습니다 — 컨베이어벨트 불량 장애 접수', time:'39분 전', tid:1, isNew:true},
   {em:'🔔', b:'리마인드', t:' — 아직 확인하지 않은 업무가 1건 있습니다', time:'1시간 전', tid:1, isNew:true},
-  {em:'✅', b:'최주임', t:'님이 내 업무를 확인했습니다 — 이마트 분당점 정산', time:'어제', tid:3, isNew:false}
+  {em:'✅', b:'김두혁', t:'님이 내 업무를 확인했습니다 — OK마트 수내 네트워크 점검', time:'어제', tid:3, isNew:false}
 ];
 
 /* 매뉴얼 챕터 (PDF 목차 실측 · 문서 내부 페이지) */
@@ -611,7 +711,7 @@ const CHAPTERS = [
   {no:10,t:'발주 관리', p:84, sub:'발주 등록 / 일괄 등록 / 발주서 인쇄'},
   {no:11,t:'설정 관리', p:86, sub:'연결·환경설정 / 업데이트 / A/S 업무'}
 ];
-let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null, mq:''};
+let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null, mq:'', sq:''};
 
 /* ================= 유틸 ================= */
 const $ = s => document.querySelector(s);
@@ -654,14 +754,187 @@ document.getElementById('nav').addEventListener('click', e => {
 
 function render(){
   const v = $('#view');
-  if(cur.taskId)            v.innerHTML = viewDetail(cur.taskId);
-  else if(cur.view==='tasks')  v.innerHTML = viewTasks();
-  else if(cur.view==='manual') v.innerHTML = viewManual();
-  else if(cur.view==='issues') v.innerHTML = viewIssues();
-  else if(cur.view==='erp')    v.innerHTML = viewErp();
-  else                         v.innerHTML = viewMembers();
+  if(cur.taskId)             v.innerHTML = viewDetail(cur.taskId);
+  else if(cur.view==='tasks')   v.innerHTML = viewTasks();
+  else if(cur.view==='stock')   v.innerHTML = viewStock();
+  else if(cur.view==='inbound') v.innerHTML = viewInbound();
+  else if(cur.view==='audit')   v.innerHTML = viewAudit();
+  else if(cur.view==='manual')  v.innerHTML = viewManual();
+  else if(cur.view==='issues')  v.innerHTML = viewIssues();
+  else if(cur.view==='erp')     v.innerHTML = viewErp();
+  else                          v.innerHTML = viewMembers();
   window.scrollTo(0,0);
-  renderNoti();
+  renderNoti(); renderWho();
+}
+
+/* ================= 로그인 사용자 · 권한 ================= */
+function renderWho(){
+  const m = meObj();
+  $('#who').innerHTML = `
+    <select onchange="switchUser(this.value)" title="목업에서 계정을 바꿔가며 권한 차이를 볼 수 있습니다">
+      ${TEAM.map(t=>`<option value="${t.name}" ${t.name===ME?'selected':''}>${t.name} ${t.rank}</option>`).join('')}
+    </select>
+    <span class="rolebadge ${m.role==='admin'?'adm':'viw'}">${m.role==='admin'?'관리자':'뷰어'}</span>`;
+}
+function switchUser(n){ ME = n; cur.taskId=null; bump(); render(); toast(`${n} 계정으로 전환 — ${isAdmin()?'편집 가능':'조회만 가능'}`); }
+function lockNote(what){
+  return `<div class="lockbar">🔒 <span><b>${esc(what)}</b>은 관리자만 할 수 있습니다. 지금은 조회만 가능합니다.
+    (우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꾸면 편집 화면이 열립니다)</span></div>`;
+}
+
+/* ================= 재고 ================= */
+const locName = id => (LOCATIONS.find(l=>l.id===id)||{}).name || id;
+const itemOf  = id => ITEMS.find(i=>i.id===id);
+const itemTot = it => LOCATIONS.reduce((s,l)=> s + (it.q[l.id]||0), 0);
+
+function viewStock(){
+  const officeSum = ITEMS.reduce((s,i)=> s + (i.q.office||0), 0);
+  const carSum    = ITEMS.reduce((s,i)=> s + LOCATIONS.filter(l=>l.kind==='차량').reduce((a,l)=>a+(i.q[l.id]||0),0), 0);
+  const zero      = ITEMS.filter(i=> itemTot(i)===0).length;
+  const q = (cur.sq||'').trim();
+
+  let rows = '';
+  for(const cat of ['POS장비','VAN장비','주변기기','용지']){
+    const list = ITEMS.filter(i=> i.cat===cat && (!q || i.name.includes(q)));
+    if(!list.length) continue;
+    rows += `<tr class="catrow"><td colspan="${LOCATIONS.length+2}">${cat} · ${list.length}품목</td></tr>`;
+    rows += list.map(i=>{
+      const t = itemTot(i);
+      return `<tr class="${t===0?'low':''}">
+        <td>${esc(i.name)}
+          <span class="prc">${i.price ? i.price.toLocaleString()+'원' : '단가 미등록'} · ${i.unit}</span></td>
+        ${LOCATIONS.map(l=>{
+          const n = i.q[l.id]||0;
+          return `<td class="${n?'':'z'}">${n||'·'}</td>`;
+        }).join('')}
+        <td class="tot">${t}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  return `
+  ${isAdmin() ? '' : lockNote('품목 추가·단가 입력·수량 수정')}
+  <div class="stotal">
+    <div class="stot"><div class="k">등록 품목</div><div class="v">${ITEMS.length}<small>종</small></div></div>
+    <div class="stot"><div class="k">사무실(창고)</div><div class="v">${officeSum.toLocaleString()}<small>개</small></div></div>
+    <div class="stot car"><div class="k">차량 합계</div><div class="v">${carSum.toLocaleString()}<small>개</small></div></div>
+    <div class="stot"><div class="k">재고 0</div><div class="v" style="color:var(--red)">${zero}<small>종</small></div></div>
+  </div>
+
+  <div class="stockbar">
+    <div class="msearch" style="margin:0;flex:1;min-width:180px">
+      <span>🔍</span>
+      <input value="${esc(cur.sq||'')}" placeholder="품목 검색 (예: 멀티패드, 스티커)"
+             oninput="cur.sq=this.value" onkeydown="if(event.key==='Enter')render()">
+    </div>
+    ${isAdmin()
+      ? `<button class="btn pri" onclick="addItem()">+ 품목 추가</button>
+         <button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`
+      : `<button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`}
+  </div>
+
+  <div class="scroll"><table class="stab">
+    <tr>
+      <th>품목</th>
+      ${LOCATIONS.map(l=>`<th class="${l.kind==='창고'?'wh':''}">${l.name}<br><span style="font-weight:400;font-size:10px;opacity:.75">${l.kind}</span></th>`).join('')}
+      <th>합계</th>
+    </tr>
+    ${rows}
+  </table></div>
+  <p style="font-size:12px;color:var(--t3);margin-top:9px">
+    구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>`;
+}
+
+function addItem(){
+  const name = prompt('추가할 품목명을 입력하세요 (예: KIS-SP420QN 멀티패드)');
+  if(!name) return;
+  const cat = prompt('분류 — POS장비 / VAN장비 / 주변기기 / 용지', 'POS장비');
+  if(!cat) return;
+  const price = prompt('단가(원) — 모르면 비워두세요', '');
+  ITEMS.push({
+    id:'N'+(ITEMS.length+1), cat:['POS장비','VAN장비','주변기기','용지'].includes(cat)?cat:'주변기기',
+    name, unit:'EA', price: price ? Number(price.replace(/[^0-9]/g,'')) || null : null,
+    q:{office:0,kdh:0,kkh:0,lyj:0,kdw:0,jdh:0}
+  });
+  toast(`품목 추가 — ${name}`); render();
+}
+
+function viewInbound(){
+  return `
+  ${isAdmin() ? '' : lockNote('입고 등록')}
+  ${isAdmin() ? `
+  <div class="panel">
+    <h4>입고 등록 — 품목 · 날짜 · 수량</h4>
+    <div class="grid2">
+      <div class="f"><label>품목</label>
+        <select id="inItem">${ITEMS.map(i=>`<option value="${i.id}">[${i.cat}] ${esc(i.name)}</option>`).join('')}</select></div>
+      <div class="f"><label>입고일</label><input type="date" id="inDate" value="2026-07-29"></div>
+    </div>
+    <div class="grid2">
+      <div class="f"><label>수량</label><input type="text" id="inQty" placeholder="예: 10"></div>
+      <div class="f"><label>입고 위치</label>
+        <select id="inLoc">${LOCATIONS.map(l=>`<option value="${l.id}">${l.name} (${l.kind})</option>`).join('')}</select></div>
+    </div>
+    <div class="grid2">
+      <div class="f"><label>단가(원) — 선택</label><input type="text" id="inPrice" placeholder="비워두면 기존 단가 유지"></div>
+      <div class="f"><label>입고처</label><input type="text" id="inFrom" placeholder="예: KIS, 아이코다"></div>
+    </div>
+    <div class="f"><label>비고</label><input type="text" id="inMemo" placeholder="선택"></div>
+    <button class="btn pri" onclick="saveInbound()">입고 등록</button>
+  </div>` : ''}
+
+  <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">입고 이력</h4>
+  ${INBOUND.map(r=>{
+    const it = itemOf(r.itemId) || {name:'(삭제된 품목)', unit:''};
+    return `<div class="inrow">
+      <span class="d">${esc(r.date)}</span>
+      <span class="n">${esc(it.name)}</span>
+      <span class="q">+${r.qty} ${esc(it.unit||'')}</span>
+      <span class="m">→ ${esc(locName(r.loc))}${r.from?` · ${esc(r.from)}`:''}${r.memo?` · ${esc(r.memo)}`:''}</span>
+    </div>`;
+  }).join('')}`;
+}
+function saveInbound(){
+  const id = $('#inItem').value, qty = Number(($('#inQty').value||'').replace(/[^0-9]/g,''));
+  if(!qty){ toast('수량을 입력해주세요'); return; }
+  const loc = $('#inLoc').value, it = itemOf(id);
+  const price = ($('#inPrice').value||'').replace(/[^0-9]/g,'');
+  if(price) it.price = Number(price);
+  it.q[loc] = (it.q[loc]||0) + qty;
+  INBOUND.unshift({id:'IN'+Date.now(), date:$('#inDate').value, itemId:id, qty,
+                   loc, from:$('#inFrom').value, memo:$('#inMemo').value});
+  toast(`입고 등록 — ${it.name} ${qty}개 → ${locName(loc)}`);
+  render();
+}
+
+function viewAudit(){
+  return `
+  ${isAdmin() ? '' : lockNote('재고 실사 등록 · 엑셀 업로드')}
+  <div class="panel">
+    <h4>재고 실사 — 엑셀 업로드</h4>
+    <p style="color:var(--t2);font-size:13.5px">
+      지금 쓰시는 구글시트 「재고 실사」를 그대로 내려받아 올리면 됩니다.
+      <b>품목명 / 사무실 / 김두혁 / 김기홍 / 임영준 / 김동화 / 장두환</b> 열을 자동으로 읽습니다.
+      기존 수량과 차이나는 항목만 골라서 보여주고, 확인 후 반영합니다.
+    </p>
+    <div class="drop" ${isAdmin()?`onclick="toast('실제 앱에서는 여기서 엑셀을 읽어 차이 목록을 보여줍니다')" style="cursor:pointer"`:''}>
+      <div class="em">📥</div>
+      <b>재고 실사 엑셀을 끌어다 놓으세요</b>
+      <p>.xlsx / .csv · 목업에서는 비활성</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h4>실사 이력</h4>
+    <div class="plist">
+      <div class="prow"><span class="st">✅</span><span class="nm">2026-04-30</span>
+        <span class="tm">월말 전체 실사 · 60품목 · 김두혁</span></div>
+      <div class="prow"><span class="st">✅</span><span class="nm">2026-04-15</span>
+        <span class="tm">사무실 재고 일일체크 · 김기홍</span></div>
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:10px">
+      구글시트의 「사무실 재고 일일체크」 날짜 그리드를 대체합니다. 체크하면 날짜·담당자가 자동 기록됩니다.</p>
+  </div>`;
 }
 
 /* ================= 업무 목록 ================= */
@@ -690,7 +963,10 @@ function viewTasks(){
     const acked = iAcked(t);
     return `
     <div class="card">
-      <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span><span class="cat">${esc(t.cat)}</span></div>
+      <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span>
+        <span class="cat">${esc(t.kind||'')}</span><span class="cat">${esc(t.cat)}</span>
+        ${(t.used||[]).length?`<span class="cat">📦 ${t.used.length}</span>`:''}
+        ${(t.expenses||[]).length?`<span class="cat">💳 ${t.expenses.reduce((s,e)=>s+e.amt,0).toLocaleString()}원</span>`:''}</div>
       <h3>${esc(t.title)}</h3>
       <div class="meta">
         <span>⏰ ${esc(t.due)}</span><span class="sep">·</span>
@@ -744,8 +1020,11 @@ function viewDetail(id){
 
   return `
   <button class="back" onclick="cur.taskId=null;render()">← 목록으로</button>
+  ${flowOf(t)}
+  ${rookieBox(t)}
   <div class="panel">
-    <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span><span class="cat">${esc(t.cat)}</span></div>
+    <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span>
+      <span class="cat">${esc(t.kind||'')}</span><span class="cat">${esc(t.cat)}</span></div>
     <h2>${esc(t.title)}</h2>
     <div class="meta">
       <span>⏰ ${esc(t.due)}</span><span class="sep">·</span>
@@ -764,6 +1043,9 @@ function viewDetail(id){
     <div class="plist">${rows}</div>
   </div>
 
+  ${usedBox(t)}
+  ${expenseBox(t)}
+
   <div class="panel">
     <h4>💬 댓글 ${t.comments.length}</h4>
     ${cmts}
@@ -777,6 +1059,127 @@ function viewDetail(id){
   ${t.mine ? `<div class="panel" style="text-align:right">
     <button class="btn ok" onclick="doneTask(${t.id})">업무 완료 처리 ✓</button>
   </div>` : ''}`;
+}
+
+/* ===== 4단계 프로세스 : 오더 등록 → 담당자 확인 → 사용 재고 → 경비 ===== */
+function flowOf(t){
+  const s1 = true;
+  const s2 = ackDone(t) > 0;
+  const s3 = (t.used||[]).length > 0;
+  const s4 = (t.expenses||[]).length > 0;
+  const done = [s1,s2,s3,s4];
+  const curIdx = done.findIndex(x=>!x);
+  const L = [['📝','오더 등록'],['✅','담당자 확인'],['📦','사용 재고'],['💳','경비 등록']];
+  return `<div class="flow">${L.map((l,i)=>`
+    <div class="fstep ${done[i]?'on':(i===curIdx?'cur':'')}">
+      <span class="ic">${l[0]}</span><b>${l[1]}</b>
+    </div>`).join('')}</div>`;
+}
+
+/* ===== 신입 담당자에게 붙는 매뉴얼 추천 ===== */
+function rookieBox(t){
+  const rookieTargets = t.targets.filter(n => ROOKIES.has(n));
+  if(!rookieTargets.length) return '';
+  const ids = CAT_LESSONS[t.cat] || [];
+  const found = [];
+  for(const ch of Object.keys(LESSONS))
+    for(const s of LESSONS[ch])
+      if(ids.includes(s.id)) found.push({ch:Number(ch), s});
+  if(!found.length) return '';
+  return `
+  <div class="rookie">
+    <b>🎓 ${rookieTargets.map(esc).join(', ')} 님은 신입입니다 — "${esc(t.cat)}" 관련 매뉴얼을 먼저 보세요</b>
+    <div class="ls">
+      ${found.map(f=>`
+        <button onclick="cur.view='manual';openSec(${f.ch},'${f.s.id}')">
+          ${f.ch}장 ${f.s.no}) ${esc(f.s.title)} <span>· 원문 p.${f.s.page}</span>
+        </button>`).join('')}
+    </div>
+  </div>`;
+}
+
+/* ===== 사용 재고 · 경비 ===== */
+function usedBox(t){
+  const rows = (t.used||[]).map((u,i)=>{
+    const it = itemOf(u.itemId) || {name:'(삭제됨)', unit:'', price:null};
+    const amt = it.price ? (it.price*u.qty).toLocaleString()+'원' : '단가 미등록';
+    return `<div class="prow">
+      <span class="st">📦</span>
+      <span class="nm" style="min-width:auto;flex:1">${esc(it.name)}</span>
+      <span class="cat">${u.qty}${esc(it.unit||'')}</span>
+      <span class="tm">${esc(locName(u.loc))}에서 차감 · ${amt}</span>
+      ${t.mine||isAdmin() ? `<span class="rm"><button class="btn sm" onclick="delUsed(${t.id},${i})">삭제</button></span>`:''}
+    </div>`;
+  }).join('') || '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 등록된 사용 재고가 없습니다.</p>';
+
+  return `<div class="panel">
+    <h4>📦 이번 업무에 사용한 재고</h4>
+    <div class="plist">${rows}</div>
+    ${t.mine||isAdmin() ? `
+    <div class="cmtform" style="flex-wrap:wrap">
+      <select id="uItem" style="flex:2;min-width:180px;border:1px solid var(--line);border-radius:8px;padding:9px">
+        ${ITEMS.map(i=>`<option value="${i.id}">[${i.cat}] ${esc(i.name)}</option>`).join('')}
+      </select>
+      <input id="uQty" style="flex:0 0 70px" placeholder="수량">
+      <select id="uLoc" style="flex:0 0 120px;border:1px solid var(--line);border-radius:8px;padding:9px">
+        ${LOCATIONS.map(l=>`<option value="${l.id}" ${l.name===ME?'selected':''}>${l.name}</option>`).join('')}
+      </select>
+      <button class="btn pri" onclick="addUsed(${t.id})">재고 차감</button>
+    </div>` : ''}
+  </div>`;
+}
+function addUsed(id){
+  const t = TASKS.find(x=>x.id===id);
+  const itemId = $('#uItem').value, qty = Number(($('#uQty').value||'').replace(/[^0-9]/g,''));
+  if(!qty){ toast('수량을 입력해주세요'); return; }
+  const loc = $('#uLoc').value, it = itemOf(itemId);
+  if((it.q[loc]||0) < qty){ toast(`${locName(loc)}에 ${it.name} 재고가 ${it.q[loc]||0}개뿐입니다`); return; }
+  it.q[loc] -= qty;
+  t.used.push({itemId, qty, loc});
+  toast(`${it.name} ${qty}개 차감 — ${locName(loc)}`);
+  render();
+}
+function delUsed(id, i){
+  const t = TASKS.find(x=>x.id===id), u = t.used[i], it = itemOf(u.itemId);
+  if(it) it.q[u.loc] = (it.q[u.loc]||0) + u.qty;
+  t.used.splice(i,1); toast('사용 재고 취소 — 재고를 되돌렸습니다'); render();
+}
+
+function expenseBox(t){
+  const sum = (t.expenses||[]).reduce((s,e)=>s+e.amt,0);
+  const rows = (t.expenses||[]).map((e,i)=>`
+    <div class="prow">
+      <span class="st">💳</span>
+      <span class="nm" style="min-width:70px">${esc(e.kind)}</span>
+      <span class="cat">${e.amt.toLocaleString()}원</span>
+      <span class="tm">${esc(e.memo||'')}</span>
+      ${t.mine||isAdmin() ? `<span class="rm"><button class="btn sm" onclick="delExp(${t.id},${i})">삭제</button></span>`:''}
+    </div>`).join('') || '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 등록된 경비가 없습니다.</p>';
+
+  return `<div class="panel">
+    <h4>💳 경비 ${sum ? `<span style="color:var(--orange)">합계 ${sum.toLocaleString()}원</span>` : ''}</h4>
+    <div class="plist">${rows}</div>
+    ${t.mine||isAdmin() ? `
+    <div class="cmtform" style="flex-wrap:wrap">
+      <select id="eKind" style="flex:0 0 120px;border:1px solid var(--line);border-radius:8px;padding:9px">
+        ${EXPENSE_KINDS.map(k=>`<option>${k}</option>`).join('')}
+      </select>
+      <input id="eAmt" style="flex:0 0 110px" placeholder="금액(원)">
+      <input id="eMemo" placeholder="비고 (선택)">
+      <button class="btn pri" onclick="addExp(${t.id})">경비 등록</button>
+    </div>` : ''}
+  </div>`;
+}
+function addExp(id){
+  const t = TASKS.find(x=>x.id===id);
+  const amt = Number(($('#eAmt').value||'').replace(/[^0-9]/g,''));
+  if(!amt){ toast('금액을 입력해주세요'); return; }
+  t.expenses.push({kind:$('#eKind').value, amt, memo:$('#eMemo').value});
+  toast(`경비 등록 — ${amt.toLocaleString()}원`); render();
+}
+function delExp(id,i){
+  const t = TASKS.find(x=>x.id===id);
+  t.expenses.splice(i,1); toast('경비 삭제'); render();
 }
 function openTask(id){ cur.taskId = id; render(); }
 
@@ -811,7 +1214,13 @@ function bump(){
 }
 
 /* ================= 등록 모달 ================= */
-function openNew(){ $('#mask').classList.add('on'); }
+function openNew(){
+  $('#fKind').innerHTML = WORK_KINDS.map(k=>`<option>${k}</option>`).join('');
+  $('#fCat').innerHTML  = WORK_CATS.map(c=>`<option>${c}</option>`).join('');
+  $('#people').innerHTML = TEAM.filter(t=>t.name!==ME).map(t=>
+    `<label><input type="checkbox" value="${t.name}">${t.name}${ROOKIES.has(t.name)?' 🎓':''}</label>`).join('');
+  $('#mask').classList.add('on');
+}
 function closeNew(){ $('#mask').classList.remove('on'); }
 function togglePeople(){
   const sel = document.querySelector('input[name=aud]:checked').value === 'sel';
@@ -826,17 +1235,22 @@ function createTask(){
     targets = [...document.querySelectorAll('#people input:checked')].map(i=>i.value);
     if(!targets.length){ toast('공유할 직원을 1명 이상 선택해주세요'); return; }
   }
+  const recv = $('#fRecv').value.trim();
   TASKS.unshift({
-    id: Date.now(), store: $('#fStore').value, cat: $('#fCat').value, title,
-    body: $('#fBody').value.trim() || '(내용 없음)',
+    id: Date.now(), store: $('#fStore').value || '(매장 미지정)',
+    kind: $('#fKind').value, cat: $('#fCat').value, title,
+    body: (recv ? `[접수내역] ${recv}\n` : '') + ($('#fBody').value.trim() || '(내용 없음)'),
     author: ME, due: `${$('#fDate').value} ${$('#fTime').value}`,
     pri: document.querySelector('input[name=pri]:checked').value,
     status: 'doing', audience: aud === 'all' ? 'all' : 'sel', mine: true,
-    acks: [], targets, comments: []
+    acks: [], targets, comments: [], used: [], expenses: []
   });
   closeNew();
-  $('#fTitle').value=''; $('#fBody').value='';
-  toast(`등록 완료 — ${targets.length}명에게 푸시 알림 발송 🔔`);
+  $('#fTitle').value=''; $('#fBody').value=''; $('#fRecv').value=''; $('#fStore').value='';
+  const rk = targets.filter(n=>ROOKIES.has(n));
+  toast(rk.length
+    ? `등록 완료 — ${targets.length}명 알림 발송 · 신입 ${rk.join(',')}에게 매뉴얼 자동 첨부 🎓`
+    : `등록 완료 — ${targets.length}명에게 푸시 알림 발송 🔔`);
   setFilter('today');
 }
 
@@ -1088,27 +1502,54 @@ function viewErp(){
   </div>`;
 }
 function viewMembers(){
-  const rows = [
-    {n:'김실장', r:'관리자', team:'운영', e:'kim@poson.co.kr'},
-    {n:'박과장', r:'엔지니어', team:'기술', e:'park@poson.co.kr'},
-    {n:'이기사', r:'엔지니어', team:'기술', e:'lee@poson.co.kr'},
-    {n:'최주임', r:'영업', team:'영업', e:'choi@poson.co.kr'},
-    {n:'정사원', r:'영업', team:'영업', e:'jung@poson.co.kr'},
-    {n:'김대리 (나)', r:'엔지니어', team:'기술', e:'me@poson.co.kr'}
-  ];
   return `
+  ${isAdmin() ? '' : lockNote('권한 변경 · 신입 지정 · 직원 초대')}
   <div class="panel">
-    <h4>직원 ${rows.length}명 — 관리자가 이메일로 초대하면 가입됩니다 (외부인 가입 차단)</h4>
+    <h4>AS부서 ${TEAM.length}명 — 관리자가 이메일로 초대해야 가입됩니다 (외부인 가입 차단)</h4>
     <div class="plist">
-      ${rows.map(r=>`<div class="prow">
-        <span class="av">${esc(r.n[0])}</span>
-        <span class="nm" style="min-width:80px">${esc(r.n)}</span>
-        <span class="cat">${esc(r.r)}</span>
-        <span class="tm">${esc(r.team)}팀 · ${esc(r.e)}</span>
+      ${TEAM.map(t=>`<div class="prow">
+        <span class="av">${esc(t.name[0])}</span>
+        <span class="nm" style="min-width:86px">${esc(t.name)} ${esc(t.rank)}${t.name===ME?' (나)':''}</span>
+        <span class="rolebadge ${t.role==='admin'?'adm':'viw'}">${t.role==='admin'?'관리자':'뷰어'}</span>
+        ${ROOKIES.has(t.name)?'<span class="cat" style="color:#175CD3;border-color:#B2DDFF">🎓 신입</span>':''}
+        <span class="tm">차량 재고 ${ITEMS.reduce((s,i)=>s+(i.q[t.id]||0),0)}개</span>
+        ${isAdmin()?`<span class="rm">
+          <button class="btn sm" onclick="toggleRookie('${t.name}')">${ROOKIES.has(t.name)?'신입 해제':'신입 지정'}</button>
+          <button class="btn sm" onclick="toggleRole('${t.id}')">${t.role==='admin'?'뷰어로':'관리자로'}</button>
+        </span>`:''}
       </div>`).join('')}
     </div>
-    <div style="margin-top:14px"><button class="btn pri" onclick="toast('초대 메일을 발송했습니다 📧')">+ 직원 초대</button></div>
+    ${isAdmin()?`<div style="margin-top:14px">
+      <button class="btn pri" onclick="toast('초대 메일을 발송했습니다 📧')">+ 직원 초대</button></div>`:''}
+  </div>
+
+  <div class="panel">
+    <h4>권한이 하는 일</h4>
+    <div class="tabwrap"><table class="ktab">
+      <tr><th>기능</th><th>관리자</th><th>일반 직원 (뷰어)</th></tr>
+      <tr><td>업무 등록 · 공유</td><td>○</td><td>○</td></tr>
+      <tr><td>담당자 확인 · 댓글</td><td>○</td><td>○</td></tr>
+      <tr><td>내 업무의 사용 재고 · 경비 등록</td><td>○</td><td>○ (본인 업무만)</td></tr>
+      <tr><td>재고 현황 조회</td><td>○</td><td>○</td></tr>
+      <tr><td>품목 추가 · 단가 입력</td><td>○</td><td>✕</td></tr>
+      <tr><td>입고 등록</td><td>○</td><td>✕</td></tr>
+      <tr><td>재고 실사 · 엑셀 업로드</td><td>○</td><td>✕</td></tr>
+      <tr><td>직원 초대 · 권한 · 신입 지정</td><td>○</td><td>✕</td></tr>
+    </table></div>
+    <p style="font-size:12px;color:var(--t3);margin-top:10px">
+      🎓 신입으로 지정된 직원에게 업무를 공유하면, 그 업무의 분류에 맞는 매뉴얼 항목이 자동으로 붙습니다.</p>
   </div>`;
+}
+function toggleRookie(n){
+  if(ROOKIES.has(n)){ ROOKIES.delete(n); toast(`${n} 신입 해제`); }
+  else { ROOKIES.add(n); toast(`${n} 신입 지정 — 업무 공유 시 매뉴얼이 자동으로 붙습니다`); }
+  render();
+}
+function toggleRole(id){
+  const t = TEAM.find(x=>x.id===id);
+  t.role = t.role==='admin' ? 'engineer' : 'admin';
+  toast(`${t.name} → ${t.role==='admin'?'관리자':'뷰어'}`);
+  render();
 }
 
 /* ================= 시작 ================= */
