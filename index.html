@@ -986,12 +986,13 @@ function manualSection(){
          alt="${esc(s.title)} 화면 ${esc(f)}" onclick="openShot('${f}')">`).join('')}
     </div>` : '';
 
-  const table = s.table ? `
-    <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:18px 0 9px">${esc(s.table.title)}</h4>
+  const tableOf = t => !t ? '' : `
+    <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:18px 0 9px">${esc(t.title)}</h4>
     <div class="tabwrap"><table class="ktab">
-      <tr>${s.table.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>
-      ${s.table.rows.map(r=>`<tr>${r.map(cd=>`<td>${esc(cd)}</td>`).join('')}</tr>`).join('')}
-    </table></div>` : '';
+      <tr>${t.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr>
+      ${t.rows.map(r=>`<tr>${r.map(cd=>`<td>${esc(cd)}</td>`).join('')}</tr>`).join('')}
+    </table></div>`;
+  const table = tableOf(s.table) + tableOf(s.table2);
 
   return `
   <button class="back" onclick="cur.msec=null;render()">← ${c.no}. ${esc(c.t)}</button>
