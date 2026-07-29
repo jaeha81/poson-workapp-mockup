@@ -867,7 +867,15 @@ document.getElementById('nav').addEventListener('click', e => {
   render();
 });
 
+let lastScreen = null;
 function render(){
+  /* 같은 화면에서 값만 바뀐 경우에는 스크롤을 그대로 둡니다.
+     안 그러면 확인·재고·경비를 누를 때마다 맨 위로 튑니다. */
+  const screen = cur.taskId ? 'task:'+cur.taskId
+               : [cur.view, cur.filter, cur.mchap, cur.msec].join(':');
+  const stay = screen === lastScreen;
+  const y = (typeof window !== 'undefined' && window.scrollY) || 0;
+
   const v = $('#view');
   if(cur.taskId)             v.innerHTML = viewDetail(cur.taskId);
   else if(cur.view==='tasks')   v.innerHTML = viewTasks();
@@ -880,7 +888,9 @@ function render(){
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
   else if(cur.view==='erp')     v.innerHTML = viewErp();
   else                          v.innerHTML = viewMembers();
-  window.scrollTo(0,0);
+
+  window.scrollTo(0, stay ? y : 0);
+  lastScreen = screen;
   renderNoti(); renderWho();
 }
 
@@ -1237,11 +1247,11 @@ function checklistBox(t){
   const pct = Math.round(done/items.length*100);
   return `<div class="panel">
     <h4>✅ ${esc(t.cat)} 현장 체크리스트
-      <span style="color:${done===items.length?'var(--green)':'var(--t3)'}">${done}/${items.length}</span></h4>
-    <div class="bar"><i style="width:${pct}%"></i></div>
+      <span id="ckcnt_${t.id}" style="color:${done===items.length?'var(--green)':'var(--t3)'}">${done}/${items.length}</span></h4>
+    <div class="bar"><i id="ckbar_${t.id}" style="width:${pct}%"></i></div>
     <div class="cklist">
       ${items.map((c,i)=>`
-        <label class="ck ${t.checked[i]?'on':''}">
+        <label class="ck ${t.checked[i]?'on':''}" id="ck_${t.id}_${i}">
           <input type="checkbox" ${t.checked[i]?'checked':''} onchange="tickCheck(${t.id},${i})">
           <span>${esc(c)}</span>
         </label>`).join('')}
@@ -1250,11 +1260,26 @@ function checklistBox(t){
       업무 분류를 "${esc(t.cat)}"로 고르면 이 목록이 자동으로 붙습니다. 신입도 빠뜨리는 것 없이 돌 수 있습니다.</p>
   </div>`;
 }
+/* 체크는 화면을 다시 그리지 않고 그 자리에서 바꿉니다 (스크롤 위치 유지) */
 function tickCheck(id, i){
   const t = TASKS.find(x=>x.id===id);
   t.checked = t.checked || {};
   t.checked[i] = !t.checked[i];
-  render();
+
+  const items = CHECKLISTS[t.cat] || [];
+  const done = items.filter((_,k)=>t.checked[k]).length;
+  const all = done === items.length;
+
+  const lab = document.getElementById(`ck_${id}_${i}`);
+  if(lab) lab.className = 'ck' + (t.checked[i] ? ' on' : '');
+
+  const cnt = document.getElementById(`ckcnt_${id}`);
+  if(cnt){ cnt.textContent = `${done}/${items.length}`; cnt.style.color = all ? 'var(--green)' : 'var(--t3)'; }
+
+  const bar = document.getElementById(`ckbar_${id}`);
+  if(bar) bar.style.width = Math.round(done/items.length*100) + '%';
+
+  if(all) toast('체크리스트 완료 ✓');
 }
 
 /* ===== 신입 담당자에게 붙는 매뉴얼 추천 ===== */
