@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>포스온 업무관리 — 화면 초안 (Mockup v1)</title>
+<style>
+:root{
+  --navy:#1E3A5F; --navy-700:#16304f; --navy-100:#E8EDF3;
+  --orange:#F97316; --orange-50:#FFF3E9;
+  --green:#0E9F6E; --green-50:#E8F7F1;
+  --red:#E02424;
+  --bg:#F6F7F9; --card:#fff; --line:#E4E7EC;
+  --t1:#101828; --t2:#475467; --t3:#98A2B3;
+  --r:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Pretendard',-apple-system,'Segoe UI','Malgun Gothic',sans-serif;
+  background:var(--bg); color:var(--t1); font-size:14px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select,textarea{font-family:inherit;font-size:14px}
+
+/* ===== 레이아웃 ===== */
+.app{display:flex;min-height:100vh}
+
+/* ===== 사이드바 ===== */
+.side{
+  width:220px;flex-shrink:0;background:var(--navy);color:#fff;
+  display:flex;flex-direction:column;position:sticky;top:0;height:100vh
+}
+.side .brand{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
+.side .brand b{display:block;font-size:17px;letter-spacing:-.3px}
+.side .brand span{font-size:11px;color:#9DB3CC}
+.nav{padding:12px 10px;flex:1;overflow-y:auto}
+.nav-label{font-size:10px;color:#7E9AB8;padding:12px 10px 6px;letter-spacing:.5px}
+.nav a{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;
+  color:#D3DEEA;text-decoration:none;font-size:13.5px;margin-bottom:2px
+}
+.nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav a.on{background:#fff;color:var(--navy);font-weight:600}
+.nav a .ic{width:16px;text-align:center;font-size:14px}
+.nav a .cnt{
+  margin-left:auto;background:var(--orange);color:#fff;font-size:10.5px;
+  font-weight:700;padding:1px 6px;border-radius:9px
+}
+.nav a.on .cnt{background:var(--orange)}
+.side-foot{padding:12px 14px 16px;border-top:1px solid rgba(255,255,255,.12)}
+.btn-new{
+  width:100%;background:var(--orange);color:#fff;font-weight:700;font-size:14px;
+  padding:11px;border-radius:9px
+}
+.btn-new:hover{background:#ea6a0c}
+
+/* ===== 본문 ===== */
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.top{
+  background:#fff;border-bottom:1px solid var(--line);padding:0 22px;height:58px;
+  display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20
+}
+.top h1{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.top .today{font-size:12.5px;color:var(--t3)}
+.top .sp{flex:1}
+.search{
+  display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);
+  border-radius:8px;padding:6px 10px;width:240px
+}
+.search input{border:none;background:none;outline:none;width:100%;font-size:13px}
+.bell{position:relative;font-size:17px;padding:6px}
+.bell .dot{
+  position:absolute;top:1px;right:0;background:var(--orange);color:#fff;font-size:9.5px;
+  font-weight:700;min-width:15px;height:15px;line-height:15px;border-radius:8px;text-align:center
+}
+.me{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:5px 8px;border-radius:8px}
+.me:hover{background:var(--bg)}
+.av{
+  width:27px;height:27px;border-radius:50%;background:var(--navy-100);color:var(--navy);
+  font-size:11.5px;font-weight:700;display:grid;place-items:center
+}
+.body{padding:20px 22px 60px;max-width:1080px;width:100%}
+
+/* ===== 필터탭 ===== */
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{
+  padding:7px 13px;border-radius:20px;font-size:13px;color:var(--t2);
+  background:#fff;border:1px solid var(--line);font-weight:500
+}
+.tab.on{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.tab .n{opacity:.7;margin-left:4px;font-size:12px}
+
+/* ===== 업무 카드 ===== */
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:15px 17px;margin-bottom:11px;transition:.12s
+}
+.card:hover{border-color:#C6D3E1;box-shadow:0 2px 10px rgba(16,24,40,.06)}
+.card .r1{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
+.chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
+.chip.urgent{background:#FDECEC;color:var(--red)}
+.chip.doing{background:#FFF7E6;color:#B45309}
+.chip.done{background:var(--green-50);color:var(--green)}
+.store{font-size:13px;font-weight:700;color:var(--navy)}
+.cat{font-size:11px;color:var(--t3);border:1px solid var(--line);padding:2px 7px;border-radius:5px}
+.card h3{font-size:15.5px;font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.meta{font-size:12.5px;color:var(--t2);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.meta .to-me{color:var(--orange);font-weight:700}
+.sep{color:var(--t3)}
+.ackrow{
+  display:flex;align-items:center;gap:10px;margin-top:11px;padding-top:11px;
+  border-top:1px dashed var(--line);flex-wrap:wrap
+}
+.dots{display:flex;gap:3px}
+.dots i{width:8px;height:8px;border-radius:50%;background:#DDE2E8;display:block}
+.dots i.f{background:var(--green)}
+.ackn{font-size:12.5px;color:var(--t2);font-weight:600}
+.unread{font-size:12px;color:var(--t3)}
+.acts{margin-left:auto;display:flex;gap:6px}
+.btn{
+  font-size:12.5px;padding:6px 12px;border-radius:7px;border:1px solid var(--line);
+  background:#fff;font-weight:600;color:var(--t2)
+}
+.btn:hover{background:var(--bg)}
+.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn.pri:hover{background:var(--navy-700)}
+.btn.ok{background:var(--green-50);color:var(--green);border-color:#B7E4D2}
+.btn.ok:hover{background:#dcf3ea}
+
+/* ===== 상세 ===== */
+.back{font-size:13px;color:var(--t2);margin-bottom:12px;display:inline-flex;gap:5px;align-items:center}
+.back:hover{color:var(--navy)}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.panel h2{font-size:19px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
+.desc{color:var(--t2);font-size:14px;background:var(--bg);padding:12px 14px;border-radius:8px;margin:12px 0;white-space:pre-line}
+.panel h4{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:10px}
+.bar{height:8px;background:#EDF0F3;border-radius:5px;overflow:hidden;margin:6px 0 14px}
+.bar > i{display:block;height:100%;background:var(--green);border-radius:5px;transition:width .35s}
+.plist{display:flex;flex-direction:column;gap:2px}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid #F2F4F7;font-size:13.5px}
+.prow:last-child{border-bottom:none}
+.prow .st{width:17px;text-align:center}
+.prow .nm{font-weight:600;min-width:56px}
+.prow .tm{color:var(--t3);font-size:12.5px}
+.prow .note{color:var(--t2);font-size:12.5px;font-style:italic}
+.prow .rm{margin-left:auto}
+.btn.sm{font-size:11.5px;padding:4px 9px}
+.cmt{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid #F2F4F7}
+.cmt .av{width:30px;height:30px;flex-shrink:0}
+.cmt .b b{font-size:13px}
+.cmt .b time{font-size:11.5px;color:var(--t3);margin-left:6px}
+.cmt .b p{font-size:13.5px;color:var(--t2);margin-top:2px}
+.cmtform{display:flex;gap:8px;margin-top:14px}
+.cmtform input{flex:1;border:1px solid var(--line);border-radius:8px;padding:9px 12px;outline:none}
+.cmtform input:focus{border-color:var(--navy)}
+
+/* ===== 모달 ===== */
+.mask{
+  position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;
+  place-items:center;z-index:60;padding:20px;overflow-y:auto
+}
+.mask.on{display:grid}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:540px;box-shadow:0 20px 50px rgba(16,24,40,.2)}
+.mhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center}
+.mhead b{font-size:16.5px}
+.mhead button{margin-left:auto;font-size:20px;color:var(--t3);line-height:1}
+.mbody{padding:20px 22px;max-height:64vh;overflow-y:auto}
+.f{margin-bottom:15px}
+.f > label{display:block;font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:6px}
+.f input[type=text],.f select,.f textarea,.f input[type=date],.f input[type=time]{
+  width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;outline:none;background:#fff
+}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--navy)}
+.f textarea{min-height:78px;resize:vertical}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.radios{display:flex;gap:8px;flex-wrap:wrap}
+.radios label{
+  flex:1;min-width:78px;text-align:center;border:1px solid var(--line);border-radius:8px;
+  padding:8px;font-size:13px;cursor:pointer;font-weight:500
+}
+.radios input{display:none}
+.radios input:checked + span{color:var(--navy);font-weight:700}
+.radios label:has(input:checked){border-color:var(--navy);background:var(--navy-100)}
+.shareBox{border:1px solid var(--line);border-radius:9px;padding:13px;background:var(--bg)}
+.shareBox .opt{display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:8px;cursor:pointer}
+.people{display:flex;gap:6px;flex-wrap:wrap;padding-left:24px;margin-bottom:6px}
+.people label{
+  border:1px solid var(--line);background:#fff;border-radius:18px;padding:5px 11px;
+  font-size:12.5px;cursor:pointer
+}
+.people label:has(input:checked){background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600}
+.people input{display:none}
+.mfoot{padding:15px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
+.mfoot .btn{padding:9px 18px;font-size:13.5px}
+
+/* ===== 알림 ===== */
+.noti{
+  position:absolute;top:52px;right:16px;width:320px;background:#fff;border:1px solid var(--line);
+  border-radius:11px;box-shadow:0 12px 30px rgba(16,24,40,.14);display:none;z-index:50;overflow:hidden
+}
+.noti.on{display:block}
+.noti .nh{padding:12px 15px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px}
+.noti .ni{padding:11px 15px;border-bottom:1px solid #F2F4F7;font-size:13px;cursor:pointer;display:flex;gap:9px}
+.noti .ni:hover{background:var(--bg)}
+.noti .ni .em{font-size:15px}
+.noti .ni b{font-weight:600}
+.noti .ni time{display:block;color:var(--t3);font-size:11.5px;margin-top:2px}
+.noti .ni.new{background:var(--orange-50)}
+
+/* ===== 매뉴얼 ===== */
+.mn{display:flex;gap:16px;align-items:flex-start}
+.mn-side{
+  width:190px;flex-shrink:0;background:#fff;border:1px solid var(--line);
+  border-radius:var(--r);padding:9px;position:sticky;top:74px
+}
+.mn-side .t{font-size:11px;color:var(--t3);padding:5px 9px 8px;font-weight:700}
+.mn-side a{
+  display:flex;gap:8px;padding:7px 9px;border-radius:7px;text-decoration:none;
+  color:var(--t2);font-size:13px
+}
+.mn-side a:hover{background:var(--bg)}
+.mn-side a.on{background:var(--navy-100);color:var(--navy);font-weight:700}
+.mn-side a .no{color:var(--t3);font-size:12px;min-width:15px}
+.mn-side a.on .no{color:var(--navy)}
+.mn-main{flex:1;min-width:0}
+.viewer{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden
+}
+.vpage{
+  background:#525659;padding:22px;display:grid;place-items:center;min-height:400px
+}
+.sheet{
+  background:#fff;width:100%;max-width:520px;aspect-ratio:4/3;border-radius:3px;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);padding:26px 30px;display:flex;flex-direction:column
+}
+.sheet .st{font-size:15px;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);padding-bottom:7px}
+.sheet .sl{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.sheet .sl i{display:block;height:8px;background:#EDF0F3;border-radius:3px}
+.sheet .sl i:nth-child(2){width:88%} .sheet .sl i:nth-child(3){width:72%}
+.sheet .sl i:nth-child(5){width:60%}
+.sheet .simg{flex:1;margin-top:14px;background:#F2F4F7;border:1px dashed #D0D5DD;border-radius:5px;display:grid;place-items:center;color:var(--t3);font-size:12px}
+.sheet .sf{margin-top:12px;font-size:10.5px;color:var(--t3);text-align:center}
+.vbar{padding:11px 15px;display:flex;align-items:center;gap:9px;border-top:1px solid var(--line);flex-wrap:wrap}
+.vbar .pg{font-size:13px;color:var(--t2);font-weight:600}
+.vbar .sp{flex:1}
+.mn-info{font-size:12px;color:var(--t3);margin-top:9px;padding:0 3px}
+
+/* ===== 빈/안내 ===== */
+.empty{background:#fff;border:1px dashed var(--line);border-radius:var(--r);padding:44px 20px;text-align:center}
+.empty .em{font-size:32px;margin-bottom:10px}
+.empty b{display:block;font-size:15px;margin-bottom:5px}
+.empty p{color:var(--t2);font-size:13.5px}
+.soon{display:inline-block;background:var(--orange-50);color:#B45309;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;margin-bottom:12px}
+.drop{border:2px dashed #CBD5E1;border-radius:var(--r);padding:34px;text-align:center;background:#fff;margin-top:14px}
+.drop .em{font-size:28px}
+.drop b{display:block;margin:8px 0 4px;font-size:14.5px}
+.drop p{color:var(--t3);font-size:12.5px}
+
+/* ===== 토스트 ===== */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
+  background:var(--t1);color:#fff;padding:12px 20px;border-radius:9px;font-size:13.5px;
+  font-weight:500;opacity:0;transition:.25s;z-index:90;box-shadow:0 8px 24px rgba(0,0,0,.25)
+}
+.toast.on{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* ===== 목업 배너 ===== */
+.mockbar{
+  background:#111827;color:#D1D5DB;font-size:11.5px;padding:6px 22px;
+  display:flex;gap:10px;align-items:center;flex-wrap:wrap
+}
+.mockbar b{color:var(--orange)}
+
+/* ===== 모바일 ===== */
+.burger{display:none;font-size:19px;padding:5px}
+@media (max-width:900px){
+  .side{
+    position:fixed;left:0;top:0;z-index:70;transform:translateX(-100%);transition:.22s;
+    box-shadow:4px 0 24px rgba(0,0,0,.2)
+  }
+  .side.open{transform:none}
+  .burger{display:block}
+  .search{display:none}
+  .body{padding:14px 13px 60px}
+  .top{padding:0 13px;gap:9px}
+  .top .today{display:none}
+  .mn{flex-direction:column}
+  .mn-side{width:100%;position:static;display:flex;overflow-x:auto;gap:4px}
+  .mn-side .t{display:none}
+  .mn-side a{white-space:nowrap}
+  .acts{margin-left:0;width:100%}
+  .acts .btn{flex:1}
+  .grid2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="mockbar">
+  <b>화면 초안 (Mockup v1)</b>
+  <span>실제 데이터 아님 · 클릭 동작 테스트용 · 확인/댓글/등록/알림/매뉴얼 전부 눌러보실 수 있습니다</span>
+</div>
+
+<div class="app">
+  <!-- 사이드바 -->
+  <aside class="side" id="side">
+    <div class="brand">
+      <b>포스온</b>
+      <span>업무관리 · TIPS POS</span>
+    </div>
+    <nav class="nav" id="nav">
+      <div class="nav-label">업무</div>
+      <a href="#" data-view="tasks" data-filter="today" class="on"><span class="ic">📋</span>오늘 업무</a>
+      <a href="#" data-view="tasks" data-filter="mine"><span class="ic">✍️</span>내가 등록</a>
+      <a href="#" data-view="tasks" data-filter="shared"><span class="ic">📨</span>공유받음<span class="cnt" id="navShared">3</span></a>
+      <a href="#" data-view="tasks" data-filter="unread"><span class="ic">🔴</span>미확인</a>
+      <div class="nav-label">자료</div>
+      <a href="#" data-view="issues"><span class="ic">💬</span>이슈 공유</a>
+      <a href="#" data-view="manual"><span class="ic">📖</span>TIPS 매뉴얼</a>
+      <a href="#" data-view="erp"><span class="ic">📊</span>ERP 주간요약</a>
+      <div class="nav-label">관리</div>
+      <a href="#" data-view="members"><span class="ic">👥</span>직원 관리</a>
+    </nav>
+    <div class="side-foot">
+      <button class="btn-new" onclick="openNew()">+ 업무 등록</button>
+    </div>
+  </aside>
+
+  <!-- 본문 -->
+  <div class="main">
+    <header class="top">
+      <button class="burger" onclick="document.getElementById('side').classList.toggle('open')">☰</button>
+      <h1 id="pageTitle">오늘 업무</h1>
+      <span class="today">2026-07-29 (수)</span>
+      <span class="sp"></span>
+      <div class="search"><span>🔍</span><input placeholder="업무·매장·매뉴얼 검색"></div>
+      <button class="bell" onclick="toggleNoti(event)">🔔<span class="dot" id="notiCnt">3</span></button>
+      <button class="me"><span class="av">김</span>김대리 ▾</button>
+
+      <div class="noti" id="noti">
+        <div class="nh">알림</div>
+        <div id="notiList"></div>
+      </div>
+    </header>
+
+    <div class="body" id="view"></div>
+  </div>
+</div>
+
+<!-- 업무 등록 모달 -->
+<div class="mask" id="mask">
+  <div class="modal">
+    <div class="mhead"><b>업무 등록</b><button onclick="closeNew()">✕</button></div>
+    <div class="mbody">
+      <div class="f">
+        <label>제목</label>
+        <input type="text" id="fTitle" placeholder="예) 홈플러스 성남점 POS 3대 교체">
+      </div>
+      <div class="grid2">
+        <div class="f">
+          <label>매장 / 거래처</label>
+          <select id="fStore">
+            <option>홈플러스 성남점</option><option>CU 일산점</option>
+            <option>이마트 분당점</option><option>GS25 천안점</option><option>직접 입력…</option>
+          </select>
+        </div>
+        <div class="f">
+          <label>분류</label>
+          <select id="fCat"><option>설치</option><option>A/S</option><option>영업</option><option>정산</option><option>기타</option></select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="f"><label>마감일</label><input type="date" id="fDate" value="2026-07-29"></div>
+        <div class="f"><label>마감시간</label><input type="time" id="fTime" value="14:00"></div>
+      </div>
+      <div class="f">
+        <label>중요도</label>
+        <div class="radios">
+          <label><input type="radio" name="pri" value="보통"><span>보통</span></label>
+          <label><input type="radio" name="pri" value="높음" checked><span>높음</span></label>
+          <label><input type="radio" name="pri" value="긴급"><span>긴급</span></label>
+        </div>
+      </div>
+      <div class="f">
+        <label>내용</label>
+        <textarea id="fBody" placeholder="작업 내용, 준비물, 주의사항을 적어주세요"></textarea>
+      </div>
+      <div class="f">
+        <label>첨부 (사진·전표·매뉴얼 페이지)</label>
+        <input type="text" value="📎 파일 선택 — 목업에서는 비활성" disabled style="background:var(--bg);color:var(--t3)">
+      </div>
+      <div class="f">
+        <label>공유 대상</label>
+        <div class="shareBox">
+          <label class="opt"><input type="radio" name="aud" value="all" checked onchange="togglePeople()">
+            <span><b>전체 공유</b> — 직원 모두에게 (기본값)</span></label>
+          <label class="opt"><input type="radio" name="aud" value="sel" onchange="togglePeople()">
+            <span><b>선택 공유</b> — 지정한 직원만</span></label>
+          <div class="people" id="people" style="display:none">
+            <label><input type="checkbox" value="김실장">김실장</label>
+            <label><input type="checkbox" value="박과장">박과장</label>
+            <label><input type="checkbox" value="이기사">이기사</label>
+            <label><input type="checkbox" value="최주임">최주임</label>
+            <label><input type="checkbox" value="정사원">정사원</label>
+          </div>
+          <label class="opt" style="margin:4px 0 0"><input type="checkbox" id="fAck" checked>
+            <span>확인 요청 — 확인 안 하면 리마인드 알림</span></label>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn" onclick="closeNew()">취소</button>
+      <button class="btn pri" onclick="createTask()">등록 &amp; 알림 발송</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= 목업 데이터 ================= */
+const ME = '김대리';
+const STAFF = ['김실장','박과장','이기사','최주임','정사원','김대리'];
+
+let TASKS = [
+  {
+    id:1, store:'홈플러스 성남점', cat:'설치', title:'POS 3대 교체 설치 + VAN 재등록',
+    body:'기존 단말 3대 회수 후 신규 POS 설치.\nVAN 재등록 필요(KIS → 나이스 전환).\n※ 매장 영업 종료 후 14시 이후 진행',
+    author:'김실장', due:'오늘 14:00', pri:'긴급', status:'urgent', audience:'all', mine:false,
+    acks:[
+      {n:'김실장',t:'09:15',note:''},
+      {n:'이기사',t:'09:41',note:'오후에 출발하겠습니다'},
+      {n:'최주임',t:'10:02',note:''}
+    ],
+    targets:['김실장','박과장','이기사','최주임','정사원','김대리'],
+    comments:[
+      {n:'박과장',t:'09:50',b:'VAN 단말 재고가 1대뿐입니다. 2대 추가 필요합니다.'},
+      {n:'김실장',t:'10:05',b:'본사에 요청 넣었습니다. 오늘 오전 중 입고 예정입니다.'}
+    ]
+  },
+  {
+    id:2, store:'CU 일산점', cat:'A/S', title:'핸디터미널 매입등록 오류 A/S',
+    body:'핸디터미널로 매입(입고) 전송 시 신상품 상품명이 안 넘어옴.\n매뉴얼 8장(핸디터미널) 상품명 수신 절차 확인 후 처리.',
+    author:'박과장', due:'오늘 11:00', pri:'높음', status:'doing', audience:'sel', mine:false,
+    acks:[
+      {n:'김대리',t:'08:30',note:''},{n:'이기사',t:'08:44',note:''},
+      {n:'최주임',t:'09:10',note:''},{n:'김실장',t:'09:12',note:''},{n:'정사원',t:'09:30',note:''}
+    ],
+    targets:['김대리','이기사','최주임','김실장','정사원'],
+    comments:[{n:'이기사',t:'09:20',b:'상품명 수신 버튼 눌러서 해결했습니다. 매뉴얼 85p 참고.'}]
+  },
+  {
+    id:3, store:'이마트 분당점', cat:'정산', title:'수수료 매장 월 정산 자료 발송',
+    body:'7월 수수료 매장 매출 분석 뽑아서 엑셀로 정리 후 점주님께 메일 발송.',
+    author:'김대리', due:'내일 18:00', pri:'보통', status:'doing', audience:'all', mine:true,
+    acks:[{n:'최주임',t:'10:20',note:'제가 자료 뽑겠습니다'}],
+    targets:['김실장','박과장','이기사','최주임','정사원'],
+    comments:[]
+  },
+  {
+    id:4, store:'GS25 천안점', cat:'영업', title:'모바일 쇼핑몰 연동 상담 방문',
+    body:'점주님이 모바일 고객카드/전자영수증 기능 문의. 데모 준비해서 방문.',
+    author:'정사원', due:'07-30 15:00', pri:'보통', status:'done', audience:'all', mine:false,
+    acks:[
+      {n:'김실장',t:'어제 16:00',note:''},{n:'박과장',t:'어제 16:10',note:''},
+      {n:'이기사',t:'어제 16:22',note:''},{n:'최주임',t:'어제 17:01',note:''},
+      {n:'김대리',t:'어제 17:30',note:''}
+    ],
+    targets:['김실장','박과장','이기사','최주임','김대리'],
+    comments:[]
+  }
+];
+
+let NOTIS = [
+  {em:'📨', b:'김실장', t:'님이 업무를 공유했습니다 — 홈플러스 성남점 POS 3대 교체', time:'10분 전', tid:1, isNew:true},
+  {em:'💬', b:'박과장', t:'님이 댓글을 남겼습니다 — VAN 단말 재고 1대뿐입니다', time:'39분 전', tid:1, isNew:true},
+  {em:'🔔', b:'리마인드', t:' — 아직 확인하지 않은 업무가 1건 있습니다', time:'1시간 전', tid:1, isNew:true},
+  {em:'✅', b:'최주임', t:'님이 내 업무를 확인했습니다 — 이마트 분당점 정산', time:'어제', tid:3, isNew:false}
+];
+
+/* 매뉴얼 챕터 (PDF 목차 실측 · 문서 내부 페이지) */
+const CHAPTERS = [
+  {no:1, t:'코드 관리', p:6,  sub:'분류코드 / 거래처 / 상품 / 공병 / 단축키'},
+  {no:2, t:'매입 관리', p:16, sub:'매입전표 / 대금결제 / 어음 관리'},
+  {no:3, t:'매출 속보', p:33, sub:'당일·대비 매출 / 전표검색 / 카드결제'},
+  {no:4, t:'매출 관리', p:40, sub:'일매출 마감 / 영업일보·월보 / 정산'},
+  {no:5, t:'회원 관리', p:51, sub:'회원등록 / 경품 / 문자 / 세금계산서'},
+  {no:6, t:'행사 관리', p:60, sub:'행사전표 / 호출등록 / 유의사항'},
+  {no:7, t:'재고 관리', p:65, sub:'재고반영·조정 / 분석 / 폐기 / 자체소비'},
+  {no:8, t:'핸디터미널', p:73, sub:'핸디 가격확인 등록 / 전송'},
+  {no:9, t:'도매 관리', p:77, sub:'출고관리 / 매장간 이동 / 견적서'},
+  {no:10,t:'발주 관리', p:85, sub:'발주 등록 / 관리 / 인쇄'},
+  {no:11,t:'설정 관리', p:86, sub:'연결·환경설정 / 업데이트 / A/S 업무'}
+];
+const PDF_FILE = '../TIPS관리 NEW 메뉴얼(대용량)개정2016년 v1_용량개선판.pdf';
+const PDF_OFFSET = 1; // 문서 표기 페이지 → 실제 PDF 페이지 보정
+
+const PDF_PAGES = 93;
+let cur = {view:'tasks', filter:'today', taskId:null, page:73};
+
+/* ================= 유틸 ================= */
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('on');
+  clearTimeout(t._x); t._x = setTimeout(()=>t.classList.remove('on'), 2200);
+}
+function ackTotal(t){ return t.targets.length; }
+function ackDone(t){ return t.acks.length; }
+function iAcked(t){ return t.acks.some(a => a.n === ME); }
+function isTarget(t){ return t.targets.includes(ME); }
+function unreadNames(t){ return t.targets.filter(n => !t.acks.some(a => a.n === n)); }
+
+function chipOf(t){
+  if(t.status==='done')  return '<span class="chip done">완료</span>';
+  if(t.status==='urgent')return '<span class="chip urgent">🔴 마감임박</span>';
+  return '<span class="chip doing">🟡 진행중</span>';
+}
+function dotsOf(t){
+  const total = ackTotal(t), done = ackDone(t);
+  let h = '<span class="dots">';
+  for(let i=0;i<total;i++) h += `<i class="${i<done?'f':''}"></i>`;
+  return h + '</span>';
+}
+
+/* ================= 라우팅 ================= */
+document.getElementById('nav').addEventListener('click', e => {
+  const a = e.target.closest('a'); if(!a) return;
+  e.preventDefault();
+  document.querySelectorAll('#nav a').forEach(x=>x.classList.remove('on'));
+  a.classList.add('on');
+  cur.view = a.dataset.view; cur.filter = a.dataset.filter || null; cur.taskId = null;
+  $('#pageTitle').textContent = a.textContent.replace(/\d+$/,'').trim();
+  document.getElementById('side').classList.remove('open');
+  render();
+});
+
+function render(){
+  const v = $('#view');
+  if(cur.taskId)            v.innerHTML = viewDetail(cur.taskId);
+  else if(cur.view==='tasks')  v.innerHTML = viewTasks();
+  else if(cur.view==='manual') v.innerHTML = viewManual();
+  else if(cur.view==='issues') v.innerHTML = viewIssues();
+  else if(cur.view==='erp')    v.innerHTML = viewErp();
+  else                         v.innerHTML = viewMembers();
+  window.scrollTo(0,0);
+  renderNoti();
+}
+
+/* ================= 업무 목록 ================= */
+function filtered(){
+  if(cur.filter==='mine')   return TASKS.filter(t=>t.mine);
+  if(cur.filter==='shared') return TASKS.filter(t=>!t.mine && isTarget(t));
+  if(cur.filter==='unread') return TASKS.filter(t=>isTarget(t) && !iAcked(t) && !t.mine);
+  return TASKS;
+}
+function viewTasks(){
+  const F = [
+    {k:'today', l:'전체', n:TASKS.length},
+    {k:'mine',  l:'내가 등록', n:TASKS.filter(t=>t.mine).length},
+    {k:'shared',l:'나에게 공유', n:TASKS.filter(t=>!t.mine&&isTarget(t)).length},
+    {k:'unread',l:'미확인', n:TASKS.filter(t=>isTarget(t)&&!iAcked(t)&&!t.mine).length}
+  ];
+  let h = '<div class="tabs">' + F.map(f =>
+    `<button class="tab ${cur.filter===f.k?'on':''}" onclick="setFilter('${f.k}')">${f.l}<span class="n">${f.n}</span></button>`
+  ).join('') + '</div>';
+
+  const list = filtered();
+  if(!list.length) return h + `<div class="empty"><div class="em">🎉</div><b>해당하는 업무가 없습니다</b><p>모두 확인하셨습니다.</p></div>`;
+
+  h += list.map(t => {
+    const un = unreadNames(t);
+    const acked = iAcked(t);
+    return `
+    <div class="card">
+      <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span><span class="cat">${esc(t.cat)}</span></div>
+      <h3>${esc(t.title)}</h3>
+      <div class="meta">
+        <span>⏰ ${esc(t.due)}</span><span class="sep">·</span>
+        <span>${t.audience==='all'?'전체 공유':'<span class="to-me">🔵 나에게 공유</span>'}</span>
+        <span class="sep">·</span><span>등록 ${esc(t.author)}${t.mine?' (나)':''}</span>
+      </div>
+      <div class="ackrow">
+        ${dotsOf(t)}
+        <span class="ackn">확인 ${ackDone(t)}/${ackTotal(t)}</span>
+        ${un.length ? `<span class="unread">미확인: ${un.slice(0,3).map(esc).join(', ')}${un.length>3?` 외 ${un.length-3}명`:''}</span>`
+                    : '<span class="unread" style="color:var(--green);font-weight:600">전원 확인 완료 ✓</span>'}
+        <span class="acts">
+          ${t.mine ? '' : (acked
+            ? `<button class="btn ok" disabled>확인함 ✓</button>`
+            : `<button class="btn pri" onclick="doAck(${t.id})">확인함 ✓</button>`)}
+          <button class="btn" onclick="openTask(${t.id})">상세 · 댓글 ${t.comments.length}</button>
+        </span>
+      </div>
+    </div>`;
+  }).join('');
+  return h;
+}
+function setFilter(k){
+  cur.filter = k; cur.taskId = null;
+  document.querySelectorAll('#nav a').forEach(a=>{
+    a.classList.toggle('on', a.dataset.filter===k);
+  });
+  render();
+}
+
+/* ================= 업무 상세 ================= */
+function viewDetail(id){
+  const t = TASKS.find(x=>x.id===id);
+  const total = ackTotal(t), done = ackDone(t), pct = Math.round(done/total*100);
+  const rows = t.targets.map(n=>{
+    const a = t.acks.find(x=>x.n===n);
+    return `<div class="prow">
+      <span class="st">${a?'✅':'⭕'}</span>
+      <span class="nm">${esc(n)}${n===ME?' (나)':''}</span>
+      ${a ? `<span class="tm">${esc(a.t)} 확인</span>${a.note?`<span class="note">"${esc(a.note)}"</span>`:''}`
+          : `<span class="tm" style="color:var(--orange);font-weight:600">미확인</span>
+             <span class="rm"><button class="btn sm" onclick="remind('${esc(n)}')">🔔 리마인드</button></span>`}
+    </div>`;
+  }).join('');
+
+  const cmts = t.comments.length ? t.comments.map(c=>`
+    <div class="cmt">
+      <span class="av">${esc(c.n[0])}</span>
+      <div class="b"><b>${esc(c.n)}</b><time>${esc(c.t)}</time><p>${esc(c.b)}</p></div>
+    </div>`).join('') : '<p style="color:var(--t3);font-size:13px;padding:10px 0">아직 댓글이 없습니다.</p>';
+
+  return `
+  <button class="back" onclick="cur.taskId=null;render()">← 목록으로</button>
+  <div class="panel">
+    <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span><span class="cat">${esc(t.cat)}</span></div>
+    <h2>${esc(t.title)}</h2>
+    <div class="meta">
+      <span>⏰ ${esc(t.due)}</span><span class="sep">·</span>
+      <span>${t.audience==='all'?'전체 공유':'선택 공유'}</span><span class="sep">·</span>
+      <span>등록 ${esc(t.author)}</span><span class="sep">·</span><span>중요도 ${esc(t.pri)}</span>
+    </div>
+    <div class="desc">${esc(t.body)}</div>
+    ${t.mine ? '' : (iAcked(t)
+      ? `<button class="btn ok" disabled>확인함 ✓</button>`
+      : `<button class="btn pri" onclick="doAck(${t.id})">확인함 ✓</button>`)}
+  </div>
+
+  <div class="panel">
+    <h4>확인 진행률 &nbsp;<span style="color:var(--green)">${done}/${total} (${pct}%)</span></h4>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    <div class="plist">${rows}</div>
+  </div>
+
+  <div class="panel">
+    <h4>💬 댓글 ${t.comments.length}</h4>
+    ${cmts}
+    <div class="cmtform">
+      <input id="cmtIn" placeholder="댓글을 입력하세요 (단톡 대신 여기서 공론화)"
+             onkeydown="if(event.key==='Enter')addCmt(${t.id})">
+      <button class="btn pri" onclick="addCmt(${t.id})">등록</button>
+    </div>
+  </div>
+
+  ${t.mine ? `<div class="panel" style="text-align:right">
+    <button class="btn ok" onclick="doneTask(${t.id})">업무 완료 처리 ✓</button>
+  </div>` : ''}`;
+}
+function openTask(id){ cur.taskId = id; render(); }
+
+/* ================= 액션 ================= */
+function doAck(id){
+  const t = TASKS.find(x=>x.id===id);
+  if(iAcked(t)) return;
+  const now = new Date();
+  t.acks.push({n:ME, t:`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`, note:''});
+  NOTIS.unshift({em:'✅', b:ME, t:`님이 확인했습니다 — ${t.title}`, time:'방금', tid:id, isNew:false});
+  toast(`확인 완료 — 등록자(${t.author})에게 알림이 갑니다`);
+  bump(); render();
+}
+function addCmt(id){
+  const t = TASKS.find(x=>x.id===id);
+  const v = $('#cmtIn').value.trim(); if(!v) return;
+  const now = new Date();
+  t.comments.push({n:ME, t:`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`, b:v});
+  toast('댓글 등록 — 관련 직원에게 알림 발송');
+  render();
+}
+function remind(n){ toast(`${n}님에게 리마인드 푸시를 보냈습니다 🔔`); }
+function doneTask(id){
+  const t = TASKS.find(x=>x.id===id);
+  t.status='done'; toast('업무 완료 처리 — 전체 공유됨');
+  cur.taskId=null; render();
+}
+function bump(){
+  const n = TASKS.filter(t=>isTarget(t)&&!iAcked(t)&&!t.mine).length;
+  $('#navShared').textContent = n;
+  $('#navShared').style.display = n ? '' : 'none';
+}
+
+/* ================= 등록 모달 ================= */
+function openNew(){ $('#mask').classList.add('on'); }
+function closeNew(){ $('#mask').classList.remove('on'); }
+function togglePeople(){
+  const sel = document.querySelector('input[name=aud]:checked').value === 'sel';
+  $('#people').style.display = sel ? 'flex' : 'none';
+}
+function createTask(){
+  const title = $('#fTitle').value.trim() || '제목 없는 업무';
+  const aud = document.querySelector('input[name=aud]:checked').value;
+  let targets;
+  if(aud === 'all') targets = STAFF.filter(n=>n!==ME);
+  else {
+    targets = [...document.querySelectorAll('#people input:checked')].map(i=>i.value);
+    if(!targets.length){ toast('공유할 직원을 1명 이상 선택해주세요'); return; }
+  }
+  TASKS.unshift({
+    id: Date.now(), store: $('#fStore').value, cat: $('#fCat').value, title,
+    body: $('#fBody').value.trim() || '(내용 없음)',
+    author: ME, due: `${$('#fDate').value} ${$('#fTime').value}`,
+    pri: document.querySelector('input[name=pri]:checked').value,
+    status: 'doing', audience: aud === 'all' ? 'all' : 'sel', mine: true,
+    acks: [], targets, comments: []
+  });
+  closeNew();
+  $('#fTitle').value=''; $('#fBody').value='';
+  toast(`등록 완료 — ${targets.length}명에게 푸시 알림 발송 🔔`);
+  setFilter('today');
+}
+
+/* ================= 알림 ================= */
+function toggleNoti(e){ e.stopPropagation(); $('#noti').classList.toggle('on'); }
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#noti') && !e.target.closest('.bell')) $('#noti').classList.remove('on');
+});
+function renderNoti(){
+  $('#notiList').innerHTML = NOTIS.map((n,i)=>`
+    <div class="ni ${n.isNew?'new':''}" onclick="fromNoti(${i})">
+      <span class="em">${n.em}</span>
+      <div><b>${esc(n.b)}</b>${esc(n.t)}<time>${esc(n.time)}</time></div>
+    </div>`).join('');
+  const c = NOTIS.filter(n=>n.isNew).length;
+  $('#notiCnt').textContent = c;
+  $('#notiCnt').style.display = c ? '' : 'none';
+}
+function fromNoti(i){
+  const n = NOTIS[i]; n.isNew = false;
+  $('#noti').classList.remove('on');
+  if(n.tid) openTask(n.tid); else render();
+}
+
+/* ================= 매뉴얼 ================= */
+/* 현재 페이지가 속한 챕터 = 시작페이지가 현재 페이지 이하인 것 중 마지막 */
+function chapterOf(page){
+  let found = CHAPTERS[0];
+  for(const c of CHAPTERS) if(c.p <= page) found = c;
+  return found;
+}
+function viewManual(){
+  const c = chapterOf(cur.page);
+  const nav = CHAPTERS.map(x=>`
+    <a href="#" onclick="event.preventDefault();cur.page=${x.p};render()" class="${x.no===c.no?'on':''}">
+      <span class="no">${x.no}</span>${esc(x.t)}
+    </a>`).join('');
+  return `
+  <div class="mn">
+    <div class="mn-side">
+      <div class="t">TIPS 관리 프로그램 · 11개 챕터</div>
+      ${nav}
+    </div>
+    <div class="mn-main">
+      <div class="viewer">
+        <div class="vpage">
+          <div class="sheet">
+            <div class="st">${c.no}. ${esc(c.t)}</div>
+            <div class="sl"><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="simg">[ 매뉴얼 캡처 화면 · p.${cur.page} ]</div>
+            <div class="sf">${esc(c.sub)}</div>
+          </div>
+        </div>
+        <div class="vbar">
+          <button class="btn" onclick="chapMove(-1)" title="이전 챕터">◀◀ 챕터</button>
+          <button class="btn" onclick="pageMove(-1)">◀ 이전</button>
+          <span class="pg">${cur.page} / ${PDF_PAGES} p</span>
+          <button class="btn" onclick="pageMove(1)">다음 ▶</button>
+          <button class="btn" onclick="chapMove(1)" title="다음 챕터">챕터 ▶▶</button>
+          <span class="sp"></span>
+          <button class="btn" onclick="toast('즐겨찾기에 담았습니다 ⭐')">⭐ 즐겨찾기</button>
+          <button class="btn" onclick="toast('업무 등록 화면에 이 페이지가 첨부됩니다')">🔗 업무에 첨부</button>
+          ${location.protocol === 'file:'
+            ? `<a class="btn pri" href="${PDF_FILE}#page=${cur.page + PDF_OFFSET}" target="_blank">실제 PDF 열기</a>`
+            : `<button class="btn pri" onclick="toast('원본 PDF(34MB)는 사내 앱에 업로드된 뒤 여기서 바로 열립니다')">실제 PDF 열기</button>`}
+        </div>
+      </div>
+      <div class="mn-info">
+        TIPS관리 NEW 메뉴얼 · v1 (2016 개정) · 93페이지 · 업로드 관리자 · 최신본 자동 배포<br>
+        ※ 목업의 뷰어는 자리표시입니다. 실제 개발 시 PDF가 앱 안에서 바로 열리고 챕터 클릭으로 점프합니다.
+      </div>
+    </div>
+  </div>`;
+}
+function pageMove(d){
+  const n = cur.page + d;
+  if(n < 1 || n > PDF_PAGES) return;
+  cur.page = n; render();
+}
+function chapMove(d){
+  const i = CHAPTERS.findIndex(x => x.no === chapterOf(cur.page).no);
+  const n = i + d;
+  if(n < 0 || n >= CHAPTERS.length) return;
+  cur.page = CHAPTERS[n].p; render();
+}
+
+/* ================= 이슈 / ERP / 직원 ================= */
+function viewIssues(){
+  const rows = [
+    {tag:'설치', t:'신형 IC 단말 VAN 재등록 순서 정리', by:'김실장', c:5, d:'오늘'},
+    {tag:'A/S', t:'핸디터미널 상품명 미수신 — 원인·해결 정리', by:'이기사', c:3, d:'어제'},
+    {tag:'정산', t:'수수료 매장 정산 시 자주 나오는 오류 3가지', by:'최주임', c:8, d:'2일 전'},
+    {tag:'영업', t:'모바일 쇼핑몰 연동 상담 스크립트 공유', by:'정사원', c:2, d:'3일 전'}
+  ];
+  return `
+  <p style="color:var(--t2);margin-bottom:14px">단톡에서 흘러가던 노하우를 주제별로 쌓아두는 곳입니다.</p>
+  ${rows.map(r=>`
+    <div class="card">
+      <div class="r1"><span class="cat">${r.tag}</span></div>
+      <h3>${esc(r.t)}</h3>
+      <div class="meta"><span>${esc(r.by)}</span><span class="sep">·</span><span>${r.d}</span>
+        <span class="sep">·</span><span>💬 ${r.c}</span></div>
+    </div>`).join('')}`;
+}
+function viewErp(){
+  return `
+  <span class="soon">2차 개발 예정</span>
+  <div class="panel">
+    <h4>ERP 주간 요약 — 엑셀 올리면 AI가 주요 이슈를 정리합니다</h4>
+    <p style="color:var(--t2);font-size:13.5px">
+      ERP에서 내려받은 엑셀/CSV를 올리면 미수금·A/S 지연·재고 이상 같은 주요 이슈를 AI가 뽑아
+      이슈 공유 게시판에 초안으로 올려줍니다. 결과는 엑셀로 만들어 메일 발송도 가능합니다.
+    </p>
+    <div class="drop">
+      <div class="em">📥</div>
+      <b>여기에 ERP 엑셀 파일을 끌어다 놓으세요</b>
+      <p>.xlsx / .csv · 목업에서는 비활성</p>
+    </div>
+  </div>
+  <div class="panel">
+    <h4>요약 결과 예시</h4>
+    <div class="desc">🔴 미수금 30일 초과 3개 매장 (합계 1,240만원) — 이마트 분당점 외 2건
+🟡 A/S 접수 후 3일 이상 미처리 2건 — CU 일산점 핸디터미널 외 1건
+🟢 이번 주 신규 설치 5건 완료 · 매출 전주 대비 +8%</div>
+  </div>`;
+}
+function viewMembers(){
+  const rows = [
+    {n:'김실장', r:'관리자', team:'운영', e:'kim@poson.co.kr'},
+    {n:'박과장', r:'엔지니어', team:'기술', e:'park@poson.co.kr'},
+    {n:'이기사', r:'엔지니어', team:'기술', e:'lee@poson.co.kr'},
+    {n:'최주임', r:'영업', team:'영업', e:'choi@poson.co.kr'},
+    {n:'정사원', r:'영업', team:'영업', e:'jung@poson.co.kr'},
+    {n:'김대리 (나)', r:'엔지니어', team:'기술', e:'me@poson.co.kr'}
+  ];
+  return `
+  <div class="panel">
+    <h4>직원 ${rows.length}명 — 관리자가 이메일로 초대하면 가입됩니다 (외부인 가입 차단)</h4>
+    <div class="plist">
+      ${rows.map(r=>`<div class="prow">
+        <span class="av">${esc(r.n[0])}</span>
+        <span class="nm" style="min-width:80px">${esc(r.n)}</span>
+        <span class="cat">${esc(r.r)}</span>
+        <span class="tm">${esc(r.team)}팀 · ${esc(r.e)}</span>
+      </div>`).join('')}
+    </div>
+    <div style="margin-top:14px"><button class="btn pri" onclick="toast('초대 메일을 발송했습니다 📧')">+ 직원 초대</button></div>
+  </div>`;
+}
+
+/* ================= 시작 ================= */
+bump(); render();
+</script>
+</body>
+</html>
