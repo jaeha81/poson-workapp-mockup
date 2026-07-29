@@ -298,7 +298,30 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .inrow .d{font-size:12.5px;color:var(--t3);font-weight:700;min-width:82px}
 .inrow .n{font-weight:600;font-size:14px}
 .inrow .q{background:var(--green-50);color:var(--green);font-weight:800;font-size:13px;padding:3px 10px;border-radius:6px}
+.inrow .q.ok{background:#FEF3F2;color:var(--red)}
+.inrow .q.plan{background:var(--orange-50);color:#B45309}
+.inrow .q.back{background:var(--green-50);color:var(--green)}
 .inrow .m{font-size:12.5px;color:var(--t3)}
+/* 예상 / 확정 / 반납 상태 배지 */
+.use{font-size:11px;font-weight:800;padding:2px 8px;border-radius:5px;white-space:nowrap}
+.use.plan{background:var(--orange-50);color:#B45309}
+.use.ok{background:var(--green-50);color:var(--green)}
+.use.back{background:#F2F4F7;color:var(--t2)}
+.btn.sm.ok{background:var(--green-50);color:var(--green);border-color:#B7E4D2}
+
+/* ===== 필드 매뉴얼 ===== */
+.tops{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:10px}
+.top{background:#fff;border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:var(--r);padding:13px 15px}
+.top .th{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.top .th b{font-size:14.5px}
+.top .cnt2{background:var(--orange-50);color:#B45309;font-size:11px;font-weight:800;padding:2px 8px;border-radius:5px;margin-left:auto}
+.top .tw{font-size:12.5px;color:var(--t2);line-height:1.5;margin-bottom:6px}
+.top .tn{font-size:12px;color:var(--t3);line-height:1.5}
+.fcase{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:8px}
+.fcase .fs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
+.fcase .fs b{font-size:14.5px;font-weight:600}
+.fcase .ff{font-size:13.5px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:5px}
+.fcase .fm{font-size:12px;color:var(--t3)}
 
 /* ===== 날짜 · 당직 ===== */
 .datebar{
@@ -548,8 +571,9 @@ input,select,textarea{font-family:inherit;font-size:14px}
       <a href="#" data-view="inbound"><span class="ic">📥</span>입고 등록</a>
       <a href="#" data-view="audit"><span class="ic">📋</span>재고 실사</a>
       <div class="nav-label">자료</div>
-      <a href="#" data-view="issues"><span class="ic">💬</span>이슈 공유</a>
+      <a href="#" data-view="field"><span class="ic">🛠</span>필드 매뉴얼</a>
       <a href="#" data-view="manual"><span class="ic">📖</span>TIPS 매뉴얼</a>
+      <a href="#" data-view="issues"><span class="ic">💬</span>이슈 공유</a>
       <a href="#" data-view="erp"><span class="ic">📊</span>ERP 주간요약</a>
       <div class="nav-label">관리</div>
       <a href="#" data-view="members"><span class="ic">👥</span>직원 · 권한</a>
@@ -719,7 +743,7 @@ let TASKS = [
     targets:['임영준','장두환','김동화','김기홍'],
     owners:['임영준'], checked:{0:true,1:true},
     comments:[{n:'장두환',t:'09:20',b:'매뉴얼 8장 핸디터미널 전송 대응표 보고 처리했습니다.'}],
-    used:[{itemId:'A14', qty:1, loc:'lyj'}], expenses:[]
+    used:[{itemId:'A14', qty:1, loc:'lyj', confirmed:true}], expenses:[]
   },
   {
     id:3, store:'OK마트 (수내)', kind:'AS방문', cat:'NETWORK',
@@ -744,7 +768,7 @@ let TASKS = [
     targets:['김기홍','김두혁','장두환','임영준'],
     owners:['김동화'], checked:{0:true,1:true,5:true,6:true},
     comments:[],
-    used:[{itemId:'P13', qty:1, loc:'kdw'}],
+    used:[{itemId:'P13', qty:1, loc:'kdw', confirmed:true}],
     expenses:[
       {kind:'출장비', amt:50000, memo:'입금 확인 완료', receipt:true},
       {kind:'주차/톨비', amt:8000, memo:'', receipt:true}
@@ -828,6 +852,7 @@ function render(){
   else if(cur.view==='stock')   v.innerHTML = viewStock();
   else if(cur.view==='inbound') v.innerHTML = viewInbound();
   else if(cur.view==='audit')   v.innerHTML = viewAudit();
+  else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
   else if(cur.view==='erp')     v.innerHTML = viewErp();
@@ -910,8 +935,22 @@ function viewStock(){
     </tr>
     ${rows}
   </table></div>
-  <p style="font-size:12px;color:var(--t3);margin-top:9px">
-    구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>`;
+  <p style="font-size:12px;color:var(--t3);margin:9px 0 20px">
+    구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>
+
+  <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">
+    📤 사용 이력 — 어느 날 · 어느 매장에 나갔나</h4>
+  ${USAGE.slice(0,12).map(u=>{
+    const it = itemOf(u.itemId) || {name:'(삭제된 품목)', unit:''};
+    const cls = u.state==='반납' ? 'back' : (u.state==='예상' ? 'plan' : 'ok');
+    return `<div class="inrow">
+      <span class="d">${esc(u.date||'')}</span>
+      <span class="n">${esc(it.name)}</span>
+      <span class="q ${cls}">${u.qty>0?'-':'+'}${Math.abs(u.qty)} ${esc(it.unit||'')}</span>
+      <span class="use ${cls}">${esc(u.state)}</span>
+      <span class="m">${esc(u.store||'')} · ${esc(locName(u.loc))} · ${esc(u.by||'')}</span>
+    </div>`;
+  }).join('')}`;
 }
 
 function addItem(){
@@ -1214,22 +1253,31 @@ function rookieBox(t){
 
 /* ===== 사용 재고 · 경비 ===== */
 function usedBox(t){
+  const mineOrOwner = t.mine || isAdmin() || (t.owners||[]).includes(ME);
+  const plans = (t.used||[]).filter(u=>!u.confirmed).length;
   const rows = (t.used||[]).map((u,i)=>{
     const it = itemOf(u.itemId) || {name:'(삭제됨)', unit:'', price:null};
     const amt = it.price ? (it.price*u.qty).toLocaleString()+'원' : '단가 미등록';
     return `<div class="prow">
-      <span class="st">📦</span>
+      <span class="st">${u.confirmed?'✅':'📦'}</span>
       <span class="nm" style="min-width:auto;flex:1">${esc(it.name)}</span>
       <span class="cat">${u.qty}${esc(it.unit||'')}</span>
-      <span class="tm">${esc(locName(u.loc))}에서 차감 · ${amt}</span>
-      ${t.mine||isAdmin() ? `<span class="rm"><button class="btn sm" onclick="delUsed(${t.id},${i})">삭제</button></span>`:''}
+      <span class="use ${u.confirmed?'ok':'plan'}">${u.confirmed?'실사용 확정':'예상 (선차감)'}</span>
+      <span class="tm">${esc(locName(u.loc))} · ${amt}</span>
+      ${mineOrOwner ? `<span class="rm">
+        ${u.confirmed ? '' : `<button class="btn sm ok" onclick="confirmUsed(${t.id},${i})">사용 확정</button>`}
+        <button class="btn sm" onclick="delUsed(${t.id},${i})">${u.confirmed?'취소':'안 씀 (반납)'}</button>
+      </span>`:''}
     </div>`;
-  }).join('') || '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 등록된 사용 재고가 없습니다.</p>';
+  }).join('') || '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 등록된 재고가 없습니다.</p>';
 
   return `<div class="panel">
-    <h4>📦 이번 업무에 사용한 재고</h4>
+    <h4>📦 사용 재고 ${plans?`<span style="color:var(--orange)">· 예상 ${plans}건 정산 대기</span>`:''}</h4>
+    <p style="font-size:12.5px;color:var(--t3);margin-bottom:10px">
+      나가기 전에 <b>쓸 것 같은 재고를 미리</b> 넣으세요. 넣는 즉시 재고에서 빠집니다.
+      돌아와서 실제로 쓴 건 <b>사용 확정</b>, 안 쓴 건 <b>반납</b>하면 재고가 되돌아갑니다.</p>
     <div class="plist">${rows}</div>
-    ${t.mine||isAdmin() ? `
+    ${mineOrOwner ? `
     <div class="cmtform" style="flex-wrap:wrap">
       <select id="uItem" style="flex:2;min-width:180px;border:1px solid var(--line);border-radius:8px;padding:9px">
         ${ITEMS.map(i=>`<option value="${i.id}">[${i.cat}] ${esc(i.name)}</option>`).join('')}
@@ -1238,7 +1286,7 @@ function usedBox(t){
       <select id="uLoc" style="flex:0 0 120px;border:1px solid var(--line);border-radius:8px;padding:9px">
         ${LOCATIONS.map(l=>`<option value="${l.id}" ${l.name===ME?'selected':''}>${l.name}</option>`).join('')}
       </select>
-      <button class="btn pri" onclick="addUsed(${t.id})">재고 차감</button>
+      <button class="btn pri" onclick="addUsed(${t.id})">예상 재고 넣기</button>
     </div>` : ''}
   </div>`;
 }
@@ -1249,14 +1297,23 @@ function addUsed(id){
   const loc = $('#uLoc').value, it = itemOf(itemId);
   if((it.q[loc]||0) < qty){ toast(`${locName(loc)}에 ${it.name} 재고가 ${it.q[loc]||0}개뿐입니다`); return; }
   it.q[loc] -= qty;
-  t.used.push({itemId, qty, loc});
-  toast(`${it.name} ${qty}개 차감 — ${locName(loc)}`);
+  t.used.push({itemId, qty, loc, confirmed:false});
+  USAGE.unshift({date:t.date, store:t.store, itemId, qty, loc, by:ME, state:'예상'});
+  toast(`${it.name} ${qty}개 선차감 — ${locName(loc)} (아직 예상)`);
   render();
+}
+function confirmUsed(id, i){
+  const t = TASKS.find(x=>x.id===id), u = t.used[i], it = itemOf(u.itemId);
+  u.confirmed = true;
+  USAGE.unshift({date:t.date, store:t.store, itemId:u.itemId, qty:u.qty, loc:u.loc, by:ME, state:'확정'});
+  toast(`${it?it.name:''} 실사용 확정`); render();
 }
 function delUsed(id, i){
   const t = TASKS.find(x=>x.id===id), u = t.used[i], it = itemOf(u.itemId);
   if(it) it.q[u.loc] = (it.q[u.loc]||0) + u.qty;
-  t.used.splice(i,1); toast('사용 재고 취소 — 재고를 되돌렸습니다'); render();
+  USAGE.unshift({date:t.date, store:t.store, itemId:u.itemId, qty:-u.qty, loc:u.loc, by:ME, state:'반납'});
+  t.used.splice(i,1);
+  toast('반납 처리 — 재고를 되돌렸습니다'); render();
 }
 
 function expenseBox(t){
@@ -1620,6 +1677,62 @@ function answer(id, pick){
   const ok = pick === s.quiz.a;
   document.getElementById('qres_'+id).innerHTML =
     `<div class="res ${ok?'ok':'no'}">${ok?'⭕ 정답입니다.':'❌ 아닙니다.'} ${esc(s.quiz.why)}</div>`;
+}
+
+/* ================= 필드 매뉴얼 ================= */
+function viewField(){
+  const q = (cur.fq||'').trim();
+  const fc = cur.fcat || '전체';
+  let list = FIELD_CASES;
+  if(fc !== '전체') list = list.filter(c => c.cat === fc);
+  if(q) list = list.filter(c => (c.sym + c.fix + c.store).includes(q));
+
+  const cats = ['전체', ...WORK_CATS];
+
+  return `
+  <div class="mprog">
+    <div class="r"><b>필드 매뉴얼 — 증상으로 찾는 현장 대응</b>
+      <span class="pc">${FIELD_CASES.length}건</span></div>
+    <div style="font-size:12.5px;color:var(--t3)">
+      TIPS 매뉴얼은 <b>프로그램 사용법</b>, 이건 <b>현장에서 실제로 어떻게 처리했는지</b>입니다.
+      4월 업무 리포트의 접수내역 → 처리내역을 그대로 정리했습니다.
+    </div>
+  </div>
+
+  <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">
+    🔁 반복해서 나오는 처리 — 신입이 먼저 외울 것</h4>
+  <div class="tops">
+    ${FIELD_TOPS.map(t=>`
+      <div class="top">
+        <div class="th"><b>${esc(t.fix)}</b><span class="cnt2">${t.cnt}건</span></div>
+        <div class="tw">이럴 때 : ${esc(t.when)}</div>
+        <div class="tn">${esc(t.note)}</div>
+      </div>`).join('')}
+  </div>
+
+  <div class="msearch" style="margin:16px 0 10px">
+    <span>🔍</span>
+    <input value="${esc(cur.fq||'')}" placeholder="증상으로 찾기 (예: 책갈피, 팅김, 서버마감, 스캔)"
+           oninput="cur.fq=this.value" onkeydown="if(event.key==='Enter')render()">
+    ${cur.fq?`<button class="btn sm" onclick="cur.fq='';render()">지우기</button>`:''}
+  </div>
+  <div class="tabs">
+    ${cats.map(c=>`<button class="tab ${fc===c?'on':''}" onclick="cur.fcat='${c}';render()">${c}
+      <span class="n">${c==='전체'?FIELD_CASES.length:FIELD_CASES.filter(x=>x.cat===c).length}</span></button>`).join('')}
+  </div>
+
+  ${list.length ? list.map(c=>`
+    <div class="fcase">
+      <div class="fs"><span class="cat">${esc(c.cat)}</span><span class="cat">${esc(c.k)}</span>
+        <b>${esc(c.sym)}</b></div>
+      <div class="ff">→ ${esc(c.fix)}</div>
+      <div class="fm">${esc(c.store)} · ${esc(c.by)} · ${esc(c.d)}</div>
+    </div>`).join('')
+   : `<div class="empty"><div class="em">🔍</div><b>"${esc(q)}" 결과가 없습니다</b>
+      <p>다른 단어로 찾아보세요. 처리 기록이 쌓일수록 검색이 잘 됩니다.</p></div>`}
+
+  <p style="font-size:12px;color:var(--t3);margin-top:14px">
+    업무를 완료 처리하면 그 <b>접수내역 → 처리내역</b>이 여기에 자동으로 쌓입니다. 쓸수록 두꺼워지는 매뉴얼입니다.</p>`;
 }
 
 /* ================= 이슈 / ERP / 직원 ================= */

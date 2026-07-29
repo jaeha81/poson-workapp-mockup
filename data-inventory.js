@@ -113,6 +113,16 @@ const ITEMS = [
   {id:'S11', cat:'용지', name:'반지고리라벨지',                 unit:'롤', price:null, q:{office:61,  kdh:0, kkh:0, lyj:0, kdw:0, jdh:0}}
 ];
 
+/* 사용 이력 — "어느 날 · 어떤 매장에 · 몇 개 나갔나"
+   예상(선차감) → 확정 / 반납 상태가 함께 남습니다 */
+let USAGE = [
+  {date:'2026-07-25', store:'하나아이스크림 망우 6호점', itemId:'P13', qty:1, loc:'kdw', by:'김동화', state:'확정'},
+  {date:'2026-07-29', store:'한국유통 단대점',          itemId:'A14', qty:1, loc:'lyj', by:'임영준', state:'확정'},
+  {date:'2026-07-24', store:'디데이산타아울렛 춘천',     itemId:'V06', qty:2, loc:'office', by:'김두혁', state:'확정'},
+  {date:'2026-07-23', store:'만종리퍼마켓 (제천)',      itemId:'S01', qty:4, loc:'office', by:'김두혁', state:'확정'},
+  {date:'2026-07-22', store:'OK마트 (수내)',           itemId:'A02', qty:1, loc:'kdh', by:'김두혁', state:'확정'}
+];
+
 /* 입고 이력 — 품목 / 날짜 / 수량 / 입고 위치 */
 const INBOUND = [
   {id:'IN04', date:'2026-04-24', itemId:'A12', qty:2,  loc:'office', from:'세우테크',  memo:'만종리퍼마켓 판매분 포함'},
