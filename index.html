@@ -309,6 +309,21 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .use.back{background:#F2F4F7;color:var(--t2)}
 .btn.sm.ok{background:var(--green-50);color:var(--green);border-color:#B7E4D2}
 
+/* ===== 업무량 순위 ===== */
+.rank{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:6px 14px}
+.rrow{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid #F2F4F7;flex-wrap:wrap}
+.rrow:last-child{border-bottom:none}
+.rno{
+  width:22px;height:22px;border-radius:50%;background:var(--navy-100);color:var(--navy);
+  font-size:11.5px;font-weight:800;display:grid;place-items:center;flex-shrink:0
+}
+.rrow:first-child .rno{background:var(--navy);color:#fff}
+.rnm{font-weight:700;font-size:14px;min-width:56px}
+.rbar{flex:1;min-width:100px;height:9px;background:#EDF0F3;border-radius:5px;overflow:hidden}
+.rbar i{display:block;height:100%;background:var(--navy);border-radius:5px}
+.rval{font-weight:800;font-size:14px;min-width:48px;text-align:right}
+.rsub{font-size:12px;color:var(--t3);width:100%;padding-left:33px}
+
 /* ===== 필드 매뉴얼 ===== */
 .tops{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:10px}
 .top{background:#fff;border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:var(--r);padding:13px 15px}
@@ -575,8 +590,9 @@ input,select,textarea{font-family:inherit;font-size:14px}
       <a href="#" data-view="manual"><span class="ic">📖</span>TIPS 매뉴얼</a>
       <a href="#" data-view="issues"><span class="ic">💬</span>이슈 공유</a>
       <a href="#" data-view="erp"><span class="ic">📊</span>ERP 주간요약</a>
-      <div class="nav-label">관리</div>
-      <a href="#" data-view="members"><span class="ic">👥</span>직원 · 권한</a>
+      <div class="nav-label" id="admLabel">관리자 전용</div>
+      <a href="#" data-view="report" id="navReport"><span class="ic">📈</span>월 업무량 집계</a>
+      <a href="#" data-view="members" id="navMembers"><span class="ic">👥</span>직원 · 권한</a>
     </nav>
     <div class="side-foot">
       <button class="btn-new" onclick="openNew()">+ 업무 등록</button>
@@ -702,6 +718,7 @@ input,select,textarea{font-family:inherit;font-size:14px}
 <script src="data-inventory.js"></script>
 <script src="data-field.js"></script>
 <script src="data-checklist.js"></script>
+<script src="data-report.js"></script>
 <script>
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
@@ -852,6 +869,7 @@ function render(){
   else if(cur.view==='stock')   v.innerHTML = viewStock();
   else if(cur.view==='inbound') v.innerHTML = viewInbound();
   else if(cur.view==='audit')   v.innerHTML = viewAudit();
+  else if(cur.view==='report')  v.innerHTML = viewReport();
   else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
@@ -869,6 +887,11 @@ function renderWho(){
       ${TEAM.map(t=>`<option value="${t.name}" ${t.name===ME?'selected':''}>${t.name} ${t.rank}</option>`).join('')}
     </select>
     <span class="rolebadge ${m.role==='admin'?'adm':'viw'}">${m.role==='admin'?'관리자':'뷰어'}</span>`;
+  /* 관리자 전용 메뉴는 일반 직원에게 아예 보이지 않습니다 */
+  const show = isAdmin() ? '' : 'none';
+  ['admLabel','navReport','navMembers'].forEach(id=>{
+    const el = document.getElementById(id); if(el) el.style.display = show;
+  });
 }
 function switchUser(n){ ME = n; cur.taskId=null; bump(); render(); toast(`${n} 계정으로 전환 — ${isAdmin()?'편집 가능':'조회만 가능'}`); }
 function lockNote(what){
@@ -1677,6 +1700,87 @@ function answer(id, pick){
   const ok = pick === s.quiz.a;
   document.getElementById('qres_'+id).innerHTML =
     `<div class="res ${ok?'ok':'no'}">${ok?'⭕ 정답입니다.':'❌ 아닙니다.'} ${esc(s.quiz.why)}</div>`;
+}
+
+/* ================= 월 업무량 집계 (관리자 전용) ================= */
+function viewReport(){
+  if(!isAdmin()){
+    return `<div class="empty"><div class="em">🔒</div>
+      <b>관리자만 볼 수 있는 화면입니다</b>
+      <p>직원별 업무량 집계는 관리자 계정에서만 열립니다.<br>
+      우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꿔보세요.</p></div>`;
+  }
+  const m = MONTHLY['2026-04'];
+  const kinds = ['콜업무','AS방문','당직'];
+  const sumOf = p => (m.people[p]['콜업무'].TOT + m.people[p]['AS방문'].TOT);
+
+  const tbl = (title, rows) => `
+    <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:18px 0 9px">${esc(title)}</h4>
+    <div class="tabwrap"><table class="ktab">
+      <tr><th>구분</th><th>TOT</th>${REPORT_COLS.map(c=>`<th>${esc(c)}</th>`).join('')}</tr>
+      ${kinds.map(k=>`<tr>
+        <td>${k}</td><td class="tot">${rows[k].TOT}</td>
+        ${REPORT_COLS.map(c=>`<td style="text-align:center;${rows[k][c]?'':'color:#D0D5DD'}">${rows[k][c]||'·'}</td>`).join('')}
+      </tr>`).join('')}
+    </table></div>`;
+
+  const ranked = Object.keys(m.people).sort((a,b)=>sumOf(b)-sumOf(a));
+  const max = sumOf(ranked[0]) || 1;
+
+  return `
+  <div class="mprog">
+    <div class="r"><b>월 업무량 집계 — 2026년 4월</b>
+      <span class="pc">전체 ${m.all['콜업무'].TOT + m.all['AS방문'].TOT}건</span></div>
+    <div style="font-size:12.5px;color:var(--t3)">
+      ${esc(m.from)} ~ ${esc(m.to)} · 개인 합계는 <b>콜업무 + AS방문</b>, 당직은 별도로 집계합니다 (지금 쓰시는 시트 기준과 동일).
+      실제 앱에서는 등록된 업무에서 자동으로 계산됩니다.
+    </div>
+  </div>
+
+  <div class="stotal">
+    <div class="stot"><div class="k">콜업무</div><div class="v">${m.all['콜업무'].TOT}<small>건</small></div></div>
+    <div class="stot"><div class="k">AS방문</div><div class="v">${m.all['AS방문'].TOT}<small>건</small></div></div>
+    <div class="stot car"><div class="k">당직</div><div class="v">${m.all['당직'].TOT}<small>건</small></div></div>
+    <div class="stot"><div class="k">당직 방문</div><div class="v">${Object.values(m.dutyVisit).reduce((a,b)=>a+b,0)}<small>건</small></div></div>
+  </div>
+
+  <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">직원별 업무량</h4>
+  <div class="rank">
+    ${ranked.map((p,i)=>{
+      const s = sumOf(p), pc = Math.round(s/max*100);
+      const d = m.people[p]['당직'].TOT, dv = m.dutyVisit[p]||0;
+      return `<div class="rrow">
+        <span class="rno">${i+1}</span>
+        <span class="rnm">${esc(p)}</span>
+        <span class="rbar"><i style="width:${pc}%"></i></span>
+        <span class="rval">${s}건</span>
+        <span class="rsub">콜 ${m.people[p]['콜업무'].TOT} · 방문 ${m.people[p]['AS방문'].TOT} · 당직 ${d}${dv?` (방문 ${dv})`:''}</span>
+      </div>`;
+    }).join('')}
+  </div>
+
+  ${tbl('AS 전체', m.all)}
+  ${Object.keys(m.people).map(p=>tbl(p, m.people[p])).join('')}
+
+  <div class="panel" style="margin-top:18px">
+    <h4>주요 이슈</h4>
+    <div class="plist">
+      ${m.issues.map(s=>`<div class="prow"><span class="st">■</span>
+        <span class="nm" style="min-width:auto;flex:1;font-weight:500">${esc(s)}</span></div>`).join('')}
+    </div>
+  </div>
+
+  <div class="note i">
+    <b>⚠️ 시트에서 발견한 차이</b>
+    콜업무를 직원별로 더하면 227건인데 전체는 228건입니다. 담당자가 안 적힌 건이 1건 있습니다.
+    앱에서 등록하면 담당자 없이 저장이 안 되므로 이런 차이가 생기지 않습니다.
+  </div>
+
+  <div class="stockbar" style="margin-top:14px">
+    <button class="btn pri" onclick="toast('월간 리포트를 엑셀로 내려받습니다')">엑셀 내려받기</button>
+    <button class="btn" onclick="window.print()">인쇄 · PDF</button>
+    <span style="font-size:12px;color:var(--t3)">이 화면이 지금 손으로 만드시는 월간 리포트 시트를 대체합니다.</span>
+  </div>`;
 }
 
 /* ================= 필드 매뉴얼 ================= */
