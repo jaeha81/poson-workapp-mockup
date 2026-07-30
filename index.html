@@ -645,6 +645,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 /* ===== 모바일 ===== */
 .burger{display:none;font-size:19px;padding:5px}
+.logo-m{display:none}
 /* ===== 마감 손질 ===== */
 .panel{border-radius:var(--r);box-shadow:var(--sh-1);border-color:var(--line)}
 .chip,.cat,.wtag,.rolebadge,.use,.rcpt,.mk,.memo,.soonx,.cnt2{border-radius:var(--r-tag)}
@@ -860,7 +861,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   .top{padding:0 10px;gap:6px}
   .top .today{display:none}
   /* 헤더가 화면 폭을 넘겨 본문 전체가 잘리던 문제 */
-  .top h1{font-size:15px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* 사이드바가 접히는 화면에서는 헤더에 로고를 띄웁니다 */
+  .logo-m{display:block;height:20px;width:auto;flex-shrink:0}
+  .top h1{font-size:14.5px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .top .sp{display:none}
   .bell{padding:4px;flex-shrink:0}
   .who{flex-shrink:0}
@@ -955,6 +958,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <div class="main">
     <header class="top">
       <button class="burger" onclick="document.getElementById('side').classList.toggle('open')">☰</button>
+      <img src="assets/logo.png" alt="포스온" class="logo-m">
       <h1 id="pageTitle">오늘 업무</h1>
       <span class="today">2026-07-29 (수)</span>
       <span class="sp"></span>
