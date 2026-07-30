@@ -82,9 +82,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   width:220px;flex-shrink:0;background:var(--navy);color:#fff;
   display:flex;flex-direction:column;position:sticky;top:0;height:100vh
 }
-.side .brand{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
-.side .brand b{display:block;font-size:17px;letter-spacing:-.3px}
-.side .brand span{font-size:11px;color:#9DB3CC}
+.side .brand{padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+/* 로고가 어두운 바탕에서 묻히지 않게 흰 판 위에 올림 */
+.side .brand .logo{
+  display:block;width:100%;max-width:150px;height:auto;
+  background:#fff;border-radius:10px;padding:9px 12px;margin-bottom:8px
+}
+.side .brand span{font-size:11px;color:#9DB3CC;letter-spacing:0}
 .nav{padding:12px 10px;flex:1;overflow-y:auto}
 .nav-label{font-size:10px;color:#7E9AB8;padding:12px 10px 6px;letter-spacing:.5px}
 .nav a{
@@ -709,6 +713,40 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .side .brand b{letter-spacing:-.03em}
 .av{letter-spacing:0}
 
+/* 당직 일정 */
+.duty-now{
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#fff;
+  border:1px solid var(--line);border-left:3px solid var(--navy);
+  border-radius:var(--r);padding:12px 15px;margin-bottom:14px;box-shadow:var(--sh-1)
+}
+.dn-d{font-size:13px;font-weight:700;color:var(--navy)}
+.dn-i{font-size:13.5px;display:flex;align-items:center;gap:7px}
+.dn-i b{font-size:11px;font-weight:800;color:var(--t3);background:var(--bg);padding:2px 8px;border-radius:var(--r-tag)}
+.ktab.dt td,.ktab.dt th{text-align:center;padding:7px 6px;font-size:12.5px}
+.ktab.dt td:first-child,.ktab.dt th:first-child{text-align:center;min-width:66px}
+.ktab.dt th.sat{background:#2C6FA8}
+.ktab.dt th.sun{background:#A83C3C}
+.dt-wk td{background:var(--navy-50);font-weight:700;color:var(--t2);border-bottom:none}
+.dt-day.off{color:#C8D0DA}
+.dt-day.sat{color:#2C6FA8}
+.dt-day.sun{color:#A83C3C}
+.dt-day.cur{background:var(--navy);color:#fff;border-radius:5px}
+.dt-h{font-size:11.5px!important;font-weight:700;color:var(--t3)!important;background:#FAFBFC}
+.dt-x{background:#FAFBFC}
+.dt-none{color:#C8D0DA}
+.dt-me{background:var(--orange-50);color:var(--orange-600);font-weight:800}
+.dt-sel{border:1px solid transparent;background:none;font-size:12.5px;padding:2px 4px;
+  border-radius:5px;font-weight:600;max-width:72px}
+.dt-sel:hover{border-color:var(--line);background:#fff}
+
+/* 예정 업무 체크 */
+.planopt{
+  display:flex;align-items:flex-start;gap:9px;background:var(--navy-50);
+  border:1px solid #D9E2EC;border-radius:var(--r-in);padding:11px 13px;margin-bottom:15px;
+  font-size:13px;cursor:pointer
+}
+.planopt input{width:17px;height:17px;margin-top:1px;flex-shrink:0;accent-color:#1E3A5F}
+
 /* 인원 한도 */
 .limits{display:flex;flex-direction:column;gap:8px}
 .lim{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--bg);border-radius:var(--r-in)}
@@ -867,6 +905,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-issue" viewBox="0 0 24 24"><path d="M20.5 12.3c0 3.9-3.8 7.1-8.5 7.1-.9 0-1.8-.1-2.6-.3L4.5 20.6l1.2-3.5a6.8 6.8 0 0 1-2.2-4.8c0-3.9 3.8-7.1 8.5-7.1s8.5 3.2 8.5 7.1z"/></symbol>
   <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
+  <symbol id="i-duty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12l3.1 1.9"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
   <symbol id="i-stores" viewBox="0 0 24 24"><path d="M4 9.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9.5"/><path d="M3 9.5h18l-1.6-5.2a1 1 0 0 0-1-.8H5.6a1 1 0 0 0-1 .8z"/><path d="M9.5 21v-6h5v6"/></symbol>
   <symbol id="i-members" viewBox="0 0 24 24"><circle cx="9.4" cy="8" r="3.5"/><path d="M3.4 20.2c0-3.4 2.7-5.7 6-5.7s6 2.3 6 5.7"/><path d="M16.4 5.3a3.5 3.5 0 0 1 0 6.6"/><path d="M18.1 14.9c2.2.7 3.5 2.6 3.5 5.3"/></symbol>
@@ -881,7 +920,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <!-- 사이드바 -->
   <aside class="side" id="side">
     <div class="brand">
-      <b>포스온</b>
+      <img src="assets/logo.png" alt="포스온" class="logo">
       <span>업무관리 · TIPS POS</span>
     </div>
     <nav class="nav" id="nav">
@@ -891,6 +930,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <a href="#" data-view="tasks" data-filter="mine"><svg class="ic"><use href="#i-mine"/></svg>내가 등록</a>
       <a href="#" data-view="tasks" data-filter="unread"><svg class="ic"><use href="#i-unread"/></svg>미확인</a>
       <a href="#" data-view="plan"><svg class="ic"><use href="#i-plan"/></svg>예정 업무</a>
+      <a href="#" data-view="duty"><svg class="ic"><use href="#i-duty"/></svg>당직 일정</a>
       <div class="nav-label">재고</div>
       <a href="#" data-view="stock"><svg class="ic"><use href="#i-stock"/></svg>재고 현황</a>
       <a href="#" data-view="inbound"><svg class="ic"><use href="#i-inbound"/></svg>입고 등록</a>
@@ -963,7 +1003,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
         <label>접수내역 (고객이 말한 증상)</label>
         <input type="text" id="fRecv" placeholder="예) 핸드터미널 스캔이 안 됩니다">
       </div>
-      <div class="f"><label>업무일</label><input type="date" id="fDate" value="2026-07-29"></div>
+      <div class="f"><label>업무일 <span style="font-weight:500;color:var(--t3)">— 비워도 됩니다</span></label>
+        <input type="text" id="fDate" value="2026-07-29" placeholder="2026-07-30 또는 비워두기"></div>
+      <label class="opt planopt">
+        <input type="checkbox" id="fPlan" onchange="togglePlanMode()">
+        <span><b>예정 업무로 등록</b> — 아직 확정 전이면 체크. 예정 업무 목록으로 들어갑니다</span>
+      </label>
       <div class="f">
         <label>내용</label>
         <textarea id="fBody" placeholder="작업 내용, 준비물, 주의사항을 적어주세요"></textarea>
@@ -1019,6 +1064,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 <script src="data-checklist.js"></script>
 <script src="data-report.js"></script>
 <script src="data-stores.js"></script>
+<script src="data-duty.js"></script>
 <script>
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
@@ -1120,10 +1166,11 @@ const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
 };
-/* 그 날이 속한 주(일~토) 7일 */
+/* 그 날이 속한 주(월~일) 7일 — 당직표가 월요일 시작이라 맞췄습니다 */
 function weekOf(dstr){
   const dt = new Date(dstr + 'T00:00:00');
-  dt.setDate(dt.getDate() - dt.getDay());
+  const shift = (dt.getDay() + 6) % 7;   /* 월=0 … 일=6 */
+  dt.setDate(dt.getDate() - shift);
   const out = [];
   for(let i=0;i<7;i++){ out.push(ymd(dt)); dt.setDate(dt.getDate()+1); }
   return out;
@@ -1192,6 +1239,7 @@ function render(){
   else if(cur.view==='report')  v.innerHTML = viewReport();
   else if(cur.view==='stores')  v.innerHTML = viewStores();
   else if(cur.view==='plan')    v.innerHTML = viewPlan();
+  else if(cur.view==='duty')    v.innerHTML = viewDuty();
   else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
@@ -1927,23 +1975,43 @@ function openNew(){
   $('#mask').classList.add('on');
 }
 function closeNew(){ $('#mask').classList.remove('on'); }
+function clearNewForm(){
+  ['fTitle','fBody','fRecv','fStore'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  const p = document.getElementById('fPlan'); if(p) p.checked = false;
+}
+function togglePlanMode(){
+  const on = $('#fPlan').checked;
+  toast(on ? '예정 업무로 등록됩니다 — 담당자는 나중에 정해도 됩니다'
+           : '오늘 업무로 등록됩니다');
+}
 function createTask(){
   const title = $('#fTitle').value.trim() || '제목 없는 업무';
   const owners = [...document.querySelectorAll('#people input:checked')].map(i=>i.value);
+  const recv = $('#fRecv').value.trim();
+  /* 업무일은 형식을 강제하지 않습니다. 비면 지금 보고 있는 날짜로 */
+  const date = ($('#fDate').value || '').trim() || cur.date;
+  const store = $('#fStore').value || '(매장 미지정)';
+
+  /* 예정 업무로 보내기 — 담당자 없이도 등록됩니다 */
+  if($('#fPlan').checked){
+    PLANS.push({id:Date.now(), date, store, recv: recv || title,
+                owner: owners[0] || '', ack:'', memo:''});
+    closeNew(); clearNewForm();
+    toast(`예정 업무 등록 — ${store}`);
+    cur.view='plan'; cur.date=date; render(); markNav();
+    return;
+  }
   if(!owners.length){ toast('오더 담당자를 1명 이상 선택해주세요'); return; }
   const targets = STAFF.filter(n => n !== ME);   // 내용은 전원 공유
-  const recv = $('#fRecv').value.trim();
-  const date = $('#fDate').value;
   TASKS.unshift({
-    id: Date.now(), store: $('#fStore').value || '(매장 미지정)',
+    id: Date.now(), store,
     kind: $('#fKind').value, cat: $('#fCat').value, title,
     body: (recv ? `[접수내역] ${recv}\n` : '') + ($('#fBody').value.trim() || '(내용 없음)'),
     author: ME, date, due: date,
     status: 'doing', audience: 'all', mine: true,
-    acks: [], targets, owners, comments: [], used: [], expenses: [], checked: {}
+    acks: [], targets, owners, comments: [], used: [], expenses: [], reports: [], checked: {}
   });
-  closeNew();
-  $('#fTitle').value=''; $('#fBody').value=''; $('#fRecv').value=''; $('#fStore').value='';
+  closeNew(); clearNewForm();
   const rk = owners.filter(n=>ROOKIES.has(n));
   const holNote = isHoliday(date) ? ' · 휴일 업무라 당직비 대상입니다' : '';
   toast(rk.length
@@ -2159,6 +2227,81 @@ function answer(id, pick){
   document.getElementById('qres_'+id).innerHTML =
     `<div class="res ${ok?'ok':'no'}">${ok?'⭕ 정답입니다.':'❌ 아닙니다.'} ${esc(s.quiz.why)}</div>`;
 }
+
+/* ================= 당직 일정 =================
+   「POSON 07월 전화 당직 일정」 표를 그대로 옮겼습니다.
+   야간당직은 매일, 주말당직은 토·일만. 편집은 관리자만. */
+function viewDuty(){
+  const m = DUTY['2026-07'];
+  const DOW = ['월','화','수','목','금','토','일'];
+  const today = dutyOf(cur.date);
+  const canEdit = isAdmin();
+
+  const cell = (name, i, wk, kind) => {
+    if(i < 5 && kind === 'weekend') return `<td class="dt-x"></td>`;
+    const cls = name ? (name === ME ? 'dt-me' : '') : 'dt-none';
+    return canEdit
+      ? `<td class="${cls}"><select class="dt-sel" onchange="setDuty(${wk},'${kind}',${i},this.value)">
+           <option value="">—</option>
+           ${DUTY_MEMBERS.map(n=>`<option ${n===name?'selected':''}>${n}</option>`).join('')}
+         </select></td>`
+      : `<td class="${cls}">${name ? esc(name) : '—'}</td>`;
+  };
+
+  return `
+  <div class="mprog">
+    <div class="r"><b>전화 당직 일정 — 2026년 7월</b>
+      <span class="pc">당직 인원 ${DUTY_MEMBERS.length}명</span></div>
+    <div style="font-size:12.5px;color:var(--t3)">
+      ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주말당직은 토·일에 섭니다.
+      ${canEdit?'칸을 눌러 담당자를 바꿀 수 있습니다.':'변경은 관리자만 가능합니다.'}
+    </div>
+  </div>
+
+  ${today ? `
+  <div class="duty-now">
+    <span class="dn-d">${esc(cur.date)}</span>
+    <span class="dn-i"><b>야간당직</b>${today.night?esc(today.night):'없음'}</span>
+    ${today.weekend?`<span class="dn-i"><b>주말당직</b>${esc(today.weekend)}</span>`:''}
+    ${(today.night===ME||today.weekend===ME)?`<span class="chip duty">내 당직입니다</span>`:''}
+  </div>`:''}
+
+  <div class="tabwrap">
+    <table class="ktab dt">
+      <tr><th>구분</th>${DOW.map((d,i)=>`<th class="${i===5?'sat':''}${i===6?'sun':''}">${d}</th>`).join('')}</tr>
+      ${m.weeks.map(w=>{
+        const base = new Date(w.from+'T00:00:00');
+        const days = [...Array(7)].map((_,i)=>{ const d=new Date(base); d.setDate(base.getDate()+i); return d; });
+        return `
+        <tr class="dt-wk"><td>${w.no}주차</td>
+          ${days.map((d,i)=>{
+            const inMonth = d.getMonth() === 6;
+            const isCur = ymd(d) === cur.date;
+            return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${i===5?'sat':''}${i===6?'sun':''}">${d.getDate()}</td>`;
+          }).join('')}
+        </tr>
+        <tr><td class="dt-h">주말당직</td>${w.weekend.map((n,i)=>cell(n,i,w.no,'weekend')).join('')}</tr>
+        <tr><td class="dt-h">야간당직</td>${w.night.map((n,i)=>cell(n,i,w.no,'night')).join('')}</tr>`;
+      }).join('')}
+    </table>
+  </div>
+
+  <div class="panel" style="margin-top:14px">
+    <h4>특이사항</h4>
+    ${canEdit
+      ? `<div class="cmtform" style="margin-top:0">
+           <input id="dtNote" value="${esc(m.note)}" placeholder="당직 관련 전달 사항">
+           <button class="btn pri" onclick="saveDutyNote()">저장</button></div>`
+      : `<div class="desc" style="margin:0">${esc(m.note) || '특이사항 없음'}</div>`}
+  </div>`;
+}
+function setDuty(wk, kind, i, name){
+  const w = DUTY['2026-07'].weeks.find(x=>x.no===wk);
+  w[kind][i] = name || null;
+  toast(name ? `${wk}주차 ${kind==='night'?'야간':'주말'}당직 → ${name}` : '당직 해제');
+  render();
+}
+function saveDutyNote(){ DUTY['2026-07'].note = $('#dtNote').value; toast('특이사항 저장'); render(); }
 
 /* ================= 예정 업무 =================
    지금 쓰시는 「Services Schedule (일일)」 엑셀을 대체합니다.
@@ -2761,7 +2904,7 @@ function applyHash(){
   if(['today','order','mine','unread'].includes(p[0])){
     cur.view = 'tasks'; cur.filter = p[0]; return true;
   }
-  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan'].includes(p[0])){
+  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty'].includes(p[0])){
     cur.view = p[0]; return true;
   }
   return false;
