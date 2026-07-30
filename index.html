@@ -709,6 +709,37 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .side .brand b{letter-spacing:-.03em}
 .av{letter-spacing:0}
 
+/* 인원 한도 */
+.limits{display:flex;flex-direction:column;gap:8px}
+.lim{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--bg);border-radius:var(--r-in)}
+.lim .ln{flex:1;font-size:13.5px;font-weight:600;color:var(--t2)}
+.lim b{font-size:16px;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
+
+/* 현장 보고 */
+.reps{display:flex;flex-direction:column;gap:2px}
+.rep{display:flex;align-items:center;gap:9px;padding:9px 4px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
+.rep:last-child{border-bottom:none}
+.rep-k{
+  font-size:11px;font-weight:800;padding:3px 9px;border-radius:var(--r-tag);
+  background:var(--navy-100);color:var(--navy);flex-shrink:0
+}
+.rep-k.pay{background:var(--orange-50);color:var(--orange-600)}
+.rep-b{font-size:13.5px;flex:1;min-width:0}
+.rep-m{font-size:12px;color:var(--t3)}
+.repbtns{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
+.repbtns .btn{flex:1;min-width:72px}
+
+/* 영수증 드롭 */
+.rcpt-drop{cursor:pointer;padding:20px;margin-top:12px;transition:border-color .18s var(--ease),background .18s var(--ease)}
+.rcpt-drop:hover,.rcpt-drop.over{border-color:var(--navy);background:var(--navy-50)}
+.rcpt-drop.filled{border-color:#BFE3D5;background:var(--green-50);border-style:solid}
+.rcpt-drop b{font-size:14px;display:block;margin-bottom:3px}
+.rcpt-state{
+  display:inline-block;margin-top:8px;font-size:11.5px;font-weight:700;
+  background:var(--bg);color:var(--t3);padding:3px 10px;border-radius:var(--r-tag)
+}
+.rcpt-state.ok{background:var(--green-50);color:var(--green)}
+
 /* 주간 날짜바 — 오더가 있는 날은 진하게 */
 .weekbar{
   display:flex;align-items:stretch;gap:7px;background:#fff;border:1px solid var(--line);
@@ -836,6 +867,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-issue" viewBox="0 0 24 24"><path d="M20.5 12.3c0 3.9-3.8 7.1-8.5 7.1-.9 0-1.8-.1-2.6-.3L4.5 20.6l1.2-3.5a6.8 6.8 0 0 1-2.2-4.8c0-3.9 3.8-7.1 8.5-7.1s8.5 3.2 8.5 7.1z"/></symbol>
   <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
+  <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
   <symbol id="i-stores" viewBox="0 0 24 24"><path d="M4 9.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9.5"/><path d="M3 9.5h18l-1.6-5.2a1 1 0 0 0-1-.8H5.6a1 1 0 0 0-1 .8z"/><path d="M9.5 21v-6h5v6"/></symbol>
   <symbol id="i-members" viewBox="0 0 24 24"><circle cx="9.4" cy="8" r="3.5"/><path d="M3.4 20.2c0-3.4 2.7-5.7 6-5.7s6 2.3 6 5.7"/><path d="M16.4 5.3a3.5 3.5 0 0 1 0 6.6"/><path d="M18.1 14.9c2.2.7 3.5 2.6 3.5 5.3"/></symbol>
 </defs></svg>
@@ -858,6 +890,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <a href="#" data-view="tasks" data-filter="order"><svg class="ic"><use href="#i-order"/></svg>내 오더<span class="cnt" id="navShared">3</span></a>
       <a href="#" data-view="tasks" data-filter="mine"><svg class="ic"><use href="#i-mine"/></svg>내가 등록</a>
       <a href="#" data-view="tasks" data-filter="unread"><svg class="ic"><use href="#i-unread"/></svg>미확인</a>
+      <a href="#" data-view="plan"><svg class="ic"><use href="#i-plan"/></svg>예정 업무</a>
       <div class="nav-label">재고</div>
       <a href="#" data-view="stock"><svg class="ic"><use href="#i-stock"/></svg>재고 현황</a>
       <a href="#" data-view="inbound"><svg class="ic"><use href="#i-inbound"/></svg>입고 등록</a>
@@ -1158,6 +1191,7 @@ function render(){
   else if(cur.view==='audit')   v.innerHTML = viewAudit();
   else if(cur.view==='report')  v.innerHTML = viewReport();
   else if(cur.view==='stores')  v.innerHTML = viewStores();
+  else if(cur.view==='plan')    v.innerHTML = viewPlan();
   else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
@@ -1508,6 +1542,7 @@ function viewDetail(id){
       연한 이름이 아직 안 본 사람입니다. 누르면 리마인드가 갑니다.</p>`:''}
   </div>
 
+  ${reportBox(t)}
   ${usedBox(t)}
   ${expenseBox(t)}
 
@@ -1596,6 +1631,62 @@ function rookieBox(t){
         </button>`).join('')}
     </div>
   </div>`;
+}
+
+/* ===== 현장 보고 — 단톡에 올리던 이동·결제 보고를 여기서 =====
+   "원가마켓별내점 이동합니다" / "대금결제 440만원 카드결제완료 / 식사후 대일푸드 이동합니다" */
+const REPORT_TYPES = [
+  {k:'출발',   t:'출발합니다'},
+  {k:'도착',   t:'도착했습니다'},
+  {k:'작업완료', t:'작업 완료했습니다'},
+  {k:'결제완료', t:'결제 완료했습니다'},
+  {k:'이동',   t:'다음 매장으로 이동합니다'}
+];
+function reportBox(t){
+  const mine = t.mine || isAdmin() || (t.owners||[]).includes(ME);
+  t.reports = t.reports || [];
+  const rows = t.reports.length ? t.reports.map(r=>`
+    <div class="rep">
+      <span class="rep-k ${r.k==='결제완료'?'pay':''}">${esc(r.k)}</span>
+      <span class="rep-b">${esc(r.b)}</span>
+      <span class="rep-m">${esc(r.n)} · ${esc(r.t)}</span>
+    </div>`).join('')
+    : '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 보고가 없습니다.</p>';
+
+  return `<div class="panel">
+    <h4>현장 보고 ${t.reports.length?`<span style="color:var(--t3)">${t.reports.length}</span>`:''}</h4>
+    <div class="reps">${rows}</div>
+    ${mine ? `
+    <div class="repbtns">
+      ${REPORT_TYPES.map(r=>`<button class="btn" onclick="quickReport(${t.id},'${r.k}')">${r.k}</button>`).join('')}
+    </div>
+    <div class="cmtform">
+      <input id="repIn" placeholder="예) 대금결제 440만원(vat포함) 카드결제완료"
+             onkeydown="if(event.key==='Enter')addReport(${t.id})">
+      <button class="btn pri" onclick="addReport(${t.id})">보고</button>
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:8px">
+      누르면 전원에게 알림이 갑니다. 단톡에 올리던 이동·결제 보고를 여기에 남기면 업무에 붙어서 남습니다.</p>` : ''}
+  </div>`;
+}
+function nowHM(){
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function quickReport(id, k){
+  const t = TASKS.find(x=>x.id===id);
+  const tpl = REPORT_TYPES.find(r=>r.k===k);
+  t.reports = t.reports || [];
+  t.reports.push({k, b:`${t.store} ${tpl.t}`, n:ME, t:nowHM()});
+  toast(`${k} 보고 — 전원에게 알림`); render();
+}
+function addReport(id){
+  const t = TASKS.find(x=>x.id===id);
+  const v = $('#repIn').value.trim(); if(!v) return;
+  t.reports = t.reports || [];
+  const k = /결제|입금|카드/.test(v) ? '결제완료' : '보고';
+  t.reports.push({k, b:v, n:ME, t:nowHM()});
+  toast('현장 보고 등록 — 전원에게 알림'); render();
 }
 
 /* ===== 사용 재고 · 경비 ===== */
@@ -1692,18 +1783,35 @@ function expenseBox(t){
       </select>
       <input id="eAmt" style="flex:0 0 110px" placeholder="금액(원)">
       <input id="eMemo" placeholder="비고 (선택)">
-      <label class="shot-btn">📷 영수증 촬영<input type="checkbox" id="eRcpt"></label>
       <button class="btn pri" onclick="addExp(${t.id})">경비 등록</button>
     </div>
-    <p style="font-size:12px;color:var(--t3);margin-top:8px">
-      실제 앱에서는 📷을 누르면 카메라가 열리고, 찍은 영수증이 스캔처럼 보정돼 첨부됩니다.</p>` : ''}
+    <div class="drop rcpt-drop" id="rdrop"
+         ondragover="event.preventDefault();this.classList.add('over')"
+         ondragleave="this.classList.remove('over')"
+         ondrop="event.preventDefault();this.classList.remove('over');dropRcpt()"
+         onclick="dropRcpt()">
+      <b>영수증을 여기에 끌어다 놓으세요</b>
+      <p>폰에서는 눌러서 바로 촬영 · 찍으면 스캔처럼 보정돼 첨부됩니다</p>
+      <span class="rcpt-state" id="rState">첨부 대기</span>
+    </div>` : ''}
   </div>`;
+}
+/* 영수증 — 드롭 또는 촬영 */
+let rcptReady = false;
+function dropRcpt(){
+  rcptReady = true;
+  const el = document.getElementById('rState');
+  if(el){ el.textContent = '영수증 1장 첨부됨'; el.className = 'rcpt-state ok'; }
+  const d = document.getElementById('rdrop');
+  if(d) d.classList.add('filled');
+  toast('영수증이 첨부됐습니다. 금액을 넣고 경비 등록을 누르세요');
 }
 function addExp(id){
   const t = TASKS.find(x=>x.id===id);
   const amt = Number(($('#eAmt').value||'').replace(/[^0-9]/g,''));
   if(!amt){ toast('금액을 입력해주세요'); return; }
-  t.expenses.push({kind:$('#eKind').value, amt, memo:$('#eMemo').value, receipt:$('#eRcpt').checked});
+  t.expenses.push({kind:$('#eKind').value, amt, memo:$('#eMemo').value, receipt:rcptReady});
+  rcptReady = false;
   toast(`경비 등록 — ${amt.toLocaleString()}원`); render();
 }
 
@@ -2052,6 +2160,119 @@ function answer(id, pick){
     `<div class="res ${ok?'ok':'no'}">${ok?'⭕ 정답입니다.':'❌ 아닙니다.'} ${esc(s.quiz.why)}</div>`;
 }
 
+/* ================= 예정 업무 =================
+   지금 쓰시는 「Services Schedule (일일)」 엑셀을 대체합니다.
+   날짜 / 방문지 / 접수내역 / 담당자 / 확인 / 비고 + 전달사항 */
+let PLANS = [
+  {id:1, date:'2026-07-30', store:'금강넷 (서산)', recv:'위임장 직인 날인 및 서류 받아오기', owner:'김두혁', ack:'', memo:''},
+  {id:2, date:'2026-07-30', store:'청라병원',      recv:'업무PC 신규 설치',                  owner:'',      ack:'', memo:''},
+  {id:3, date:'2026-07-30', store:'디데이산타 동두천', recv:'계산대 변경',                    owner:'',      ack:'', memo:''},
+  {id:4, date:'2026-07-30', store:'디데이산타 포천',   recv:'계산대 입고 확인 (준공승인 지연)', owner:'',    ack:'', memo:''}
+];
+let NOTICE = 'AS 복귀 후 ECOUNT 업데이트 하세요';
+
+function viewPlan(){
+  const day = PLANS.filter(p => p.date === cur.date);
+  const canEdit = isAdmin();
+  return `
+  <div class="mprog">
+    <div class="r"><b>예정 업무</b><span class="pc">${esc(cur.date)} · ${day.length}건</span></div>
+    <div style="font-size:12.5px;color:var(--t3)">
+      매일 만드시는 「Services Schedule (일일)」을 대신합니다.
+      담당자를 지정하면 그 사람에게 알림이 가고, 확인란에 이름이 남습니다.
+    </div>
+  </div>
+
+  <div class="panel">
+    <h4>전달 사항</h4>
+    ${canEdit
+      ? `<div class="cmtform" style="margin-top:0">
+           <input id="ntIn" value="${esc(NOTICE)}" placeholder="전 직원에게 전달할 내용">
+           <button class="btn pri" onclick="saveNotice()">저장</button>
+         </div>`
+      : `<div class="desc" style="margin:0">${esc(NOTICE) || '전달 사항 없음'}</div>`}
+  </div>
+
+  ${canEdit ? `
+  <div class="panel">
+    <h4>예정 업무 추가</h4>
+    <div class="grid2">
+      <div class="f"><label>방문지</label>
+        <div class="ac">
+          <input type="text" id="plStore" autocomplete="off" placeholder="이름 일부만 (예: 산타, 다팜)"
+                 oninput="acSearch2(this.value)" onfocus="acSearch2(this.value)">
+          <div class="ac-list" id="acList2"></div>
+        </div>
+      </div>
+      <div class="f"><label>담당자 (비워두면 미정)</label>
+        <select id="plOwner"><option value="">미정</option>
+          ${TEAM.map(t=>`<option>${t.name}</option>`).join('')}</select></div>
+    </div>
+    <div class="f"><label>접수내역</label>
+      <input type="text" id="plRecv" placeholder="예) 계산대 입고 확인 (준공승인 지연)"></div>
+    <button class="btn pri" onclick="addPlan()">예정 업무 추가</button>
+  </div>` : ''}
+
+  ${day.length ? day.map(p=>`
+    <div class="card">
+      <div class="r1"><span class="store">${esc(p.store)}</span>
+        ${p.ack?`<span class="chip done">확인 ${esc(p.ack)}</span>`
+                :`<span class="cat">확인 대기</span>`}</div>
+      <h3 style="cursor:default">${esc(p.recv)}</h3>
+      <div class="meta">
+        <span>담당 <b style="color:${p.owner?'var(--navy)':'var(--t3)'}">${p.owner?esc(p.owner):'미정'}</b></span>
+        ${p.memo?`<span class="sep">·</span><span>${esc(p.memo)}</span>`:''}
+      </div>
+      <div class="ackrow">
+        <span class="acts" style="margin-left:0">
+          ${!p.ack && (p.owner===ME || !p.owner)
+            ? `<button class="btn pri" onclick="ackPlan(${p.id})">확인 — 내 이름 남기기</button>` : ''}
+          ${canEdit?`<button class="btn" onclick="toTask(${p.id})">업무로 등록</button>
+                     <button class="btn" onclick="delPlan(${p.id})">삭제</button>`:''}
+        </span>
+      </div>
+    </div>`).join('')
+   : `<div class="empty"><b>${esc(cur.date)} 예정 업무가 없습니다</b>
+      <p>위에서 추가하거나, 왼쪽 주간 막대에서 다른 날짜를 골라보세요.</p></div>`}`;
+}
+function acSearch2(q){
+  const box = $('#acList2');
+  const hit = searchStores(q, 8);
+  box.innerHTML = hit.length
+    ? hit.map(s=>`<button class="ac-i" onclick="ac2Pick('${esc(s.name).replace(/'/g,"\\'")}')">
+        <span class="ac-n">${esc(s.name)}</span><span class="ac-m">${esc(s.kind)} · ${esc(s.code)}</span></button>`).join('')
+    : `<div class="ac-none">찾은 거래처가 없습니다</div>`;
+  box.classList.add('on');
+}
+function ac2Pick(n){ $('#plStore').value = n; $('#acList2').classList.remove('on'); }
+function addPlan(){
+  const store = $('#plStore').value.trim(), recv = $('#plRecv').value.trim();
+  if(!store || !recv){ toast('방문지와 접수내역을 입력해주세요'); return; }
+  PLANS.push({id:Date.now(), date:cur.date, store, recv, owner:$('#plOwner').value, ack:'', memo:''});
+  $('#plStore').value=''; $('#plRecv').value='';
+  toast(`예정 업무 추가 — ${store}`); render();
+}
+function ackPlan(id){
+  const p = PLANS.find(x=>x.id===id);
+  p.ack = ME; if(!p.owner) p.owner = ME;
+  toast(`확인 — ${ME} 이름이 남았습니다`); render();
+}
+function delPlan(id){ PLANS = PLANS.filter(x=>x.id!==id); toast('삭제'); render(); }
+function toTask(id){
+  const p = PLANS.find(x=>x.id===id);
+  TASKS.unshift({
+    id:Date.now(), store:p.store, kind:'AS방문', cat:'POS', title:p.recv,
+    body:`[접수내역] ${p.recv}`, author:ME, date:p.date, due:p.date,
+    status:'doing', audience:'all', mine:true,
+    acks:[], targets:STAFF.filter(n=>n!==ME), owners:p.owner?[p.owner]:[],
+    comments:[], used:[], expenses:[], reports:[], checked:{}
+  });
+  PLANS = PLANS.filter(x=>x.id!==id);
+  toast(`업무로 등록 — ${p.store}`);
+  cur.view='tasks'; cur.filter='today'; render(); markNav();
+}
+function saveNotice(){ NOTICE = $('#ntIn').value; toast('전달 사항 저장 — 전원에게 표시됩니다'); render(); }
+
 /* ================= 거래처 관리 (관리자 전용) ================= */
 function viewStores(){
   if(!isAdmin()){
@@ -2375,8 +2596,43 @@ function viewErp(){
   </div>`;
 }
 function viewMembers(){
+  const admins = TEAM.filter(t=>t.role==='admin').length;
+  const cars = TEAM.filter(t=>t.car).length;
   return `
   ${isAdmin() ? '' : lockNote('권한 변경 · 신입 지정 · 직원 초대')}
+
+  <div class="stotal">
+    <div class="stot"><div class="k">사용 인원</div>
+      <div class="v">${TEAM.length}<small>/ ${LIMITS.seats}명</small></div></div>
+    <div class="stot"><div class="k">관리자</div>
+      <div class="v">${admins}<small>/ ${LIMITS.admins}명</small></div></div>
+    <div class="stot car"><div class="k">차량 재고</div>
+      <div class="v">${cars}<small>명</small></div></div>
+    <div class="stot"><div class="k">신입 지정</div>
+      <div class="v">${ROOKIES.size}<small>명</small></div></div>
+  </div>
+
+  ${isAdmin()?`
+  <div class="panel">
+    <h4>인원 한도</h4>
+    <div class="limits">
+      <div class="lim">
+        <span class="ln">파일럿 사용 인원</span>
+        <button class="btn sm" onclick="setLimit('seats',-1)">−</button>
+        <b>${LIMITS.seats}</b>
+        <button class="btn sm" onclick="setLimit('seats',1)">+</button>
+      </div>
+      <div class="lim">
+        <span class="ln">관리자 권한 부여 가능 인원</span>
+        <button class="btn sm" onclick="setLimit('admins',-1)">−</button>
+        <b>${LIMITS.admins}</b>
+        <button class="btn sm" onclick="setLimit('admins',1)">+</button>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:10px">
+      1차 파일럿은 20명 기준입니다. 인원이 늘면 여기서 한도를 올리세요.</p>
+  </div>`:''}
+
   <div class="panel">
     <h4>AS부서 ${TEAM.length}명 — 관리자가 이메일로 초대해야 가입됩니다 (외부인 가입 차단)</h4>
     <div class="plist">
@@ -2438,8 +2694,24 @@ function toggleCar(id){
 }
 function toggleRole(id){
   const t = TEAM.find(x=>x.id===id);
+  const admins = TEAM.filter(x=>x.role==='admin').length;
+  if(t.role !== 'admin' && admins >= LIMITS.admins){
+    toast(`관리자 한도 ${LIMITS.admins}명입니다. 위에서 한도를 올리세요`); return;
+  }
+  if(t.role === 'admin' && admins <= 1){ toast('관리자가 최소 1명은 있어야 합니다'); return; }
   t.role = t.role==='admin' ? 'engineer' : 'admin';
   toast(`${t.name} → ${t.role==='admin'?'관리자':'뷰어'}`);
+  render();
+}
+/* 파일럿 인원 · 관리자 수 한도 — 관리자가 직접 올립니다 */
+const LIMITS = {seats:20, admins:5};
+function setLimit(k, d){
+  const min = k==='admins' ? TEAM.filter(t=>t.role==='admin').length : TEAM.length;
+  const next = LIMITS[k] + d;
+  if(next < min){ toast(`현재 ${min}명이라 그 아래로는 못 내립니다`); return; }
+  if(next > 200){ toast('200명까지 설정할 수 있습니다'); return; }
+  LIMITS[k] = next;
+  toast(`${k==='seats'?'사용 인원':'관리자'} 한도 ${next}명`);
   render();
 }
 
@@ -2489,7 +2761,7 @@ function applyHash(){
   if(['today','order','mine','unread'].includes(p[0])){
     cur.view = 'tasks'; cur.filter = p[0]; return true;
   }
-  if(['stock','inbound','audit','field','issues','erp','report','members','stores'].includes(p[0])){
+  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan'].includes(p[0])){
     cur.view = p[0]; return true;
   }
   return false;
