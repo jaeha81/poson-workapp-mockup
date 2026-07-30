@@ -5,25 +5,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>포스온 업무관리 — 화면 초안 (Mockup v1)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
-  --navy:#1E3A5F; --navy-700:#16304f; --navy-100:#E8EDF3;
-  --orange:#F97316; --orange-50:#FFF3E9;
-  --green:#0E9F6E; --green-50:#E8F7F1;
-  --red:#E02424;
-  --bg:#F6F7F9; --card:#fff; --line:#E4E7EC;
-  --t1:#101828; --t2:#475467; --t3:#98A2B3;
-  --r:10px;
+  /* 남색 계열 — 그림자와 회색도 같은 색조로 맞춰 한 광원처럼 보이게 */
+  --navy:#1E3A5F; --navy-700:#16304F; --navy-900:#132741; --navy-100:#E7EDF4; --navy-50:#F3F6FA;
+  /* 주황 채도를 낮춰 경고색이 화면을 잡아먹지 않게 */
+  --orange:#DE6F26; --orange-600:#C25E1B; --orange-50:#FDF2E9;
+  --green:#0E8F63; --green-50:#E9F5F0;
+  --red:#C93A3A; --red-50:#FCEDED;
+
+  --bg:#F5F6F8; --card:#fff;
+  --line:#E5E8EC; --line-2:#EEF0F3;
+  --t1:#141B26; --t2:#4A5568; --t3:#93A0B0;
+
+  /* 라운드는 한 값으로 통일하지 않고 바깥은 넉넉히, 안쪽은 좁게 */
+  --r:13px; --r-in:9px; --r-tag:6px;
+
+  /* 그림자는 검정이 아니라 남색을 옅게 — 배경 색조와 어긋나지 않도록 */
+  --sh-1:0 1px 2px rgba(30,58,95,.05);
+  --sh-2:0 2px 8px rgba(30,58,95,.07), 0 1px 2px rgba(30,58,95,.05);
+  --sh-3:0 12px 32px rgba(19,39,65,.14), 0 2px 8px rgba(19,39,65,.08);
+
+  --ease:cubic-bezier(.2,.7,.3,1);       /* 감속이 긴 자연스러운 곡선 */
+  --spring:cubic-bezier(.34,1.4,.5,1);   /* 살짝 튀는 느낌 */
+  --z-head:20; --z-noti:50; --z-modal:60; --z-side:70; --z-toast:90; --z-lbox:100;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{overflow-x:hidden}
+html{overflow-x:hidden;scroll-behavior:smooth}
 body{overflow-x:hidden;
-  font-family:'Pretendard',-apple-system,'Segoe UI','Malgun Gothic',sans-serif;
-  background:var(--bg); color:var(--t1); font-size:14px; line-height:1.5;
-  -webkit-font-smoothing:antialiased;
+  font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,
+              'Apple SD Gothic Neo','Segoe UI','Malgun Gothic',sans-serif;
+  background:var(--bg); color:var(--t1); font-size:14px; line-height:1.6;
+  letter-spacing:-.01em;
+  -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+  font-feature-settings:'ss01','tnum';
 }
+/* 숫자는 자릿수가 흔들리지 않게 고정폭 */
+.stab td,.stab th,.ktab td,.ktab th,.stot .v,.stot2,.rval,.ackn,.inrow .q,
+.tab .n,.mprog .pc,.chip,.cnt,.cnt2{font-variant-numeric:tabular-nums}
+p,.desc,.tn,.tw{text-wrap:pretty}
+h1,h2,h3,h4{letter-spacing:-.022em;text-wrap:balance}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,select,textarea{font-family:inherit;font-size:14px}
+input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
+
+/* 키보드 사용자용 포커스 — 마우스 클릭에는 안 나오게 */
+:focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:4px}
+
+/* ===== 모션 ===== */
+@keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pop{0%{transform:scale(.82)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
+.card,.sec,.fcase,.sitem,.inrow,.chap,.fixc,.step,.rrow{
+  animation:riseIn .34s var(--ease) both
+}
+/* 위에서부터 차례로 — 한꺼번에 나타나면 인공적으로 보임 */
+.card:nth-child(1),.sec:nth-child(1),.fcase:nth-child(1),.sitem:nth-child(1){animation-delay:.02s}
+.card:nth-child(2),.sec:nth-child(2),.fcase:nth-child(2),.sitem:nth-child(2){animation-delay:.05s}
+.card:nth-child(3),.sec:nth-child(3),.fcase:nth-child(3),.sitem:nth-child(3){animation-delay:.08s}
+.card:nth-child(4),.sec:nth-child(4),.fcase:nth-child(4),.sitem:nth-child(4){animation-delay:.11s}
+.card:nth-child(n+5),.sec:nth-child(n+5),.fcase:nth-child(n+5),.sitem:nth-child(n+5){animation-delay:.13s}
+.panel{animation:fadeIn .3s var(--ease) both}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
 
 /* ===== 레이아웃 ===== */
 .app{display:flex;min-height:100vh}
@@ -39,15 +88,24 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .nav{padding:12px 10px;flex:1;overflow-y:auto}
 .nav-label{font-size:10px;color:#7E9AB8;padding:12px 10px 6px;letter-spacing:.5px}
 .nav a{
-  display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:8px;
-  color:#D3DEEA;text-decoration:none;font-size:13.5px;margin-bottom:2px
+  display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-in);
+  color:#CBD8E6;text-decoration:none;font-size:13.5px;margin-bottom:1px;position:relative;
+  transition:background .18s var(--ease),color .18s var(--ease),padding-left .2s var(--ease)
 }
-.nav a:hover{background:rgba(255,255,255,.08);color:#fff}
+.nav a:hover{background:rgba(255,255,255,.07);color:#fff;padding-left:14px}
 .nav a.on{background:#fff;color:var(--navy);font-weight:600}
-.nav a .ic{width:16px;text-align:center;font-size:14px}
+.nav a.on::before{
+  content:'';position:absolute;left:-10px;top:8px;bottom:8px;width:3px;
+  background:var(--orange);border-radius:0 3px 3px 0
+}
+.nav a .ic{
+  width:17px;height:17px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;opacity:.9
+}
+.nav a.on .ic{opacity:1}
 .nav a .cnt{
   margin-left:auto;background:var(--orange);color:#fff;font-size:10.5px;
-  font-weight:700;padding:1px 6px;border-radius:9px
+  font-weight:700;padding:1px 7px;border-radius:9px;letter-spacing:0
 }
 .nav a.on .cnt{background:var(--orange)}
 .side-foot{padding:12px 14px 16px;border-top:1px solid rgba(255,255,255,.12)}
@@ -96,9 +154,10 @@ input,select,textarea{font-family:inherit;font-size:14px}
 /* ===== 업무 카드 ===== */
 .card{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:15px 17px;margin-bottom:11px;transition:.12s
+  padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh-1);
+  transition:box-shadow .22s var(--ease),border-color .22s var(--ease),transform .22s var(--ease)
 }
-.card:hover{border-color:#C6D3E1;box-shadow:0 2px 10px rgba(16,24,40,.06)}
+.card:hover{border-color:#D3DBE4;box-shadow:var(--sh-2);transform:translateY(-1px)}
 .card .r1{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
 .chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
 .chip.urgent{background:#FDECEC;color:var(--red)}
@@ -126,14 +185,21 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .unread{font-size:12px;color:var(--t3)}
 .acts{margin-left:auto;display:flex;gap:6px}
 .btn{
-  font-size:12.5px;padding:6px 12px;border-radius:7px;border:1px solid var(--line);
-  background:#fff;font-weight:600;color:var(--t2)
+  font-size:12.5px;padding:7px 13px;border-radius:var(--r-in);border:1px solid var(--line);
+  background:#fff;font-weight:600;color:var(--t2);
+  transition:background .18s var(--ease),border-color .18s var(--ease),
+             color .18s var(--ease),transform .12s var(--ease),box-shadow .18s var(--ease)
 }
-.btn:hover{background:var(--bg)}
-.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
-.btn.pri:hover{background:var(--navy-700)}
-.btn.ok{background:var(--green-50);color:var(--green);border-color:#B7E4D2}
-.btn.ok:hover{background:#dcf3ea}
+.btn:hover{background:var(--navy-50);border-color:#D3DBE4;color:var(--t1)}
+.btn:active{transform:translateY(1px) scale(.985)}
+.btn.pri{background:var(--navy);color:#fff;border-color:var(--navy);box-shadow:var(--sh-1)}
+.btn.pri:hover{background:var(--navy-700);border-color:var(--navy-700);box-shadow:var(--sh-2)}
+.btn.ok{background:var(--green-50);color:var(--green);border-color:#BFE3D5}
+.btn.ok:hover{background:#DFF0E8;border-color:#A5D8C5}
+.btn:disabled{cursor:default;transform:none;opacity:.85}
+.btn:disabled:hover{background:var(--green-50);border-color:#BFE3D5}
+.btn-new{transition:background .18s var(--ease),transform .12s var(--ease),box-shadow .2s var(--ease)}
+.btn-new:active{transform:translateY(1px) scale(.99)}
 
 /* ===== 상세 ===== */
 .back{font-size:13px;color:var(--t2);margin-bottom:12px;display:inline-flex;gap:5px;align-items:center}
@@ -141,7 +207,14 @@ input,select,textarea{font-family:inherit;font-size:14px}
 .panel{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
 .panel h2{font-size:19px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
 .desc{color:var(--t2);font-size:14px;background:var(--bg);padding:12px 14px;border-radius:8px;margin:12px 0;white-space:pre-line}
-.panel h4{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:10px}
+.panel h4{
+  position:relative;padding-left:11px;font-size:13px;font-weight:700;color:var(--t2);
+  margin-bottom:11px;letter-spacing:-.005em
+}
+.panel h4::before{
+  content:'';position:absolute;left:0;top:.42em;width:3px;height:.95em;
+  background:var(--navy);border-radius:2px;opacity:.5
+}
 .bar{height:8px;background:#EDF0F3;border-radius:5px;overflow:hidden;margin:6px 0 14px}
 .bar > i{display:block;height:100%;background:var(--green);border-radius:5px;transition:width .35s}
 .plist{display:flex;flex-direction:column;gap:2px}
@@ -568,6 +641,74 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
 /* ===== 모바일 ===== */
 .burger{display:none;font-size:19px;padding:5px}
+/* ===== 마감 손질 ===== */
+.panel{border-radius:var(--r);box-shadow:var(--sh-1);border-color:var(--line)}
+.chip,.cat,.wtag,.rolebadge,.use,.rcpt,.mk,.memo,.soonx,.cnt2{border-radius:var(--r-tag)}
+.card .r1{gap:7px;row-gap:5px}
+.cat{font-size:11px;padding:2px 8px;letter-spacing:0}
+.store{letter-spacing:-.01em}
+.card h3{font-size:16px;line-height:1.4;margin-bottom:7px}
+.meta{font-size:12.5px;line-height:1.55}
+
+/* 눌러서 들어가는 것들 — 같은 반응으로 통일 */
+.sec,.fcase,.chap,.sitem{transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .14s var(--ease)}
+.sec:hover,.fcase:hover,.chap:hover{border-color:#D3DBE4;box-shadow:var(--sh-2)}
+.sec:active,.fcase:active,.chap:active{transform:scale(.995)}
+.tab{transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),transform .12s var(--ease)}
+.tab:hover{border-color:#D3DBE4;background:var(--navy-50)}
+.tab:active{transform:scale(.97)}
+.tab.on:hover{background:var(--navy-700)}
+.tlink{transition:color .16s var(--ease)}
+
+/* 체크박스 — 네이티브 대신 직접 그려 체크될 때 살짝 튀게 */
+.ck input{
+  appearance:none;-webkit-appearance:none;width:19px;height:19px;border:1.5px solid #C6CFDA;
+  border-radius:6px;background:#fff;position:relative;cursor:pointer;
+  transition:background .18s var(--ease),border-color .18s var(--ease)
+}
+.ck input:hover{border-color:var(--green)}
+.ck input:checked{background:var(--green);border-color:var(--green)}
+.ck input:checked::after{
+  content:'';position:absolute;left:6px;top:2.4px;width:5px;height:9.5px;
+  border:2px solid #fff;border-top:0;border-left:0;transform:rotate(42deg);
+  animation:pop .34s var(--spring)
+}
+.ck{transition:background .2s var(--ease),border-color .2s var(--ease)}
+.ck.on span{transition:color .2s var(--ease)}
+
+.bar{background:#E9EDF2}
+.bar > i{transition:width .5s var(--ease)}
+.dots i{transition:background .3s var(--ease)}
+
+/* 토스트는 아래에서 살짝 튀어 올라오게 */
+.toast{
+  transition:transform .34s var(--spring),opacity .22s var(--ease);
+  box-shadow:var(--sh-3);background:var(--navy-900);border-radius:11px
+}
+
+/* 알림 · 모달 그림자를 배경 색조에 맞춤 */
+.noti{box-shadow:var(--sh-3);border-radius:var(--r)}
+.noti .ni{transition:background .16s var(--ease)}
+.modal{box-shadow:var(--sh-3);border-radius:16px}
+.mask{backdrop-filter:blur(2px);background:rgba(19,39,65,.42)}
+
+/* 빈 화면은 큰 이모지 대신 담백하게 */
+.empty{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:40px 22px;box-shadow:var(--sh-1)}
+.empty .em{font-size:22px;margin-bottom:8px;opacity:.5}
+.empty b{font-size:15px;letter-spacing:-.015em}
+.empty p{color:var(--t2);font-size:13.5px;margin-top:5px}
+
+.mockbar{background:var(--navy-900);color:#A9BACB}
+.mockbar b{color:var(--orange)}
+.lead{border-radius:var(--r);box-shadow:var(--sh-2)}
+.lead h2{letter-spacing:-.03em;line-height:1.35}
+.stot,.mprog,.rank,.msearch,.datebar,.stockbar .btn,.inrow{border-radius:var(--r)}
+.stot .v{letter-spacing:-.045em}
+.stot2{letter-spacing:-.045em}
+.top{box-shadow:0 1px 0 rgba(30,58,95,.06)}
+.side .brand b{letter-spacing:-.03em}
+.av{letter-spacing:0}
+
 .only-mo{display:none}
 @media (max-width:900px){
   .side{
@@ -614,6 +755,22 @@ input,select,textarea{font-family:inherit;font-size:14px}
 </head>
 <body>
 
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <symbol id="i-today" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.6"/><path d="M8 9h8M8 13h8M8 17h5"/></symbol>
+  <symbol id="i-order" viewBox="0 0 24 24"><path d="M3.5 13.5V18a2.5 2.5 0 0 0 2.5 2.5h12a2.5 2.5 0 0 0 2.5-2.5v-4.5"/><path d="M3.5 13.5h4l1.2 2.2h6.6l1.2-2.2h4"/><path d="M12 3.5v7m0 0 2.8-2.8M12 10.5 9.2 7.7"/></symbol>
+  <symbol id="i-mine" viewBox="0 0 24 24"><path d="M4 20.5h4l11-11a2.6 2.6 0 0 0-3.7-3.7L4.4 16.7z"/><path d="m14.6 6.6 3.4 3.4"/></symbol>
+  <symbol id="i-unread" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.8v4.6"/><circle cx="12" cy="16.1" r=".95" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-stock" viewBox="0 0 24 24"><path d="M12 3.2 20 7.6v8.8L12 20.8 4 16.4V7.6z"/><path d="M4 7.6 12 12l8-4.4M12 12v8.8"/></symbol>
+  <symbol id="i-inbound" viewBox="0 0 24 24"><path d="M20.5 12v6.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V12"/><path d="M3.5 12h17"/><path d="M12 2.5v7m0 0 2.8-2.8M12 9.5 9.2 6.7"/></symbol>
+  <symbol id="i-audit" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.6"/><path d="m8.4 12.4 2.5 2.5 4.7-5.1"/></symbol>
+  <symbol id="i-field" viewBox="0 0 24 24"><path d="M13.4 2.5 5.6 13.2h5.8l-1 8.3 7.9-10.8h-5.8z"/></symbol>
+  <symbol id="i-manual" viewBox="0 0 24 24"><path d="M12 7.2C10.6 5.6 8.4 5 4.5 5v13c3.9 0 6.1.6 7.5 2.2 1.4-1.6 3.6-2.2 7.5-2.2V5c-3.9 0-6.1.6-7.5 2.2z"/><path d="M12 7.2v13"/></symbol>
+  <symbol id="i-issue" viewBox="0 0 24 24"><path d="M20.5 12.3c0 3.9-3.8 7.1-8.5 7.1-.9 0-1.8-.1-2.6-.3L4.5 20.6l1.2-3.5a6.8 6.8 0 0 1-2.2-4.8c0-3.9 3.8-7.1 8.5-7.1s8.5 3.2 8.5 7.1z"/></symbol>
+  <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
+  <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
+  <symbol id="i-members" viewBox="0 0 24 24"><circle cx="9.4" cy="8" r="3.5"/><path d="M3.4 20.2c0-3.4 2.7-5.7 6-5.7s6 2.3 6 5.7"/><path d="M16.4 5.3a3.5 3.5 0 0 1 0 6.6"/><path d="M18.1 14.9c2.2.7 3.5 2.6 3.5 5.3"/></symbol>
+</defs></svg>
+
 <div class="mockbar">
   <b>화면 초안 (Mockup v1)</b>
   <span>실제 데이터 아님 · 클릭 동작 테스트용 · 확인/댓글/등록/알림/매뉴얼 전부 눌러보실 수 있습니다</span>
@@ -628,22 +785,22 @@ input,select,textarea{font-family:inherit;font-size:14px}
     </div>
     <nav class="nav" id="nav">
       <div class="nav-label">업무</div>
-      <a href="#" data-view="tasks" data-filter="today" class="on"><span class="ic">📋</span>오늘 업무</a>
-      <a href="#" data-view="tasks" data-filter="order"><span class="ic">📨</span>내 오더<span class="cnt" id="navShared">3</span></a>
-      <a href="#" data-view="tasks" data-filter="mine"><span class="ic">✍️</span>내가 등록</a>
-      <a href="#" data-view="tasks" data-filter="unread"><span class="ic">🔴</span>미확인</a>
+      <a href="#" data-view="tasks" data-filter="today" class="on"><svg class="ic"><use href="#i-today"/></svg>오늘 업무</a>
+      <a href="#" data-view="tasks" data-filter="order"><svg class="ic"><use href="#i-order"/></svg>내 오더<span class="cnt" id="navShared">3</span></a>
+      <a href="#" data-view="tasks" data-filter="mine"><svg class="ic"><use href="#i-mine"/></svg>내가 등록</a>
+      <a href="#" data-view="tasks" data-filter="unread"><svg class="ic"><use href="#i-unread"/></svg>미확인</a>
       <div class="nav-label">재고</div>
-      <a href="#" data-view="stock"><span class="ic">📦</span>재고 현황</a>
-      <a href="#" data-view="inbound"><span class="ic">📥</span>입고 등록</a>
-      <a href="#" data-view="audit"><span class="ic">📋</span>재고 실사</a>
+      <a href="#" data-view="stock"><svg class="ic"><use href="#i-stock"/></svg>재고 현황</a>
+      <a href="#" data-view="inbound"><svg class="ic"><use href="#i-inbound"/></svg>입고 등록</a>
+      <a href="#" data-view="audit"><svg class="ic"><use href="#i-audit"/></svg>재고 실사</a>
       <div class="nav-label">자료</div>
-      <a href="#" data-view="field"><span class="ic">🛠</span>필드 매뉴얼</a>
-      <a href="#" data-view="manual"><span class="ic">📖</span>TIPS 매뉴얼</a>
-      <a href="#" data-view="issues"><span class="ic">💬</span>이슈 공유</a>
-      <a href="#" data-view="erp"><span class="ic">📊</span>ERP 주간요약</a>
+      <a href="#" data-view="field"><svg class="ic"><use href="#i-field"/></svg>필드 매뉴얼</a>
+      <a href="#" data-view="manual"><svg class="ic"><use href="#i-manual"/></svg>TIPS 매뉴얼</a>
+      <a href="#" data-view="issues"><svg class="ic"><use href="#i-issue"/></svg>이슈 공유</a>
+      <a href="#" data-view="erp"><svg class="ic"><use href="#i-erp"/></svg>ERP 주간요약</a>
       <div class="nav-label" id="admLabel">관리자 전용</div>
-      <a href="#" data-view="report" id="navReport"><span class="ic">📈</span>월 업무량 집계</a>
-      <a href="#" data-view="members" id="navMembers"><span class="ic">👥</span>직원 · 권한</a>
+      <a href="#" data-view="report" id="navReport"><svg class="ic"><use href="#i-report"/></svg>월 업무량 집계</a>
+      <a href="#" data-view="members" id="navMembers"><svg class="ic"><use href="#i-members"/></svg>직원 · 권한</a>
     </nav>
     <div class="side-foot">
       <button class="btn-new" onclick="openNew()">+ 업무 등록</button>
@@ -1027,7 +1184,7 @@ function viewStock(){
     구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>
 
   <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">
-    📤 사용 이력 — 어느 날 · 어느 매장에 나갔나</h4>
+    사용 이력 — 어느 날 · 어느 매장에 나갔나</h4>
   ${USAGE.slice(0,12).map(u=>{
     const it = itemOf(u.itemId) || {name:'(삭제된 품목)', unit:''};
     const cls = u.state==='반납' ? 'back' : (u.state==='예상' ? 'plan' : 'ok');
@@ -1285,7 +1442,7 @@ function viewDetail(id){
   ${expenseBox(t)}
 
   <div class="panel">
-    <h4>📝 현장 메모 ${t.comments.length}</h4>
+    <h4>현장 메모 ${t.comments.length}</h4>
     ${cmts}
     <div class="cmtform">
       <input id="cmtIn" placeholder="현장에서 확인한 것 / 다음 방문 때 챙길 것"
@@ -1323,7 +1480,7 @@ function checklistBox(t){
   const done = items.filter((_,i)=>t.checked[i]).length;
   const pct = Math.round(done/items.length*100);
   return `<div class="panel">
-    <h4>✅ ${esc(t.cat)} 현장 체크리스트
+    <h4>${esc(t.cat)} 현장 체크리스트
       <span id="ckcnt_${t.id}" style="color:${done===items.length?'var(--green)':'var(--t3)'}">${done}/${items.length}</span></h4>
     <div class="bar"><i id="ckbar_${t.id}" style="width:${pct}%"></i></div>
     <div class="cklist">
@@ -1371,7 +1528,7 @@ function rookieBox(t){
   if(!found.length) return '';
   return `
   <div class="rookie">
-    <b>🎓 ${rookieTargets.map(esc).join(', ')} 님은 신입입니다 — "${esc(t.cat)}" 관련 매뉴얼을 먼저 보세요</b>
+    <b>${rookieTargets.map(esc).join(', ')} 님은 신입입니다 — "${esc(t.cat)}" 관련 매뉴얼을 먼저 보세요</b>
     <div class="ls">
       ${found.map(f=>`
         <button onclick="cur.view='manual';openSec(${f.ch},'${f.s.id}')">
@@ -1402,7 +1559,7 @@ function usedBox(t){
   }).join('') || '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 등록된 재고가 없습니다.</p>';
 
   return `<div class="panel">
-    <h4>📦 사용 재고 ${plans?`<span style="color:var(--orange)">· 예상 ${plans}건 정산 대기</span>`:''}</h4>
+    <h4>사용 재고 ${plans?`<span style="color:var(--orange)">· 예상 ${plans}건 정산 대기</span>`:''}</h4>
     <p style="font-size:12.5px;color:var(--t3);margin-bottom:10px">
       나가기 전에 <b>쓸 것 같은 재고를 미리</b> 넣으세요. 넣는 즉시 재고에서 빠집니다.
       돌아와서 실제로 쓴 건 <b>사용 확정</b>, 안 쓴 건 <b>반납</b>하면 재고가 되돌아갑니다.</p>
@@ -1461,10 +1618,10 @@ function expenseBox(t){
   const noRcpt = (t.expenses||[]).filter(e=>!e.receipt).length;
 
   return `<div class="panel">
-    <h4>💳 경비 ${sum ? `<span style="color:var(--orange)">합계 ${sum.toLocaleString()}원</span>` : ''}</h4>
+    <h4>경비 ${sum ? `<span style="color:var(--orange)">합계 ${sum.toLocaleString()}원</span>` : ''}</h4>
     <div class="plist">${rows}</div>
     ${sum ? `<div class="stockbar" style="margin:12px 0 0">
-      <button class="btn pri" onclick="settleSheet(${t.id})">🧾 현장 경비 정산서</button>
+      <button class="btn pri" onclick="settleSheet(${t.id})">현장 경비 정산서</button>
       <button class="btn" onclick="toast('엑셀로 내려받습니다')">엑셀 내려받기</button>
       ${noRcpt?`<span style="font-size:12.5px;color:var(--red)">영수증 미첨부 ${noRcpt}건</span>`:''}
     </div>`:''}
@@ -1770,12 +1927,12 @@ function manualSection(){
   <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 9px">따라하기</h4>
   <div class="stepn">${steps}</div>
 
-  ${(s.warn||[]).map(w=>`<div class="note w"><b>⚠️ 주의</b>${esc(w)}</div>`).join('')}
-  ${s.tip?`<div class="note i"><b>💡 알아두기</b>${esc(s.tip)}</div>`:''}
+  ${(s.warn||[]).map(w=>`<div class="note w"><b>주의</b>${esc(w)}</div>`).join('')}
+  ${s.tip?`<div class="note i"><b>알아두기</b>${esc(s.tip)}</div>`:''}
 
   ${s.quiz?`
   <div class="quiz">
-    <div class="q">❓ ${esc(s.quiz.q)}</div>
+    <div class="q">${esc(s.quiz.q)}</div>
     <div class="ox">
       <button onclick="answer('${s.id}',true)">O</button>
       <button onclick="answer('${s.id}',false)">X</button>
@@ -1786,7 +1943,7 @@ function manualSection(){
   <div class="donebar">
     <button class="btn ${read?'ok':'pri'}" onclick="toggleRead('${s.id}')">
       ${read?'학습 완료 ✓ (해제하려면 클릭)':'학습 완료로 표시'}</button>
-    <button class="btn" onclick="toast('업무 등록 화면에 이 항목이 첨부됩니다')">🔗 업무에 첨부</button>
+    <button class="btn" onclick="toast('업무 등록 화면에 이 항목이 첨부됩니다')">업무에 첨부</button>
   </div>
 
   <div class="donebar">
@@ -1878,7 +2035,7 @@ function viewReport(){
   </div>
 
   <div class="note i">
-    <b>⚠️ 시트에서 발견한 차이</b>
+    <b>시트에서 발견한 차이</b>
     콜업무를 직원별로 더하면 227건인데 전체는 228건입니다. 담당자가 안 적힌 건이 1건 있습니다.
     앱에서 등록하면 담당자 없이 저장이 안 되므로 이런 차이가 생기지 않습니다.
   </div>
@@ -1921,7 +2078,7 @@ function fieldDetail(){
   </div>
 
   <div class="panel">
-    <h4>🛠 이렇게 처리했습니다</h4>
+    <h4>이렇게 처리했습니다</h4>
     <div class="desc" style="color:var(--t1);font-size:14.5px;line-height:1.65">${esc(c.fix)}</div>
     <div class="tabwrap"><table class="ktab">
       <tr><td style="width:74px">매장</td><td>${esc(c.store)}</td></tr>
@@ -1930,14 +2087,14 @@ function fieldDetail(){
       <tr><td>처리일</td><td>2026-${esc(c.d)}</td></tr>
     </table></div>
     <div class="stockbar" style="margin-top:12px">
-      <button class="btn pri" onclick="toast('업무 등록 화면에 이 사례가 첨부됩니다')">🔗 업무에 첨부</button>
-      <button class="btn" onclick="toast('즐겨찾기에 담았습니다 ⭐')">⭐ 즐겨찾기</button>
+      <button class="btn pri" onclick="toast('업무 등록 화면에 이 사례가 첨부됩니다')">업무에 첨부</button>
+      <button class="btn" onclick="toast('즐겨찾기에 담았습니다 ⭐')">즐겨찾기</button>
     </div>
   </div>
 
   ${tops.length ? tops.map(t=>`
     <div class="note i">
-      <b>🔁 자주 나오는 처리입니다 — 4월에만 ${t.cnt}건</b>
+      <b>자주 나오는 처리입니다 — 4월에만 ${t.cnt}건</b>
       ${esc(t.note)}
     </div>`).join('') : ''}
 
@@ -1972,7 +2129,7 @@ function fieldDetail(){
 
   ${lessons.length ? `
   <div class="rookie">
-    <b>📖 이 분류에서 같이 보면 좋은 TIPS 매뉴얼</b>
+    <b>이 분류에서 같이 보면 좋은 TIPS 매뉴얼</b>
     <div class="ls">
       ${lessons.slice(0,5).map(f=>`
         <button onclick="cur.fcase=null;cur.view='manual';openSec(${f.ch},'${f.s.id}')">
@@ -2003,7 +2160,7 @@ function viewField(){
   </div>
 
   <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">
-    🔁 반복해서 나오는 처리 — 신입이 먼저 외울 것</h4>
+    반복해서 나오는 처리 — 신입이 먼저 외울 것</h4>
   <div class="tops">
     ${FIELD_TOPS.map(t=>`
       <div class="fixc">
