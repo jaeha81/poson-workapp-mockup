@@ -13,15 +13,20 @@ const TEAM = [
   {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true }
 ];
 
-/* 재고 보관 위치 = 창고(사무실) + 차량(담당자별) */
-const LOCATIONS = [
-  {id:'office', name:'사무실', kind:'창고'},
-  {id:'kdh',    name:'김두혁', kind:'차량'},
-  {id:'kkh',    name:'김기홍', kind:'차량'},
-  {id:'lyj',    name:'임영준', kind:'차량'},
-  {id:'kdw',    name:'김동화', kind:'차량'},
-  {id:'jdh',    name:'장두환', kind:'차량'}
-];
+/* 재고 보관 위치 = 창고(사무실) + 차량(담당자별)
+   차량은 고정이 아닙니다. 직원 · 권한에서 "차량 재고"를 켠 사람만 열에 나타납니다. */
+const OFFICE = {id:'office', name:'사무실', kind:'창고'};
+const CAR_ORDER = ['kdh','kkh','lyj','kdw','jdh'];   /* 시트 열 순서 유지 */
+const LOCATIONS = [OFFICE];
+function rebuildLocations(){
+  LOCATIONS.length = 1;                              /* 사무실만 남기고 */
+  for(const id of CAR_ORDER){
+    const t = TEAM.find(x => x.id === id);
+    if(t && t.car) LOCATIONS.push({id:t.id, name:t.name, kind:'차량'});
+  }
+  return LOCATIONS;
+}
+rebuildLocations();
 
 /* 업무 구분 · 분류 — 시트 드롭다운 그대로 */
 const WORK_KINDS = ['콜업무', 'AS방문', '당직'];
