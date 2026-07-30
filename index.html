@@ -722,8 +722,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .dn-d{font-size:13px;font-weight:700;color:var(--navy)}
 .dn-i{font-size:13.5px;display:flex;align-items:center;gap:7px}
 .dn-i b{font-size:11px;font-weight:800;color:var(--t3);background:var(--bg);padding:2px 8px;border-radius:var(--r-tag)}
-.ktab.dt td,.ktab.dt th{text-align:center;padding:7px 6px;font-size:12.5px}
-.ktab.dt td:first-child,.ktab.dt th:first-child{text-align:center;min-width:66px}
+.ktab.dt{min-width:520px}   /* 좁은 화면에서는 가로로 밀어서 봅니다 */
+.ktab.dt td,.ktab.dt th{text-align:center;padding:7px 6px;font-size:12.5px;white-space:nowrap}
+.ktab.dt td:first-child,.ktab.dt th:first-child{text-align:center;min-width:62px}
 .ktab.dt th.sat{background:#2C6FA8}
 .ktab.dt th.sun{background:#A83C3C}
 .dt-wk td{background:var(--navy-50);font-weight:700;color:var(--t2);border-bottom:none}
