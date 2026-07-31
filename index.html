@@ -889,6 +889,55 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 빈 화면 */
 .empty p{max-width:31em;margin-left:auto;margin-right:auto;line-height:1.6}
 
+/* ===== 달력 — 일요일·법정공휴일은 빨강, 토요일은 파랑 (한국 달력 관례) ===== */
+.day.red .dw,.day.red .dd{color:#D97C7C}
+.day.red.has .dd{color:var(--red)}
+.day.blue .dw,.day.blue .dd{color:#8AA6C4}
+.day.blue.has .dd{color:#2C6FA8}
+/* 선택된 날은 남색 판 위라 글씨가 흰색이어야 합니다 */
+.day.on .dd,.day.on .dw{color:#fff}
+/* 공휴일 표시 점 — 주말과 구분됩니다 */
+.dd{position:relative}
+.hdot{
+  position:absolute;left:50%;bottom:-3px;transform:translateX(-50%);
+  width:4px;height:4px;border-radius:50%;background:var(--red)
+}
+.day.on .hdot{background:var(--orange)}
+.dt-day.red{color:#A83C3C;font-weight:700}
+.dt-day.blue{color:#2C6FA8}
+.dt-day{position:relative}
+.dt-day .hdot{bottom:2px}
+/* 다른 달 날짜는 색보다 흐림이 먼저입니다 */
+.dt-day.off,.dt-day.off.red,.dt-day.off.blue{color:#C8D0DA;font-weight:400}
+.dt-day.off .hdot{background:#D8DEE6}
+.dt-day.cur,.dt-day.cur.red,.dt-day.cur.blue{background:var(--navy);color:#fff;border-radius:5px}
+.dt-day.cur .hdot{background:var(--orange)}
+
+/* ===== 경비 정산 ===== */
+.ktab.exp{min-width:760px}
+.ktab.exp td{vertical-align:middle;font-size:12.5px}
+.ktab.exp th{white-space:nowrap;text-align:center}
+.ktab.exp th:nth-child(2),.ktab.exp th:nth-child(4){text-align:left}
+/* 단가는 표 밖 카드에서 바로 고칩니다 */
+.rate-in{
+  width:5.4em;border:1px solid var(--line);border-radius:var(--r-in);padding:2px 7px;
+  font-size:19px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
+  background:#fff;outline:none;text-align:right
+}
+.rate-in:focus{border-color:var(--navy)}
+/* AS 방문 한 건 — 날짜 · 내역 · 지급 여부 */
+.asrow{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--line-2)}
+.asrow:last-child{border-bottom:none}
+.asd{font-weight:700;color:var(--t3);flex-shrink:0;min-width:34px}
+.ast{flex:1;min-width:0;line-height:1.5;white-space:normal}
+.aswhy{display:block;color:var(--orange-600);font-size:11.5px;font-weight:600;margin-top:2px}
+.asrow .btn.sm{flex-shrink:0;align-self:center}
+.explink{
+  font-size:12.5px;text-align:left;color:var(--navy);font-weight:600;
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:#C6D3E1
+}
+.explink:hover{text-decoration-color:var(--navy)}
+
 /* 모바일 메뉴 뒷막 — 메뉴를 안 고르고 바깥을 눌러도 닫히게 */
 .side-bd{
   position:fixed;inset:0;background:rgba(19,39,65,.42);backdrop-filter:blur(1px);
@@ -978,6 +1027,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
   <symbol id="i-duty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12l3.1 1.9"/></symbol>
+  <symbol id="i-expense" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8.4h6M9 12.2h6"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
   <symbol id="i-stores" viewBox="0 0 24 24"><path d="M4 9.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9.5"/><path d="M3 9.5h18l-1.6-5.2a1 1 0 0 0-1-.8H5.6a1 1 0 0 0-1 .8z"/><path d="M9.5 21v-6h5v6"/></symbol>
   <symbol id="i-members" viewBox="0 0 24 24"><circle cx="9.4" cy="8" r="3.5"/><path d="M3.4 20.2c0-3.4 2.7-5.7 6-5.7s6 2.3 6 5.7"/><path d="M16.4 5.3a3.5 3.5 0 0 1 0 6.6"/><path d="M18.1 14.9c2.2.7 3.5 2.6 3.5 5.3"/></symbol>
@@ -1004,6 +1054,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <a href="#" data-view="tasks" data-filter="unread"><svg class="ic"><use href="#i-unread"/></svg>미확인</a>
       <a href="#" data-view="plan"><svg class="ic"><use href="#i-plan"/></svg>예정 업무</a>
       <a href="#" data-view="duty"><svg class="ic"><use href="#i-duty"/></svg>당직 일정</a>
+      <a href="#" data-view="expense"><svg class="ic"><use href="#i-expense"/></svg>경비 정산</a>
       <div class="nav-label">재고</div>
       <a href="#" data-view="stock"><svg class="ic"><use href="#i-stock"/></svg>재고 현황</a>
       <a href="#" data-view="inbound"><svg class="ic"><use href="#i-inbound"/></svg>입고 등록</a>
@@ -1141,6 +1192,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 <script src="data-checklist.js"></script>
 <script src="data-report.js"></script>
 <script src="data-stores.js"></script>
+<script src="data-holiday.js"></script>
 <script src="data-duty.js"></script>
 <script>
 /* ================= 목업 데이터 ================= */
@@ -1328,6 +1380,7 @@ function render(){
   else if(cur.view==='stores')  v.innerHTML = viewStores();
   else if(cur.view==='plan')    v.innerHTML = viewPlan();
   else if(cur.view==='duty')    v.innerHTML = viewDuty();
+  else if(cur.view==='expense') v.innerHTML = viewExpense();
   else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
@@ -1585,10 +1638,11 @@ function viewTasks(){
         const n = TASKS.filter(t=>t.date===d).length;
         const dt = new Date(d+'T00:00:00');
         const w = dt.getDay();
-        return `<button class="day ${d===cur.date?'on':''} ${n?'has':''} ${isHoliday(d)?'hol':''}"
-                  onclick="cur.date='${d}';render()">
-          <span class="dw ${w===0?'sun':''}${w===6?'sat':''}">${DOW[w]}</span>
-          <span class="dd">${dt.getDate()}</span>
+        const hn = holidayName(d);
+        return `<button class="day ${d===cur.date?'on':''} ${n?'has':''} ${isRedDay(d)?'red':''} ${isBlueDay(d)?'blue':''}"
+                  title="${hn?esc(hn):''}" onclick="cur.date='${d}';render()">
+          <span class="dw">${DOW[w]}</span>
+          <span class="dd">${dt.getDate()}${hn?'<i class="hdot"></i>':''}</span>
           ${n?`<span class="dn">${n}</span>`:'<span class="dn empty"></span>'}
         </button>`;
       }).join('')}
@@ -1596,7 +1650,7 @@ function viewTasks(){
     <button class="btn wk" onclick="moveDate(7)" title="다음 주">▶</button>
     <button class="btn wk today" onclick="cur.date='2026-07-29';render()">오늘</button>
   </div>
-  ${isHoliday(cur.date)?`<div class="note w" style="margin-bottom:12px"><b>휴일</b>이 날 업무는 당직비 대상입니다.</div>`:''}
+  ${isHoliday(cur.date)?`<div class="note w" style="margin-bottom:12px"><b>${esc(holidayName(cur.date)||'주말')}</b>이 날 업무는 당직비 대상입니다.</div>`:''}
 `;
 
   /* 필터 탭 줄은 제거 — 같은 구분이 왼쪽 메뉴에 이미 있음 (2차 피드백) */
@@ -1692,7 +1746,7 @@ function viewDetail(id){
 /* ===== 주중 / 공휴일 — 공휴일이면 당직비 대상 ===== */
 function isHoliday(dstr){
   if(!dstr) return false;
-  if(HOLIDAYS_2026.includes(dstr)) return true;
+  if(HOLIDAYS[dstr]) return true;
   const dt = new Date(dstr + 'T00:00:00');
   if(isNaN(dt)) return false;
   const w = dt.getDay();
@@ -2370,9 +2424,11 @@ function viewDuty(){
           <td class="dt-h" style="white-space:nowrap">${fmt(w.from)}~${fmt(w.to)}
             ${whole ? '' : '<span class="dt-none" style="font-size:10.5px"> · 걸침</span>'}</td>
           ${days.map((d,i)=>{
+            const ds = ymd(d), hn = holidayName(ds);
             const inMonth = d.getMonth() === mm - 1;
-            const isCur = ymd(d) === cur.date;
-            return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${i===1?'sat':''}${i===2?'sun':''}">${d.getDate()}</td>`;
+            const isCur = ds === cur.date;
+            return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${isRedDay(ds)?'red':''} ${isBlueDay(ds)?'blue':''}"
+                      title="${hn?esc(hn):''}">${d.getDate()}${hn?'<i class="hdot"></i>':''}</td>`;
           }).join('')}
           <td class="${w.name ? (w.name===ME?'dt-me':'') : 'dt-none'}">${
             canEdit
@@ -2415,6 +2471,184 @@ function setDuty(from, name){
   render();
 }
 function saveDutyNote(){ DUTY_NOTE[cur.dm] = $('#dtNote').value; toast('특이사항 저장'); render(); }
+
+/* ================= 경비 정산 =================
+   「포스온 AS부서 N월 당직현황」 표를 화면으로 옮긴 것입니다.
+   (1) 주당직 수당 — 당직 일정에서 자동으로 옵니다 (그 달에 온전히 들어간 주만)
+   (2) AS 방문 수당 — 주당직 기간 밖 방문 중 관리자가 지급으로 켠 건만
+   (3) 업무 경비   — 업무 상세에서 등록한 출장비·주차/톨비 등을 모읍니다 */
+let PAY_STATE = {};   /* 'YYYY-MM|이름' -> true(지급 완료) */
+
+function payKey(ym, n){ return ym + '|' + n; }
+function togglePaid(ym, n){
+  const k = payKey(ym, n);
+  PAY_STATE[k] = !PAY_STATE[k];
+  toast(`${n} ${PAY_STATE[k] ? '지급 완료로 표시' : '지급 대기로 되돌림'}`);
+  render();
+}
+function toggleAsPay(i){
+  DUTY_AS[i].pay = !DUTY_AS[i].pay;
+  toast(DUTY_AS[i].pay ? 'AS 수당 지급 대상으로 올림' : '지급 대상에서 뺐습니다');
+  render();
+}
+function setPayRate(k, v){
+  DUTY_PAY[k] = Number(String(v).replace(/[^0-9]/g, '')) || 0;
+  toast('단가 수정 — ' + DUTY_PAY[k].toLocaleString() + '원');
+  render();
+}
+function moveExpMonth(n){ cur.em = shiftMonth(cur.em, n); render(); }
+
+/* 그 달에 업무에 등록된 경비 (담당자 기준) */
+function taskExpensesOf(ym){
+  const out = [];
+  TASKS.forEach(t => {
+    if(!(t.date || '').startsWith(ym)) return;
+    (t.expenses || []).forEach(e => {
+      out.push({ d:t.date, tid:t.id, title:t.title, store:t.store,
+                 who:(t.owners && t.owners[0]) || t.author,
+                 kind:e.kind, amt:e.amt, receipt:e.receipt, memo:e.memo });
+    });
+  });
+  return out.sort((a, b) => a.d < b.d ? -1 : 1);
+}
+
+function viewExpense(){
+  const ym = cur.em;
+  const [yy, mm] = ym.split('-').map(Number);
+  const canEdit = isAdmin();
+  const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
+  const won = n => n.toLocaleString() + '원';
+
+  const weeks  = dutyPayWeeks(ym);
+  const asList = DUTY_AS.filter(a => a.d.startsWith(ym));
+  const exps   = taskExpensesOf(ym);
+
+  /* 당직 수당 표에는 그 달에 당직을 섰거나 AS를 나간 사람만 올립니다
+     (업무 경비만 있는 사람은 아래 경비 표에서 봅니다) */
+  const names = [...new Set([
+    ...weeks.map(w => w.name).filter(Boolean),
+    ...asList.map(a => a.who)
+  ])];
+
+  const rows = names.map(n => {
+    const wk = weeks.filter(w => w.name === n);
+    const as = asList.filter(a => a.who === n);
+    const asPay = as.filter(a => a.pay);
+    const ex = exps.filter(e => e.who === n);
+    return { n, wk, as, asPay, ex,
+             exAmt: ex.reduce((s, e) => s + e.amt, 0),
+             duty: wk.length * DUTY_PAY.week + asPay.length * DUTY_PAY.asVisit };
+  });
+  const totDuty = rows.reduce((s, r) => s + r.duty, 0);
+  const totExp  = exps.reduce((s, e) => s + e.amt, 0);
+
+  const rate = (k, label, note) => `
+    <div class="stot"><div class="k">${label} <span style="font-weight:500">${note}</span></div>
+      <div class="v">${canEdit
+        ? `<input class="rate-in" value="${DUTY_PAY[k].toLocaleString()}" onchange="setPayRate('${k}', this.value)">`
+        : DUTY_PAY[k].toLocaleString()}<small>원</small></div></div>`;
+
+  const asCell = (a) => {
+    const i = DUTY_AS.indexOf(a);
+    return `<div class="asrow">
+      <span class="asd">${fmt(a.d)}</span>
+      <span class="ast">${esc(a.t)}${a.why ? `<span class="aswhy">${esc(a.why)}</span>` : ''}</span>
+      ${canEdit
+        ? `<button class="btn sm ${a.pay ? 'ok' : ''}" onclick="toggleAsPay(${i})">${a.pay ? '지급 ✓' : '지급 안 함'}</button>`
+        : `<span class="cat ${a.pay ? 'k1' : 'k3'}">${a.pay ? '지급' : '해당 없음'}</span>`}
+    </div>`;
+  };
+
+  return `
+  <div class="mprog">
+    <div class="r">
+      <button class="btn sm" onclick="moveExpMonth(-1)">◀</button>
+      <b>경비 정산 — ${yy}년 ${mm}월</b>
+      <button class="btn sm" onclick="moveExpMonth(1)">▶</button>
+      ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.em='2026-07';render()">이번 달</button>` : ''}
+      <span class="pc">${won(totDuty + totExp)}</span>
+    </div>
+    <div style="font-size:12.5px;color:var(--t3)">
+      당직 수당은 <b>당직 일정</b>에서, 경비는 <b>업무에 등록한 경비</b>에서 자동으로 모입니다.
+      ${canEdit ? '단가와 지급 여부는 여기서 바꿉니다.' : '수정은 관리자만 가능합니다.'}
+    </div>
+  </div>
+
+  ${canEdit ? '' : lockNote('단가 수정·지급 처리')}
+
+  <div class="stotal">
+    ${rate('week', '주당직', '1주 · 금~목')}
+    ${rate('asVisit', 'AS 방문', '주당직 제외')}
+    <div class="stot car"><div class="k">${mm}월 지급액 합계</div>
+      <div class="v">${(totDuty + totExp).toLocaleString()}<small>원</small></div></div>
+  </div>
+
+  <div class="panel">
+    <h4>당직 · AS 수당</h4>
+    ${rows.length ? `
+    <div class="tabwrap">
+      <table class="ktab exp">
+        <tr><th>당직자</th><th>주당직 기간</th><th>수</th><th>AS 방문 (주당직 제외)</th><th>수</th>
+            <th>지급액</th><th>지급현황</th></tr>
+        ${rows.map(r => `
+        <tr>
+          <td>${esc(r.n)}</td>
+          <td>${r.wk.length ? r.wk.map(w => `${fmt(w.from)}~${fmt(w.to)}`).join('<br>') : '<span class="dt-none">—</span>'}</td>
+          <td class="tot" style="text-align:center">${r.wk.length}</td>
+          <td>${r.as.length ? r.as.map(asCell).join('') : '<span class="dt-none">—</span>'}</td>
+          <td class="tot" style="text-align:center">${r.asPay.length}</td>
+          <td class="tot" style="text-align:right">${won(r.duty)}</td>
+          <td style="text-align:center">${canEdit
+            ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'ok' : ''}" onclick="togglePaid('${ym}','${esc(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
+            : `<span class="cat ${PAY_STATE[payKey(ym, r.n)] ? 'k1' : 'k3'}">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</span>`}</td>
+        </tr>`).join('')}
+        <tr><td class="tot">TOT</td><td class="tot"></td>
+            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.wk.length, 0)}</td>
+            <td class="tot"></td>
+            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.asPay.length, 0)}</td>
+            <td class="tot" style="text-align:right">${won(totDuty)}</td><td class="tot"></td></tr>
+      </table>
+    </div>` : `<div class="desc" style="margin:0">이 달에 배정된 당직이 없습니다.</div>`}
+  </div>
+
+  <div class="panel">
+    <h4>업무에 등록된 경비 <span style="color:var(--t3);font-weight:500">— 업무 상세에서 등록한 것이 그대로 옵니다</span></h4>
+    ${exps.length ? `
+    <div class="tabwrap">
+      <table class="ktab exp">
+        <tr><th>일자</th><th>업무</th><th>담당</th><th>항목</th><th>금액</th><th>영수증</th></tr>
+        ${exps.map(e => `
+        <tr>
+          <td>${fmt(e.d)}</td>
+          <td><button class="explink" onclick="openTask(${e.tid})">${esc(e.store)} — ${esc(e.title)}</button></td>
+          <td>${esc(e.who)}</td>
+          <td>${esc(e.kind)}</td>
+          <td class="tot" style="text-align:right">${won(e.amt)}</td>
+          <td style="text-align:center"><span class="rcpt ${e.receipt ? 'ok' : 'no'}">${e.receipt ? '첨부됨' : '없음'}</span></td>
+        </tr>`).join('')}
+        <tr><td class="tot">TOT</td><td class="tot"></td><td class="tot"></td><td class="tot"></td>
+            <td class="tot" style="text-align:right">${won(totExp)}</td><td class="tot"></td></tr>
+      </table>
+    </div>` : `<div class="empty" style="padding:28px 20px"><b>이 달에 등록된 경비가 없습니다</b>
+      <p>업무 상세 화면의 <b>경비</b>에서 출장비·주차/톨비를 등록하면 여기에 모입니다.</p></div>`}
+  </div>
+
+  <div class="panel">
+    <h4>${mm}월 총 지급액</h4>
+    <div class="plist">
+      <div class="prow"><span class="nm" style="min-width:118px">당직 · AS 수당</span>
+        <span class="rm" style="font-weight:800">${won(totDuty)}</span></div>
+      <div class="prow"><span class="nm" style="min-width:118px">업무 경비</span>
+        <span class="rm" style="font-weight:800">${won(totExp)}</span></div>
+      <div class="prow"><span class="nm" style="min-width:118px;color:var(--navy)">합계</span>
+        <span class="rm" style="font-weight:800;font-size:16px;color:var(--navy)">${won(totDuty + totExp)}</span></div>
+    </div>
+    <div class="repbtns">
+      <button class="btn" onclick="toast('엑셀 내려받기 — 목업에서는 비활성')">엑셀 내려받기</button>
+      <button class="btn pri" onclick="window.print()">인쇄 · PDF 저장</button>
+    </div>
+  </div>`;
+}
 
 /* ================= 예정 업무 =================
    지금 쓰시는 「Services Schedule (일일)」 엑셀을 대체합니다.
@@ -3016,7 +3250,7 @@ function applyHash(){
   if(['today','order','mine','unread'].includes(p[0])){
     cur.view = 'tasks'; cur.filter = p[0]; return true;
   }
-  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty'].includes(p[0])){
+  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense'].includes(p[0])){
     cur.view = p[0]; return true;
   }
   return false;
