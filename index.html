@@ -889,6 +889,39 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 빈 화면 */
 .empty p{max-width:31em;margin-left:auto;margin-right:auto;line-height:1.6}
 
+/* ===== 첫 화면 (스플래시) — 로고를 잠깐 보여주고 앱으로 ===== */
+.splash{
+  position:fixed;inset:0;z-index:200;background:var(--navy);
+  display:grid;place-items:center;
+  animation:splashOut .45s var(--ease) 1.15s forwards
+}
+.splash .sp-in{
+  display:flex;flex-direction:column;align-items:center;gap:11px;
+  animation:splashIn .55s var(--ease) both
+}
+.splash img{width:190px;max-width:56vw;height:auto}
+.splash span{font-size:12.5px;color:#9DB3CC;letter-spacing:.02em}
+@keyframes splashIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes splashOut{to{opacity:0;visibility:hidden}}
+/* 앱은 첫 화면이 걷힐 즈음 스며들 듯 나타납니다 */
+.app{animation:fadeIn .5s var(--ease) 1.15s both}
+
+/* ===== 새로고침 — 5초마다 자동, 우측 상단에서 수동 ===== */
+.sync{
+  display:flex;align-items:center;gap:5px;padding:5px 9px;border-radius:8px;
+  color:var(--t2);font-size:12px;font-weight:600;flex-shrink:0;
+  transition:background .16s var(--ease),color .16s var(--ease)
+}
+.sync:hover{background:var(--bg);color:var(--t1)}
+.sync:active{transform:scale(.96)}
+.sync .ic{
+  width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round
+}
+.sync.spin .ic{animation:spin .6s var(--ease)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sync .ago{color:var(--t3);font-weight:500;letter-spacing:0}
+
 /* ===== 달력 — 일요일·법정공휴일은 빨강, 토요일은 파랑 (한국 달력 관례) ===== */
 .day.red .dw,.day.red .dd{color:#D97C7C}
 .day.red.has .dd{color:var(--red)}
@@ -964,6 +997,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   .top h1{font-size:14.5px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .top .sp{display:none}
   .bell{padding:4px;flex-shrink:0}
+  /* 좁은 화면에서는 새로고침 아이콘만 남깁니다 */
+  .sync{padding:5px 6px}
+  .sync .ago{display:none}
   .who{flex-shrink:0}
   .who select{max-width:92px;padding:6px 4px;font-size:12px}
   .rolebadge{font-size:9.5px;padding:3px 6px}
@@ -1013,6 +1049,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 </head>
 <body>
 
+<!-- 첫 화면 — 로고를 잠깐 보여준 뒤 앱으로 넘어갑니다 -->
+<div class="splash" id="splash" aria-hidden="true">
+  <div class="sp-in">
+    <img src="assets/logo-white.png" alt="포스온">
+    <span>업무관리 · TIPS POS</span>
+  </div>
+</div>
+
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-today" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.6"/><path d="M8 9h8M8 13h8M8 17h5"/></symbol>
   <symbol id="i-order" viewBox="0 0 24 24"><path d="M3.5 13.5V18a2.5 2.5 0 0 0 2.5 2.5h12a2.5 2.5 0 0 0 2.5-2.5v-4.5"/><path d="M3.5 13.5h4l1.2 2.2h6.6l1.2-2.2h4"/><path d="M12 3.5v7m0 0 2.8-2.8M12 10.5 9.2 7.7"/></symbol>
@@ -1027,6 +1071,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
   <symbol id="i-duty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12l3.1 1.9"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20.2 11.4a8.2 8.2 0 1 1-2.4-5.4"/><path d="M20.5 3.6v5.2h-5.2"/></symbol>
   <symbol id="i-expense" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8.4h6M9 12.2h6"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
   <symbol id="i-stores" viewBox="0 0 24 24"><path d="M4 9.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9.5"/><path d="M3 9.5h18l-1.6-5.2a1 1 0 0 0-1-.8H5.6a1 1 0 0 0-1 .8z"/><path d="M9.5 21v-6h5v6"/></symbol>
@@ -1083,6 +1128,10 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <span class="today">2026-07-29 (수)</span>
       <span class="sp"></span>
       <div class="search"><span>🔍</span><input placeholder="업무·매장·매뉴얼 검색"></div>
+      <button class="sync" id="syncBtn" onclick="doRefresh(true)" title="지금 새로 불러오기">
+        <svg class="ic" viewBox="0 0 24 24"><use href="#i-refresh"/></svg>
+        <span class="ago" id="syncAgo">방금</span>
+      </button>
       <button class="bell" onclick="toggleNoti(event)">🔔<span class="dot" id="notiCnt">3</span></button>
       <span class="who" id="who"></span>
 
@@ -3274,9 +3323,51 @@ if(typeof window !== 'undefined' && window.addEventListener){
   });
 }
 
+/* ================= 새로고침 =================
+   5초마다 자동으로 최신 내용을 다시 그립니다.
+   ⚠️ 입력 중이거나 창이 떠 있을 때는 건너뜁니다 — 치던 글이 날아가면 안 됩니다.
+   (실서비스에서는 이 자리에서 서버 데이터를 다시 받아옵니다) */
+let lastSync = Date.now();
+
+function agoText(ms){
+  const s = Math.floor((Date.now() - ms) / 1000);
+  if(s < 10) return '방금';
+  if(s < 60) return s + '초 전';
+  const m = Math.floor(s / 60);
+  if(m < 60) return m + '분 전';
+  return Math.floor(m / 60) + '시간 전';
+}
+function paintAgo(){
+  const el = document.getElementById('syncAgo');
+  if(el) el.textContent = agoText(lastSync);
+}
+function busyNow(){
+  const el = document.activeElement;
+  const typing = el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName);
+  return !!(typing || document.querySelector('.mask.on') || document.querySelector('.noti.on'));
+}
+function doRefresh(manual){
+  if(!manual && busyNow()) return;      /* 입력·모달 중에는 건드리지 않습니다 */
+  lastSync = Date.now();
+  bump(); render(); paintAgo();
+  if(manual){
+    const b = document.getElementById('syncBtn');
+    if(b){ b.classList.remove('spin'); void b.offsetWidth; b.classList.add('spin'); }
+    toast('최신 내용으로 새로 불러왔습니다');
+  }
+}
+if(typeof window !== 'undefined'){
+  setInterval(()=>doRefresh(false), 5000);
+  setInterval(paintAgo, 5000);
+  /* 다른 창을 보다 돌아오면 그 즉시 맞춥니다 */
+  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) doRefresh(false); });
+  /* 첫 화면(로고)은 앱이 뜨고 나면 걷어냅니다 */
+  setTimeout(()=>{ const s = document.getElementById('splash'); if(s) s.remove(); }, 1800);
+}
+
 /* ================= 시작 ================= */
 applyHash();
-bump(); render(); markNav();
+bump(); render(); markNav(); paintAgo();
 </script>
 </body>
 </html>
