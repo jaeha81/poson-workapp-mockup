@@ -889,22 +889,22 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 빈 화면 */
 .empty p{max-width:31em;margin-left:auto;margin-right:auto;line-height:1.6}
 
-/* ===== 첫 화면 (스플래시) — 로고를 잠깐 보여주고 앱으로 ===== */
+/* ===== 첫 화면 (스플래시) — 로고를 보여주고 앱으로 =====
+   머무는 시간 3.15초 + 사라지는 데 0.45초 (재하님 요청으로 2초 늦춤) */
 .splash{
   position:fixed;inset:0;z-index:200;background:var(--navy);
   display:grid;place-items:center;
-  animation:splashOut .45s var(--ease) 1.15s forwards
+  animation:splashOut .45s var(--ease) 3.15s forwards
 }
 .splash .sp-in{
-  display:flex;flex-direction:column;align-items:center;gap:11px;
+  display:flex;flex-direction:column;align-items:center;
   animation:splashIn .55s var(--ease) both
 }
 .splash img{width:190px;max-width:56vw;height:auto}
-.splash span{font-size:12.5px;color:#9DB3CC;letter-spacing:.02em}
 @keyframes splashIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes splashOut{to{opacity:0;visibility:hidden}}
 /* 앱은 첫 화면이 걷힐 즈음 스며들 듯 나타납니다 */
-.app{animation:fadeIn .5s var(--ease) 1.15s both}
+.app{animation:fadeIn .5s var(--ease) 3.15s both}
 
 /* ===== 새로고침 — 5초마다 자동, 우측 상단에서 수동 ===== */
 .sync{
@@ -921,6 +921,47 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .sync.spin .ic{animation:spin .6s var(--ease)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sync .ago{color:var(--t3);font-weight:500;letter-spacing:0}
+
+/* ===== 재고 — 분류 고르기 ===== */
+.sech{font-size:13px;font-weight:700;color:var(--t2);margin:0 0 11px;
+  position:relative;padding-left:11px;letter-spacing:-.005em}
+.sech::before{content:'';position:absolute;left:0;top:.42em;width:3px;height:.95em;
+  background:var(--navy);border-radius:2px;opacity:.5}
+.catcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(216px,1fr));gap:10px;margin-bottom:4px}
+.catcard{
+  background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;
+  text-align:left;width:100%;box-shadow:var(--sh-1);
+  transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .14s var(--ease)
+}
+.catcard:hover{border-color:#D3DBE4;box-shadow:var(--sh-2);transform:translateY(-1px)}
+.catcard:active{transform:scale(.995)}
+.cc-h{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.cc-h b{font-size:15px;font-weight:700}
+.cc-go{margin-left:auto;color:var(--t3);font-size:17px}
+.cc-v{font-size:24px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;line-height:1.15}
+.cc-v small{font-size:12px;font-weight:600;color:var(--t3);margin-left:3px}
+.cc-s{font-size:12px;color:var(--t3);margin-top:2px}
+.cc-z{display:inline-block;margin-top:9px;font-size:11px;font-weight:800;
+  background:#FEF3F2;color:var(--red);padding:2px 8px;border-radius:var(--r-tag)}
+.cc-ok{display:inline-block;margin-top:9px;font-size:11px;font-weight:700;
+  background:var(--green-50);color:var(--green);padding:2px 8px;border-radius:var(--r-tag)}
+/* 고른 분류의 머리줄 */
+.cathead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.cathead b{font-size:16px;font-weight:700}
+
+/* ===== 공휴일 목록 ===== */
+.hlist{display:flex;flex-direction:column;gap:1px}
+.hrow{
+  display:flex;align-items:center;gap:11px;padding:9px 4px;
+  border-bottom:1px solid var(--line-2);font-size:13.5px;flex-wrap:wrap
+}
+.hrow:last-child{border-bottom:none}
+.hd{font-weight:700;font-variant-numeric:tabular-nums;min-width:92px;color:var(--t2)}
+.hw{width:16px;text-align:center;color:var(--t3);font-size:12.5px;font-weight:600}
+.hd.red,.hw.red{color:var(--red)}
+.hd.blue,.hw.blue{color:#2C6FA8}
+.hn{flex:1;min-width:0;font-weight:600}
+.hx{margin-left:auto}
 
 /* ===== 달력 — 일요일·법정공휴일은 빨강, 토요일은 파랑 (한국 달력 관례) ===== */
 .day.red .dw,.day.red .dd{color:#D97C7C}
@@ -1056,7 +1097,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 <div class="splash" id="splash" aria-hidden="true">
   <div class="sp-in">
     <img src="assets/logo-white.png" alt="포스온">
-    <span>업무관리 · TIPS POS</span>
   </div>
 </div>
 
@@ -1074,6 +1114,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
   <symbol id="i-duty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12l3.1 1.9"/></symbol>
+  <symbol id="i-holiday" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><circle cx="12" cy="15" r="1.9" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20.2 11.4a8.2 8.2 0 1 1-2.4-5.4"/><path d="M20.5 3.6v5.2h-5.2"/></symbol>
   <symbol id="i-expense" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8.4h6M9 12.2h6"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
@@ -1112,6 +1153,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <a href="#" data-view="manual"><svg class="ic"><use href="#i-manual"/></svg>TIPS 매뉴얼</a>
       <a href="#" data-view="issues"><svg class="ic"><use href="#i-issue"/></svg>이슈 공유</a>
       <a href="#" data-view="erp"><svg class="ic"><use href="#i-erp"/></svg>ERP 주간요약</a>
+      <a href="#" data-view="holiday"><svg class="ic"><use href="#i-holiday"/></svg>공휴일</a>
       <div class="nav-label" id="admLabel">관리자 전용</div>
       <a href="#" data-view="report" id="navReport"><svg class="ic"><use href="#i-report"/></svg>월 업무량 집계</a>
       <a href="#" data-view="stores" id="navStores"><svg class="ic"><use href="#i-stores"/></svg>거래처 관리</a>
@@ -1343,7 +1385,7 @@ const CHAPTERS = [
 ];
 let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null,
            mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
-           dm:'2026-07', em:'2026-07'};
+           dm:'2026-07', em:'2026-07', hy:'2026', hq:'', scat:null};
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -1433,6 +1475,7 @@ function render(){
   else if(cur.view==='plan')    v.innerHTML = viewPlan();
   else if(cur.view==='duty')    v.innerHTML = viewDuty();
   else if(cur.view==='expense') v.innerHTML = viewExpense();
+  else if(cur.view==='holiday') v.innerHTML = viewHoliday();
   else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
@@ -1470,18 +1513,28 @@ const locName = id => (LOCATIONS.find(l=>l.id===id)||{}).name || id;
 const itemOf  = id => ITEMS.find(i=>i.id===id);
 const itemTot = it => LOCATIONS.reduce((s,l)=> s + (it.q[l.id]||0), 0);
 
-function viewStock(){
-  const officeSum = ITEMS.reduce((s,i)=> s + (i.q.office||0), 0);
-  const carSum    = ITEMS.reduce((s,i)=> s + LOCATIONS.filter(l=>l.kind==='차량').reduce((a,l)=>a+(i.q[l.id]||0),0), 0);
-  const zero      = ITEMS.filter(i=> itemTot(i)===0).length;
-  const q = (cur.sq||'').trim();
+/* ================= 재고 현황 =================
+   한 화면에 60품목을 다 늘어놓으면 스크롤만 길어집니다.
+   먼저 **큰 분류를 고르고**, 그 안의 품목만 봅니다. 검색은 분류와 상관없이 전체에서 찾습니다. */
+const STOCK_CATS = ['POS장비','VAN장비','주변기기','용지'];
+function stockCats(){
+  const out = [...STOCK_CATS];
+  ITEMS.forEach(i => { if(i.cat && !out.includes(i.cat)) out.push(i.cat); });
+  return out.filter(c => ITEMS.some(i => i.cat === c));
+}
+function openStockCat(c){ cur.scat = c; cur.sq = ''; render(); }
+function backStockCat(){ cur.scat = null; render(); }
 
-  let rows = '';
-  for(const cat of ['POS장비','VAN장비','주변기기','용지']){
-    const list = ITEMS.filter(i=> i.cat===cat && (!q || i.name.includes(q)));
-    if(!list.length) continue;
-    rows += `<tr class="catrow"><td colspan="${LOCATIONS.length+2}">${cat} · ${list.length}품목</td></tr>`;
-    rows += list.map(i=>{
+/* PC — 창고·차량별 수량 표 */
+function stockTable(list){
+  if(!list.length) return '';
+  return `<div class="scroll only-pc"><table class="stab">
+    <tr>
+      <th>품목</th>
+      ${LOCATIONS.map(l=>`<th class="${l.kind==='창고'?'wh':''}">${l.name}<br><span style="font-weight:400;font-size:10px;opacity:.75">${l.kind}</span></th>`).join('')}
+      <th>합계</th>
+    </tr>
+    ${list.map(i=>{
       const t = itemTot(i);
       return `<tr class="${t===0?'low':''}">
         <td>${esc(i.name)}
@@ -1492,10 +1545,18 @@ function viewStock(){
         }).join('')}
         <td class="tot">${t}</td>
       </tr>`;
-    }).join('');
-  }
+    }).join('')}
+  </table></div>`;
+}
 
-  return `
+function viewStock(){
+  const officeSum = ITEMS.reduce((s,i)=> s + (i.q.office||0), 0);
+  const carSum    = ITEMS.reduce((s,i)=> s + LOCATIONS.filter(l=>l.kind==='차량').reduce((a,l)=>a+(i.q[l.id]||0),0), 0);
+  const zero      = ITEMS.filter(i=> itemTot(i)===0).length;
+  const q   = (cur.sq||'').trim();
+  const cat = cur.scat;
+
+  const head = `
   ${isAdmin() ? '' : lockNote('품목 추가·단가 입력·수량 수정')}
   <div class="stotal">
     <div class="stot"><div class="k">등록 품목</div><div class="v">${ITEMS.length}<small>종</small></div></div>
@@ -1507,30 +1568,65 @@ function viewStock(){
   <div class="stockbar">
     <div class="msearch" style="margin:0;flex:1;min-width:180px">
       <span>🔍</span>
-      <input value="${esc(cur.sq||'')}" placeholder="품목 검색 (예: 멀티패드, 스티커)"
-             oninput="cur.sq=this.value" onkeydown="if(event.key==='Enter')render()">
+      <input value="${esc(q)}" placeholder="품목 검색 — 분류와 상관없이 전체에서 찾습니다"
+             oninput="cur.sq=this.value;cur.scat=null" onkeydown="if(event.key==='Enter')render()">
     </div>
+    ${q?`<button class="btn" onclick="cur.sq='';render()">지우기</button>`:''}
     ${isAdmin()
       ? `<button class="btn pri" onclick="addItem()">+ 품목 추가</button>
          <button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`
       : `<button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`}
-  </div>
+  </div>`;
 
-  <div class="scroll only-pc"><table class="stab">
-    <tr>
-      <th>품목</th>
-      ${LOCATIONS.map(l=>`<th class="${l.kind==='창고'?'wh':''}">${l.name}<br><span style="font-weight:400;font-size:10px;opacity:.75">${l.kind}</span></th>`).join('')}
-      <th>합계</th>
-    </tr>
-    ${rows}
-  </table></div>
+  /* ---------- 검색 중 ---------- */
+  if(q){
+    const hit = ITEMS.filter(i => i.name.includes(q));
+    return head + (hit.length
+      ? `<h4 class="sech">"${esc(q)}" — ${hit.length}품목</h4>
+         ${stockTable(hit)}
+         <div class="only-mo">${stockCardList(hit)}</div>`
+      : `<div class="empty" style="padding:34px 20px"><b>"${esc(q)}" 로 찾은 품목이 없습니다</b>
+         <p>이름 일부만 쳐도 됩니다. 아직 등록 전인 품목이면 위 <b>품목 추가</b>로 넣어주세요.</p></div>`);
+  }
 
-  <div class="only-mo">${stockCards(q)}</div>
-  <p style="font-size:12px;color:var(--t3);margin:9px 0 20px">
-    구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>
+  /* ---------- 분류를 고른 뒤 ---------- */
+  if(cat){
+    const list = ITEMS.filter(i => i.cat === cat);
+    const catTot  = list.reduce((s,i)=> s + itemTot(i), 0);
+    const catZero = list.filter(i => itemTot(i)===0).length;
+    return head + `
+      <div class="cathead">
+        <button class="btn sm" onclick="backStockCat()">← 분류 전체</button>
+        <b>${esc(cat)}</b>
+        <span class="cat k3">${list.length}품목</span>
+        <span class="cat k3">총 ${catTot.toLocaleString()}개</span>
+        ${catZero?`<span class="cat" style="color:var(--red);border-color:#FDA29B;background:#FEF3F2">재고 0 — ${catZero}종</span>`:''}
+      </div>
+      ${stockTable(list)}
+      <div class="only-mo">${stockCardList(list)}</div>
+      <p style="font-size:12px;color:var(--t3);margin:9px 0 20px">
+        구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>`;
+  }
 
-  <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">
-    사용 이력 — 어느 날 · 어느 매장에 나갔나</h4>
+  /* ---------- 분류 고르기 (첫 화면) ---------- */
+  const cards = stockCats().map(c => {
+    const list = ITEMS.filter(i => i.cat === c);
+    const tot  = list.reduce((s,i)=> s + itemTot(i), 0);
+    const z    = list.filter(i => itemTot(i)===0).length;
+    const off  = list.reduce((s,i)=> s + (i.q.office||0), 0);
+    return `<button class="catcard" onclick="openStockCat('${esc(c)}')">
+      <div class="cc-h"><b>${esc(c)}</b><span class="cc-go">›</span></div>
+      <div class="cc-v">${tot.toLocaleString()}<small>개</small></div>
+      <div class="cc-s">${list.length}품목 · 사무실 ${off.toLocaleString()}개</div>
+      ${z?`<span class="cc-z">재고 0 — ${z}종</span>`:'<span class="cc-ok">전 품목 재고 있음</span>'}
+    </button>`;
+  }).join('');
+
+  return head + `
+  <h4 class="sech">분류를 고르면 그 안의 품목만 봅니다</h4>
+  <div class="catcards">${cards}</div>
+
+  <h4 class="sech" style="margin-top:22px">사용 이력 — 어느 날 · 어느 매장에 나갔나</h4>
   ${USAGE.slice(0,12).map(u=>{
     const it = itemOf(u.itemId) || {name:'(삭제된 품목)', unit:''};
     const cls = u.state==='반납' ? 'back' : (u.state==='예상' ? 'plan' : 'ok');
@@ -1545,31 +1641,24 @@ function viewStock(){
 }
 
 /* 모바일에서는 8열 표 대신 품목 카드로 봅니다 */
-function stockCards(q){
-  let out = '';
-  for(const cat of ['POS장비','VAN장비','주변기기','용지']){
-    const list = ITEMS.filter(i=> i.cat===cat && (!q || i.name.includes(q)));
-    if(!list.length) continue;
-    out += `<div class="scat">${cat} · ${list.length}품목</div>`;
-    out += list.map(i=>{
-      const t = itemTot(i);
-      const where = LOCATIONS.filter(l=>(i.q[l.id]||0) > 0);
-      return `<div class="sitem ${t===0?'zero':''}">
-        <div class="sh">
-          <b>${esc(i.name)}</b>
-          <span class="stot2 ${t===0?'z':''}">${t}<small>${esc(i.unit)}</small></span>
-        </div>
-        <div class="sp2">${i.price ? i.price.toLocaleString()+'원' : '단가 미등록'}</div>
-        <div class="swhere">
-          ${where.length
-            ? where.map(l=>`<span class="wtag ${l.kind==='창고'?'wh':''}">${esc(l.name)} ${i.q[l.id]}</span>`).join('')
-            : `<span class="wtag none">재고 없음</span>`}
-        </div>
-      </div>`;
-    }).join('');
-  }
-  return out || `<div class="empty"><div class="em">🔍</div><b>찾는 품목이 없습니다</b>
-    <p>품목명 일부만 쳐도 됩니다. 아직 등록 전인 품목이면 위 <b>품목 추가</b>로 넣어주세요.</p></div>`;
+function stockCardList(list){
+  if(!list.length) return '';
+  return list.map(i=>{
+    const t = itemTot(i);
+    const where = LOCATIONS.filter(l=>(i.q[l.id]||0) > 0);
+    return `<div class="sitem ${t===0?'zero':''}">
+      <div class="sh">
+        <b>${esc(i.name)}</b>
+        <span class="stot2 ${t===0?'z':''}">${t}<small>${esc(i.unit)}</small></span>
+      </div>
+      <div class="sp2">${i.price ? i.price.toLocaleString()+'원' : '단가 미등록'}</div>
+      <div class="swhere">
+        ${where.length
+          ? where.map(l=>`<span class="wtag ${l.kind==='창고'?'wh':''}">${esc(l.name)} ${i.q[l.id]}</span>`).join('')
+          : `<span class="wtag none">재고 없음</span>`}
+      </div>
+    </div>`;
+  }).join('');
 }
 
 function addItem(){
@@ -2704,6 +2793,116 @@ function viewExpense(){
   </div>`;
 }
 
+/* ================= 공휴일 =================
+   코드를 고치지 않고 앱 안에서 찾아보고 고칠 수 있는 화면입니다.
+   음력 공휴일(설·추석·부처님오신날)과 대체공휴일은 해마다 바뀌므로,
+   확정 공고가 나오면 여기서 바로 손봅니다. 고친 내용은 이 브라우저에 남습니다. */
+function moveHolYear(n){ cur.hy = String(Number(cur.hy) + n); render(); }
+function holSearch(q){ cur.hq = q; render(); }
+
+function addHolidayFromForm(){
+  const d = $('#hlDate').value.trim();
+  const n = $('#hlName').value.trim();
+  const err = setHoliday(d, n);
+  if(err){ toast(err); return; }
+  toast(`${d} ${n} — 공휴일로 넣었습니다`);
+  cur.hy = d.slice(0, 4);
+  render();
+}
+function delHoliday(d){
+  const n = holidayName(d);
+  removeHoliday(d);
+  toast(`${d} ${n} — 공휴일에서 뺐습니다`);
+  render();
+}
+function resetHolidayTable(){
+  resetHolidays();
+  toast('기본 표로 되돌렸습니다');
+  render();
+}
+
+function viewHoliday(){
+  const canEdit = isAdmin();
+  const q = (cur.hq || '').trim();
+  const list = q ? searchHolidays(q) : holidaysOfYear(cur.hy);
+  const DOW = ['일','월','화','수','목','금','토'];
+  const editedCnt = Object.keys(HOLIDAY_EDITS).length;
+
+  const row = h => {
+    const dt = new Date(h.d + 'T00:00:00');
+    const w = dt.getDay();
+    const edited = isEditedHoliday(h.d);
+    return `<div class="hrow">
+      <span class="hd ${w===0?'red':''}${w===6?'blue':''}">${h.d}</span>
+      <span class="hw ${w===0?'red':''}${w===6?'blue':''}">${DOW[w]}</span>
+      <span class="hn">${esc(h.name)}</span>
+      ${edited?`<span class="cat k3">고침</span>`:''}
+      ${canEdit?`<span class="hx"><button class="btn sm" onclick="delHoliday('${h.d}')">빼기</button></span>`:''}
+    </div>`;
+  };
+
+  return `
+  <div class="mprog">
+    <div class="r">
+      ${q ? `<b>공휴일 검색 — "${esc(q)}"</b>`
+          : `<button class="btn sm" onclick="moveHolYear(-1)">◀</button>
+             <b>공휴일 — ${cur.hy}년</b>
+             <button class="btn sm" onclick="moveHolYear(1)">▶</button>`}
+      <span class="pc">${list.length}일</span>
+    </div>
+    <div style="font-size:12.5px;color:var(--t3)">
+      달력에서 <b style="color:var(--red)">빨갛게</b> 칠해지는 날입니다.
+      이 날 업무는 당직비 대상이 됩니다.
+      ${canEdit ? '아래에서 바로 넣고 뺄 수 있습니다.' : '수정은 관리자만 가능합니다.'}
+    </div>
+  </div>
+
+  <div class="msearch">
+    <span>🔍</span>
+    <input value="${esc(q)}" oninput="holSearch(this.value)"
+           placeholder="공휴일 이름이나 날짜로 찾기 (예: 추석, 10-03, 2027)">
+    ${q?`<button class="btn sm" onclick="holSearch('')">지우기</button>`:''}
+  </div>
+
+  <div class="panel">
+    <h4>${q ? '검색 결과' : cur.hy + '년 공휴일'}
+      ${editedCnt?`<span style="color:var(--t3);font-weight:500">— 이 브라우저에서 고친 것 ${editedCnt}건</span>`:''}</h4>
+    ${list.length
+      ? `<div class="hlist">${list.map(row).join('')}</div>`
+      : (q
+          ? `<div class="empty" style="padding:28px 20px"><b>"${esc(q)}" 로 찾은 공휴일이 없습니다</b>
+             <p>이름 일부(추석)나 날짜 일부(10-03)만 쳐도 됩니다.
+             ${canEdit?'없는 날이면 아래에서 새로 넣어 주세요.':''}</p></div>`
+          : `<div class="empty" style="padding:28px 20px"><b>${cur.hy}년 공휴일이 아직 없습니다</b>
+             <p>${canEdit?'아래에서 날짜와 이름을 넣어 주세요.':'관리자가 넣으면 여기에 보입니다.'}</p></div>`)}
+  </div>
+
+  ${canEdit ? `
+  <div class="panel">
+    <h4>공휴일 넣기</h4>
+    <div class="grid2">
+      <div class="f"><label>날짜</label>
+        <input type="text" id="hlDate" placeholder="2027-02-08"></div>
+      <div class="f"><label>이름</label>
+        <input type="text" id="hlName" placeholder="설날 대체"></div>
+    </div>
+    <div class="repbtns">
+      <button class="btn pri" onclick="addHolidayFromForm()">넣기</button>
+      ${editedCnt?`<button class="btn" onclick="resetHolidayTable()">기본 표로 되돌리기</button>`:''}
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:11px">
+      이미 있는 날짜에 다시 넣으면 이름이 바뀝니다. 고친 내용은 <b>이 브라우저에만</b> 저장됩니다
+      (실서비스에서는 서버에 저장되어 전 직원이 같은 표를 봅니다).</p>
+  </div>` : ''}
+
+  <div class="note i">
+    <b>해마다 한 번은 확인해 주세요</b>
+    설날 · 추석 · 부처님오신날은 음력이라 날짜가 매년 바뀌고, 대체공휴일도 그 해 요일에 따라 달라집니다.
+    2026년분은 확정 기준이고, <b>2027년분은 정부 확정 공고 전 잠정치</b>입니다.
+    관보(인사혁신처 공고)가 나오면 위에서 고쳐 주세요.
+  </div>`;
+}
+
 /* ================= 예정 업무 =================
    지금 쓰시는 「Services Schedule (일일)」 엑셀을 대체합니다.
    날짜 / 방문지 / 접수내역 / 담당자 / 확인 / 비고 + 전달사항 */
@@ -3304,7 +3503,7 @@ function applyHash(){
   if(['today','order','mine','unread'].includes(p[0])){
     cur.view = 'tasks'; cur.filter = p[0]; return true;
   }
-  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense'].includes(p[0])){
+  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense','holiday'].includes(p[0])){
     cur.view = p[0]; return true;
   }
   return false;
@@ -3329,8 +3528,7 @@ if(typeof window !== 'undefined' && window.addEventListener){
 }
 
 /* ================= 새로고침 =================
-   5초마다 자동으로 최신 내용을 다시 그립니다.
-   ⚠️ 입력 중이거나 창이 떠 있을 때는 건너뜁니다 — 치던 글이 날아가면 안 됩니다.
+   ⛔ 5초 자동 새로고침은 뺐습니다 (재하님 지시). 새로고침은 사용자가 누를 때만.
    (실서비스에서는 이 자리에서 서버 데이터를 다시 받아옵니다) */
 let lastSync = Date.now();
 
@@ -3362,12 +3560,10 @@ function doRefresh(manual){
   }
 }
 if(typeof window !== 'undefined'){
-  setInterval(()=>doRefresh(false), 5000);
-  setInterval(paintAgo, 5000);
-  /* 다른 창을 보다 돌아오면 그 즉시 맞춥니다 */
-  document.addEventListener('visibilitychange', ()=>{ if(!document.hidden) doRefresh(false); });
+  /* 마지막으로 불러온 시각만 30초마다 다시 씁니다 (화면은 건드리지 않습니다) */
+  setInterval(paintAgo, 30000);
   /* 첫 화면(로고)은 앱이 뜨고 나면 걷어냅니다 */
-  setTimeout(()=>{ const s = document.getElementById('splash'); if(s) s.remove(); }, 1800);
+  setTimeout(()=>{ const s = document.getElementById('splash'); if(s) s.remove(); }, 3800);
 }
 
 /* ================= 시작 ================= */
