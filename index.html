@@ -28,9 +28,9 @@
   --r:13px; --r-in:9px; --r-tag:6px;
 
   /* 그림자는 검정이 아니라 남색을 옅게 — 배경 색조와 어긋나지 않도록 */
-  --sh-1:0 1px 2px rgba(30,58,95,.05);
-  --sh-2:0 2px 8px rgba(30,58,95,.07), 0 1px 2px rgba(30,58,95,.05);
-  --sh-3:0 12px 32px rgba(19,39,65,.14), 0 2px 8px rgba(19,39,65,.08);
+  /* 그림자는 2단만 — 광원이 하나여야 화면이 한 덩어리로 보입니다 */
+  --sh-1:0 1px 2px rgba(30,58,95,.06);
+  --sh-2:0 8px 24px rgba(30,58,95,.10);
 
   --ease:cubic-bezier(.2,.7,.3,1);       /* 감속이 긴 자연스러운 곡선 */
   --spring:cubic-bezier(.34,1.4,.5,1);   /* 살짝 튀는 느낌 */
@@ -58,19 +58,10 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 :focus-visible{outline:2px solid var(--navy);outline-offset:2px;border-radius:4px}
 
 /* ===== 모션 ===== */
-@keyframes riseIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pop{0%{transform:scale(.82)}60%{transform:scale(1.08)}100%{transform:scale(1)}}
-.card,.sec,.fcase,.sitem,.inrow,.chap,.fixc,.step,.rrow{
-  animation:riseIn .34s var(--ease) both
-}
-/* 위에서부터 차례로 — 한꺼번에 나타나면 인공적으로 보임 */
-.card:nth-child(1),.sec:nth-child(1),.fcase:nth-child(1),.sitem:nth-child(1){animation-delay:.02s}
-.card:nth-child(2),.sec:nth-child(2),.fcase:nth-child(2),.sitem:nth-child(2){animation-delay:.05s}
-.card:nth-child(3),.sec:nth-child(3),.fcase:nth-child(3),.sitem:nth-child(3){animation-delay:.08s}
-.card:nth-child(4),.sec:nth-child(4),.fcase:nth-child(4),.sitem:nth-child(4){animation-delay:.11s}
-.card:nth-child(n+5),.sec:nth-child(n+5),.fcase:nth-child(n+5),.sitem:nth-child(n+5){animation-delay:.13s}
-.panel{animation:fadeIn .3s var(--ease) both}
+/* 목록이 한 줄씩 떠오르던 연출을 뺐습니다.
+   업무툴은 열면 바로 다 보여야 합니다. 전환은 모달·서랍·토스트에만 남깁니다. */
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
@@ -85,14 +76,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   width:220px;flex-shrink:0;background:var(--navy);color:#fff;
   display:flex;flex-direction:column;position:sticky;top:0;height:100vh
 }
-.side .brand{padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
+.side .brand{padding:18px 16px 16px;border-bottom:1px solid rgba(255,255,255,.12)}
 /* 판때기 없이 글자·심볼만.
    어두운 바탕이라 검정 글자만 흰색으로 바꾼 logo-white.png 를 씁니다
    (브랜드 파랑과 ON 배지는 원본 그대로) */
 .side .brand .logo{
-  display:block;width:100%;max-width:138px;height:auto;margin-bottom:9px
+  display:block;width:100%;max-width:138px;height:auto
 }
-.side .brand span{font-size:11px;color:#9DB3CC;letter-spacing:0}
 .nav{padding:12px 10px;flex:1;overflow-y:auto}
 .nav-label{font-size:10px;color:#7E9AB8;padding:12px 10px 6px;letter-spacing:.5px}
 .nav a{
@@ -245,11 +235,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 /* ===== 모달 ===== */
 .mask{
-  position:fixed;inset:0;background:rgba(16,24,40,.45);display:none;
+  position:fixed;inset:0;background:rgba(19,39,65,.42);display:none;
   place-items:center;z-index:60;padding:20px;overflow-y:auto
 }
 .mask.on{display:grid}
-.modal{background:#fff;border-radius:14px;width:100%;max-width:540px;box-shadow:0 20px 50px rgba(16,24,40,.2)}
+.modal{background:#fff;border-radius:14px;width:100%;max-width:540px;box-shadow:var(--sh-2)}
 .mhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center}
 .mhead b{font-size:16.5px}
 .mhead button{margin-left:auto;font-size:20px;color:var(--t3);line-height:1}
@@ -285,7 +275,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* ===== 알림 ===== */
 .noti{
   position:absolute;top:52px;right:16px;width:320px;background:#fff;border:1px solid var(--line);
-  border-radius:11px;box-shadow:0 12px 30px rgba(16,24,40,.14);display:none;z-index:50;overflow:hidden
+  border-radius:11px;box-shadow:var(--sh-2);display:none;z-index:50;overflow:hidden
 }
 .noti.on{display:block}
 .noti .nh{padding:12px 15px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px}
@@ -320,7 +310,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .sheet{
   background:#fff;width:100%;max-width:520px;aspect-ratio:4/3;border-radius:3px;
-  box-shadow:0 4px 16px rgba(0,0,0,.3);padding:26px 30px;display:flex;flex-direction:column
+  box-shadow:0 4px 16px rgba(19,39,65,.28);padding:26px 30px;display:flex;flex-direction:column
 }
 .sheet .st{font-size:15px;font-weight:700;color:var(--navy);border-bottom:2px solid var(--navy);padding-bottom:7px}
 .sheet .sl{margin-top:14px;display:flex;flex-direction:column;gap:8px}
@@ -442,7 +432,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .fcase .ff{font-size:13.5px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:5px}
 .fcase .fm{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .fcase{cursor:pointer;transition:.12s}
-.fcase:hover{border-color:var(--navy);box-shadow:0 2px 10px rgba(16,24,40,.07)}
+.fcase:hover{border-color:var(--navy);box-shadow:var(--sh-2)}
 .fgo{margin-left:auto;color:var(--navy);font-weight:700;white-space:nowrap}
 
 /* ===== 날짜 · 당직 ===== */
@@ -525,7 +515,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 15px;
   cursor:pointer;transition:.12s;text-align:left;width:100%
 }
-.chap:hover{border-color:var(--navy);box-shadow:0 2px 10px rgba(16,24,40,.07)}
+.chap:hover{border-color:var(--navy);box-shadow:var(--sh-2)}
 .chap .h{display:flex;align-items:center;gap:9px;margin-bottom:6px}
 .chap .num{
   width:26px;height:26px;border-radius:7px;background:var(--navy-100);color:var(--navy);
@@ -636,7 +626,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
   background:var(--t1);color:#fff;padding:12px 20px;border-radius:9px;font-size:13.5px;
-  font-weight:500;opacity:0;transition:.25s;z-index:90;box-shadow:0 8px 24px rgba(0,0,0,.25)
+  font-weight:500;opacity:0;transition:.25s;z-index:90;box-shadow:var(--sh-2)
 }
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
 
@@ -692,13 +682,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 토스트는 아래에서 살짝 튀어 올라오게 */
 .toast{
   transition:transform .34s var(--spring),opacity .22s var(--ease);
-  box-shadow:var(--sh-3);background:var(--navy-900);border-radius:11px
+  box-shadow:var(--sh-2);background:var(--navy-900);border-radius:11px
 }
 
 /* 알림 · 모달 그림자를 배경 색조에 맞춤 */
-.noti{box-shadow:var(--sh-3);border-radius:var(--r)}
+.noti{box-shadow:var(--sh-2);border-radius:var(--r)}
 .noti .ni{transition:background .16s var(--ease)}
-.modal{box-shadow:var(--sh-3);border-radius:16px}
+.modal{box-shadow:var(--sh-2);border-radius:16px}
 .mask{backdrop-filter:blur(2px);background:rgba(19,39,65,.42)}
 
 /* 빈 화면은 큰 이모지 대신 담백하게 */
@@ -826,7 +816,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .ac{position:relative}
 .ac-list{
   position:absolute;left:0;right:0;top:calc(100% + 5px);background:#fff;
-  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-3);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-2);
   z-index:5;display:none;overflow:hidden;max-height:262px;overflow-y:auto
 }
 .ac-list.on{display:block}
@@ -889,22 +879,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 빈 화면 */
 .empty p{max-width:31em;margin-left:auto;margin-right:auto;line-height:1.6}
 
-/* ===== 첫 화면 (스플래시) — 로고를 보여주고 앱으로 =====
-   머무는 시간 3.15초 + 사라지는 데 0.45초 (재하님 요청으로 2초 늦춤) */
-.splash{
-  position:fixed;inset:0;z-index:200;background:var(--navy);
-  display:grid;place-items:center;
-  animation:splashOut .45s var(--ease) 3.15s forwards
-}
-.splash .sp-in{
-  display:flex;flex-direction:column;align-items:center;
-  animation:splashIn .55s var(--ease) both
-}
-.splash img{width:190px;max-width:56vw;height:auto}
-@keyframes splashIn{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
-@keyframes splashOut{to{opacity:0;visibility:hidden}}
-/* 앱은 첫 화면이 걷힐 즈음 스며들 듯 나타납니다 */
-.app{animation:fadeIn .5s var(--ease) 3.15s both}
 
 /* ===== 새로고침 — 5초마다 자동, 우측 상단에서 수동 ===== */
 .sync{
@@ -921,6 +895,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .sync.spin .ic{animation:spin .6s var(--ease)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sync .ago{color:var(--t3);font-weight:500;letter-spacing:0}
+
+/* 업무일이 휴일일 때 모달 안에서 바로 알려주는 줄 */
+.dhint{display:none;margin-top:6px;font-size:12px;color:var(--orange-600)}
+.dhint.on{display:block}
+.dhint b{font-weight:800}
 
 /* ===== 재고 — 분류 고르기 ===== */
 .sech{font-size:13px;font-weight:700;color:var(--t2);margin:0 0 11px;
@@ -948,20 +927,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 고른 분류의 머리줄 */
 .cathead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
 .cathead b{font-size:16px;font-weight:700}
-
-/* ===== 공휴일 목록 ===== */
-.hlist{display:flex;flex-direction:column;gap:1px}
-.hrow{
-  display:flex;align-items:center;gap:11px;padding:9px 4px;
-  border-bottom:1px solid var(--line-2);font-size:13.5px;flex-wrap:wrap
-}
-.hrow:last-child{border-bottom:none}
-.hd{font-weight:700;font-variant-numeric:tabular-nums;min-width:92px;color:var(--t2)}
-.hw{width:16px;text-align:center;color:var(--t3);font-size:12.5px;font-weight:600}
-.hd.red,.hw.red{color:var(--red)}
-.hd.blue,.hw.blue{color:#2C6FA8}
-.hn{flex:1;min-width:0;font-weight:600}
-.hx{margin-left:auto}
 
 /* ===== 달력 — 일요일·법정공휴일은 빨강, 토요일은 파랑 (한국 달력 관례) ===== */
 .day.red .dw,.day.red .dd{color:#D97C7C}
@@ -1027,7 +992,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 @media (max-width:900px){
   .side{
     position:fixed;left:0;top:0;z-index:70;transform:translateX(-100%);transition:.22s;
-    box-shadow:4px 0 24px rgba(0,0,0,.2)
+    box-shadow:0 0 40px rgba(19,39,65,.28)
   }
   .side.open{transform:none}
   .burger{display:block;flex-shrink:0}
@@ -1093,17 +1058,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 </head>
 <body>
 
-<!-- 첫 화면 — 로고를 잠깐 보여준 뒤 앱으로 넘어갑니다 -->
-<div class="splash" id="splash" aria-hidden="true">
-  <div class="sp-in">
-    <img src="assets/logo-white.png" alt="포스온">
-  </div>
-</div>
-
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
   <symbol id="i-today" viewBox="0 0 24 24"><rect x="4.5" y="3.5" width="15" height="17" rx="2.6"/><path d="M8 9h8M8 13h8M8 17h5"/></symbol>
   <symbol id="i-order" viewBox="0 0 24 24"><path d="M3.5 13.5V18a2.5 2.5 0 0 0 2.5 2.5h12a2.5 2.5 0 0 0 2.5-2.5v-4.5"/><path d="M3.5 13.5h4l1.2 2.2h6.6l1.2-2.2h4"/><path d="M12 3.5v7m0 0 2.8-2.8M12 10.5 9.2 7.7"/></symbol>
-  <symbol id="i-mine" viewBox="0 0 24 24"><path d="M4 20.5h4l11-11a2.6 2.6 0 0 0-3.7-3.7L4.4 16.7z"/><path d="m14.6 6.6 3.4 3.4"/></symbol>
   <symbol id="i-unread" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 7.8v4.6"/><circle cx="12" cy="16.1" r=".95" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-stock" viewBox="0 0 24 24"><path d="M12 3.2 20 7.6v8.8L12 20.8 4 16.4V7.6z"/><path d="M4 7.6 12 12l8-4.4M12 12v8.8"/></symbol>
   <symbol id="i-inbound" viewBox="0 0 24 24"><path d="M20.5 12v6.5a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2V12"/><path d="M3.5 12h17"/><path d="M12 2.5v7m0 0 2.8-2.8M12 9.5 9.2 6.7"/></symbol>
@@ -1114,7 +1071,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-erp" viewBox="0 0 24 24"><path d="M4 20.5h16"/><path d="M7.5 20.5v-8M12 20.5V5.5M16.5 20.5v-5.5"/></symbol>
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
   <symbol id="i-duty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12l3.1 1.9"/></symbol>
-  <symbol id="i-holiday" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><circle cx="12" cy="15" r="1.9" fill="currentColor" stroke="none"/></symbol>
   <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20.2 11.4a8.2 8.2 0 1 1-2.4-5.4"/><path d="M20.5 3.6v5.2h-5.2"/></symbol>
   <symbol id="i-expense" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8.4h6M9 12.2h6"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
@@ -1133,13 +1089,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <aside class="side" id="side">
     <div class="brand">
       <img src="assets/logo-white.png" alt="포스온" class="logo">
-      <span>업무관리 · TIPS POS</span>
     </div>
     <nav class="nav" id="nav">
       <div class="nav-label">업무</div>
       <a href="#" data-view="tasks" data-filter="today" class="on"><svg class="ic"><use href="#i-today"/></svg>오늘 업무</a>
       <a href="#" data-view="tasks" data-filter="order"><svg class="ic"><use href="#i-order"/></svg>내 오더<span class="cnt" id="navShared">3</span></a>
-      <a href="#" data-view="tasks" data-filter="mine"><svg class="ic"><use href="#i-mine"/></svg>내가 등록</a>
       <a href="#" data-view="tasks" data-filter="unread"><svg class="ic"><use href="#i-unread"/></svg>미확인</a>
       <a href="#" data-view="plan"><svg class="ic"><use href="#i-plan"/></svg>예정 업무</a>
       <a href="#" data-view="duty"><svg class="ic"><use href="#i-duty"/></svg>당직 일정</a>
@@ -1153,7 +1107,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <a href="#" data-view="manual"><svg class="ic"><use href="#i-manual"/></svg>TIPS 매뉴얼</a>
       <a href="#" data-view="issues"><svg class="ic"><use href="#i-issue"/></svg>이슈 공유</a>
       <a href="#" data-view="erp"><svg class="ic"><use href="#i-erp"/></svg>ERP 주간요약</a>
-      <a href="#" data-view="holiday"><svg class="ic"><use href="#i-holiday"/></svg>공휴일</a>
       <div class="nav-label" id="admLabel">관리자 전용</div>
       <a href="#" data-view="report" id="navReport"><svg class="ic"><use href="#i-report"/></svg>월 업무량 집계</a>
       <a href="#" data-view="stores" id="navStores"><svg class="ic"><use href="#i-stores"/></svg>거래처 관리</a>
@@ -1220,7 +1173,8 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
         </div>
         <div class="f">
           <label>업무일 <span style="font-weight:500;color:var(--t3)">— 비워도 됨</span></label>
-          <input type="text" id="fDate" value="2026-07-29" placeholder="비워둬도 됩니다">
+          <input type="date" id="fDate" value="2026-07-29" onchange="markNewDate()">
+          <span class="dhint" id="fDateHint"></span>
         </div>
       </div>
       <div class="f">
@@ -1385,7 +1339,7 @@ const CHAPTERS = [
 ];
 let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null,
            mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
-           dm:'2026-07', em:'2026-07', hy:'2026', hq:'', scat:null};
+           dm:'2026-07', em:'2026-07', scat:null};
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -1475,7 +1429,6 @@ function render(){
   else if(cur.view==='plan')    v.innerHTML = viewPlan();
   else if(cur.view==='duty')    v.innerHTML = viewDuty();
   else if(cur.view==='expense') v.innerHTML = viewExpense();
-  else if(cur.view==='holiday') v.innerHTML = viewHoliday();
   else if(cur.view==='field')   v.innerHTML = viewField();
   else if(cur.view==='manual')  v.innerHTML = viewManual();
   else if(cur.view==='issues')  v.innerHTML = viewIssues();
@@ -1756,7 +1709,6 @@ function viewAudit(){
 /* ================= 업무 목록 ================= */
 function filtered(){
   const onDate = TASKS.filter(t => !t.date || t.date === cur.date);
-  if(cur.filter==='mine')   return onDate.filter(t=>t.mine);
   if(cur.filter==='order')  return onDate.filter(t=>(t.owners||[]).includes(ME));
   if(cur.filter==='unread') return TASKS.filter(t=>isTarget(t) && !iAcked(t) && !t.mine);
   return onDate;
@@ -1766,7 +1718,6 @@ function viewTasks(){
   const F = [
     {k:'today', l:'전체', n:onD.length},
     {k:'order', l:'내 오더', n:onD.filter(t=>(t.owners||[]).includes(ME)).length},
-    {k:'mine',  l:'내가 등록', n:onD.filter(t=>t.mine).length},
     {k:'unread',l:'미확인(전체 날짜)', n:TASKS.filter(t=>isTarget(t)&&!iAcked(t)&&!t.mine).length}
   ];
   /* 한 주를 통째로 보여주고, 오더가 있는 날은 진하게 (2차 피드백) */
@@ -2257,6 +2208,7 @@ function openNew(){
   $('#fCat').innerHTML  = WORK_CATS.map(c=>`<option>${c}</option>`).join('');
   $('#people').innerHTML = TEAM.filter(t=>t.name!==ME).map(t=>
     `<label><input type="checkbox" value="${t.name}">${t.name}${ROOKIES.has(t.name)?' 🎓':''}</label>`).join('');
+  markNewDate();
   $('#mask').classList.add('on');
 }
 function closeNew(){ $('#mask').classList.remove('on'); }
@@ -2264,6 +2216,19 @@ function clearNewForm(){
   ['fTitle','fBody','fRecv','fStore'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   const p = document.getElementById('fPlan'); if(p) p.checked = false;
 }
+/* 고른 날이 휴일이면 그 자리에서 알려줍니다 (공휴일 메뉴를 따로 두지 않는 대신) */
+function markNewDate(){
+  const el = $('#fDate'), hint = $('#fDateHint');
+  if(!el || !hint) return;
+  const d = el.value;
+  const hn = d ? holidayName(d) : null;
+  const wk = d ? new Date(d + 'T00:00:00').getDay() : -1;
+  if(hn)              hint.innerHTML = `<b>${esc(hn)}</b> · 당직비 대상`;
+  else if(wk===0||wk===6) hint.innerHTML = `<b>${wk===0?'일요일':'토요일'}</b> · 당직비 대상`;
+  else                hint.textContent = '';
+  hint.className = 'dhint' + (hint.textContent ? ' on' : '');
+}
+
 function togglePlanMode(){
   const on = $('#fPlan').checked;
   toast(on ? '예정 업무로 등록됩니다 — 담당자는 나중에 정해도 됩니다'
@@ -2790,116 +2755,6 @@ function viewExpense(){
       <button class="btn" onclick="toast('엑셀 내려받기 — 목업에서는 비활성')">엑셀 내려받기</button>
       <button class="btn pri" onclick="window.print()">인쇄 · PDF 저장</button>
     </div>
-  </div>`;
-}
-
-/* ================= 공휴일 =================
-   코드를 고치지 않고 앱 안에서 찾아보고 고칠 수 있는 화면입니다.
-   음력 공휴일(설·추석·부처님오신날)과 대체공휴일은 해마다 바뀌므로,
-   확정 공고가 나오면 여기서 바로 손봅니다. 고친 내용은 이 브라우저에 남습니다. */
-function moveHolYear(n){ cur.hy = String(Number(cur.hy) + n); render(); }
-function holSearch(q){ cur.hq = q; render(); }
-
-function addHolidayFromForm(){
-  const d = $('#hlDate').value.trim();
-  const n = $('#hlName').value.trim();
-  const err = setHoliday(d, n);
-  if(err){ toast(err); return; }
-  toast(`${d} ${n} — 공휴일로 넣었습니다`);
-  cur.hy = d.slice(0, 4);
-  render();
-}
-function delHoliday(d){
-  const n = holidayName(d);
-  removeHoliday(d);
-  toast(`${d} ${n} — 공휴일에서 뺐습니다`);
-  render();
-}
-function resetHolidayTable(){
-  resetHolidays();
-  toast('기본 표로 되돌렸습니다');
-  render();
-}
-
-function viewHoliday(){
-  const canEdit = isAdmin();
-  const q = (cur.hq || '').trim();
-  const list = q ? searchHolidays(q) : holidaysOfYear(cur.hy);
-  const DOW = ['일','월','화','수','목','금','토'];
-  const editedCnt = Object.keys(HOLIDAY_EDITS).length;
-
-  const row = h => {
-    const dt = new Date(h.d + 'T00:00:00');
-    const w = dt.getDay();
-    const edited = isEditedHoliday(h.d);
-    return `<div class="hrow">
-      <span class="hd ${w===0?'red':''}${w===6?'blue':''}">${h.d}</span>
-      <span class="hw ${w===0?'red':''}${w===6?'blue':''}">${DOW[w]}</span>
-      <span class="hn">${esc(h.name)}</span>
-      ${edited?`<span class="cat k3">고침</span>`:''}
-      ${canEdit?`<span class="hx"><button class="btn sm" onclick="delHoliday('${h.d}')">빼기</button></span>`:''}
-    </div>`;
-  };
-
-  return `
-  <div class="mprog">
-    <div class="r">
-      ${q ? `<b>공휴일 검색 — "${esc(q)}"</b>`
-          : `<button class="btn sm" onclick="moveHolYear(-1)">◀</button>
-             <b>공휴일 — ${cur.hy}년</b>
-             <button class="btn sm" onclick="moveHolYear(1)">▶</button>`}
-      <span class="pc">${list.length}일</span>
-    </div>
-    <div style="font-size:12.5px;color:var(--t3)">
-      달력에서 <b style="color:var(--red)">빨갛게</b> 칠해지는 날입니다.
-      이 날 업무는 당직비 대상이 됩니다.
-      ${canEdit ? '아래에서 바로 넣고 뺄 수 있습니다.' : '수정은 관리자만 가능합니다.'}
-    </div>
-  </div>
-
-  <div class="msearch">
-    <span>🔍</span>
-    <input value="${esc(q)}" oninput="holSearch(this.value)"
-           placeholder="공휴일 이름이나 날짜로 찾기 (예: 추석, 10-03, 2027)">
-    ${q?`<button class="btn sm" onclick="holSearch('')">지우기</button>`:''}
-  </div>
-
-  <div class="panel">
-    <h4>${q ? '검색 결과' : cur.hy + '년 공휴일'}
-      ${editedCnt?`<span style="color:var(--t3);font-weight:500">— 이 브라우저에서 고친 것 ${editedCnt}건</span>`:''}</h4>
-    ${list.length
-      ? `<div class="hlist">${list.map(row).join('')}</div>`
-      : (q
-          ? `<div class="empty" style="padding:28px 20px"><b>"${esc(q)}" 로 찾은 공휴일이 없습니다</b>
-             <p>이름 일부(추석)나 날짜 일부(10-03)만 쳐도 됩니다.
-             ${canEdit?'없는 날이면 아래에서 새로 넣어 주세요.':''}</p></div>`
-          : `<div class="empty" style="padding:28px 20px"><b>${cur.hy}년 공휴일이 아직 없습니다</b>
-             <p>${canEdit?'아래에서 날짜와 이름을 넣어 주세요.':'관리자가 넣으면 여기에 보입니다.'}</p></div>`)}
-  </div>
-
-  ${canEdit ? `
-  <div class="panel">
-    <h4>공휴일 넣기</h4>
-    <div class="grid2">
-      <div class="f"><label>날짜</label>
-        <input type="text" id="hlDate" placeholder="2027-02-08"></div>
-      <div class="f"><label>이름</label>
-        <input type="text" id="hlName" placeholder="설날 대체"></div>
-    </div>
-    <div class="repbtns">
-      <button class="btn pri" onclick="addHolidayFromForm()">넣기</button>
-      ${editedCnt?`<button class="btn" onclick="resetHolidayTable()">기본 표로 되돌리기</button>`:''}
-    </div>
-    <p style="font-size:12px;color:var(--t3);margin-top:11px">
-      이미 있는 날짜에 다시 넣으면 이름이 바뀝니다. 고친 내용은 <b>이 브라우저에만</b> 저장됩니다
-      (실서비스에서는 서버에 저장되어 전 직원이 같은 표를 봅니다).</p>
-  </div>` : ''}
-
-  <div class="note i">
-    <b>해마다 한 번은 확인해 주세요</b>
-    설날 · 추석 · 부처님오신날은 음력이라 날짜가 매년 바뀌고, 대체공휴일도 그 해 요일에 따라 달라집니다.
-    2026년분은 확정 기준이고, <b>2027년분은 정부 확정 공고 전 잠정치</b>입니다.
-    관보(인사혁신처 공고)가 나오면 위에서 고쳐 주세요.
   </div>`;
 }
 
@@ -3500,10 +3355,10 @@ function applyHash(){
     if(p[2]) cur.msec = p[2];
     return true;
   }
-  if(['today','order','mine','unread'].includes(p[0])){
+  if(['today','order','unread'].includes(p[0])){
     cur.view = 'tasks'; cur.filter = p[0]; return true;
   }
-  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense','holiday'].includes(p[0])){
+  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense'].includes(p[0])){
     cur.view = p[0]; return true;
   }
   return false;
@@ -3562,8 +3417,6 @@ function doRefresh(manual){
 if(typeof window !== 'undefined'){
   /* 마지막으로 불러온 시각만 30초마다 다시 씁니다 (화면은 건드리지 않습니다) */
   setInterval(paintAgo, 30000);
-  /* 첫 화면(로고)은 앱이 뜨고 나면 걷어냅니다 */
-  setTimeout(()=>{ const s = document.getElementById('splash'); if(s) s.remove(); }, 3800);
 }
 
 /* ================= 시작 ================= */
