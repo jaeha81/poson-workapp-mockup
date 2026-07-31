@@ -356,10 +356,15 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .sitem .sp2{font-size:12px;color:var(--t3);margin-top:2px}
 .swhere{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
 
+/* 이력·검색결과 같은 '목록'은 한 덩어리입니다.
+   행마다 판을 깔면 개수만큼 박스가 늘어나 화면이 박스 밭이 됩니다.
+   판은 바깥에 하나만 두고, 안쪽은 선으로만 나눕니다. */
+.inlist{background:var(--card);border:1px solid var(--line);border-radius:var(--r-in);overflow:hidden}
 .inrow{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;
-  margin-bottom:9px;display:flex;align-items:center;gap:12px;flex-wrap:wrap
+  padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line-2)
 }
+.inrow:last-child{border-bottom:none}
 .inrow .d{font-size:12px;color:var(--t3);font-weight:700;min-width:82px}
 .inrow .n{font-weight:600;font-size:14px}
 .inrow .q{background:var(--green-50);color:var(--green);font-weight:800;font-size:13px;padding:3px 10px;border-radius:6px}
@@ -393,13 +398,15 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .fixc .th b{font-size:14px;line-height:1.35}
 .fixc .tw{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:6px}
 .fixc .tn{font-size:12px;color:var(--t3);line-height:1.55}
-.fcase{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:8px}
+.fcases{background:var(--card);border:1px solid var(--line);border-radius:var(--r-in);overflow:hidden}
+.fcase{padding:12px 15px;border-bottom:1px solid var(--line-2)}
+.fcase:last-child{border-bottom:none}
 .fcase .fs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
 .fcase .fs b{font-size:14px;font-weight:600}
 .fcase .ff{font-size:14px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:5px}
 .fcase .fm{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.fcase{cursor:pointer;transition:.12s}
-.fcase:hover{border-color:var(--navy);box-shadow:var(--sh-2)}
+.fcase{cursor:pointer;transition:background .12s}
+.fcase:hover{background:var(--surface-2)}
 .fgo{margin-left:auto;color:var(--navy);font-weight:700;white-space:nowrap}
 
 /* ===== 날짜 · 당직 ===== */
@@ -593,9 +600,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .meta{font-size:12px;line-height:1.55}
 
 /* 눌러서 들어가는 것들 — 같은 반응으로 통일 */
-.sec,.fcase,.chap,.sitem{transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .14s var(--ease)}
-.sec:hover,.fcase:hover,.chap:hover{border-color:var(--line-strong);box-shadow:var(--sh-2)}
-.sec:active,.fcase:active,.chap:active{transform:scale(.995)}
+.sec,.chap,.sitem{transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .14s var(--ease)}
+.sec:hover,.chap:hover{border-color:var(--line-strong);box-shadow:var(--sh-2)}
+.sec:active,.chap:active{transform:scale(.995)}
 .tab{transition:background .18s var(--ease),color .18s var(--ease),border-color .18s var(--ease),transform .12s var(--ease)}
 .tab:hover{border-color:var(--line-strong);background:var(--navy-50)}
 .tab:active{transform:scale(.97)}
@@ -644,7 +651,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .mockbar b{color:var(--orange)}
 .lead{border-radius:var(--r);box-shadow:var(--sh-2)}
 .lead h2{letter-spacing:-.03em;line-height:1.35}
-.stot,.mprog,.rank,.msearch,.datebar,.stockbar .btn,.inrow{border-radius:var(--r)}
+.stot,.mprog,.rank,.msearch,.datebar,.stockbar .btn{border-radius:var(--r)}
 .stot .v{letter-spacing:-.045em}
 .stot2{letter-spacing:-.045em}
 .top{box-shadow:0 1px 0 rgba(30,58,95,.06)}
@@ -1615,6 +1622,7 @@ function viewStock(){
   <div class="catcards">${cards}</div>
 
   <h4 class="sech" style="margin-top:22px">사용 이력 — 어느 날 · 어느 매장에 나갔나</h4>
+  <div class="inlist">
   ${USAGE.slice(0,12).map(u=>{
     const it = itemOf(u.itemId) || {name:'(삭제된 품목)', unit:''};
     const cls = u.state==='반납' ? 'back' : (u.state==='예상' ? 'plan' : 'ok');
@@ -1625,7 +1633,8 @@ function viewStock(){
       <span class="use ${cls}">${esc(u.state)}</span>
       <span class="m">${esc(u.store||'')} · ${esc(locName(u.loc))} · ${esc(u.by||'')}</span>
     </div>`;
-  }).join('')}`;
+  }).join('')}
+  </div>`;
 }
 
 /* 모바일에서는 8열 표 대신 품목 카드로 봅니다 */
@@ -3280,13 +3289,13 @@ function viewField(){
       <span class="n">${c==='전체'?FIELD_CASES.length:FIELD_CASES.filter(x=>x.cat===c).length}</span></button>`).join('')}
   </div>
 
-  ${list.length ? list.map(c=>`
+  ${list.length ? `<div class="fcases">${list.map(c=>`
     <div class="fcase" onclick="openFieldCase(${FIELD_CASES.indexOf(c)})">
       <div class="fs"><span class="cat k1">${esc(c.cat)}</span><span class="cat">${esc(c.k)}</span>
         <b>${esc(c.sym)}</b></div>
       <div class="ff">→ ${esc(c.fix)}</div>
       <div class="fm">${esc(c.store)} · ${esc(c.by)} · ${esc(c.d)}<span class="fgo">자세히 <svg class="ic ic-sm"><use href="#i-chevron-right"/></svg></span></div>
-    </div>`).join('')
+    </div>`).join('')}</div>`
    : `<div class="empty"><b>"${esc(q)}" 결과가 없습니다</b>
       <p>다른 단어로 찾아보세요. 처리 기록이 쌓일수록 검색이 잘 됩니다.</p></div>`}
 
