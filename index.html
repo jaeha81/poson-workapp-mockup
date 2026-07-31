@@ -65,7 +65,6 @@ body{overflow-x:hidden;
 }
 /* 숫자는 자릿수가 흔들리지 않게 고정폭 */
 .stab td,.stab th,.ktab td,.ktab th,.stot .v,.stot2,.rval,.ackn,.inrow .q,
-.tab .n,.mprog .pc,.chip,.cnt,.cnt2{font-variant-numeric:tabular-nums}
 p,.desc,.tn,.tw{text-wrap:pretty}
 h1,h2,h3,h4{letter-spacing:-.022em;text-wrap:balance}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
@@ -174,10 +173,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .card:hover{border-color:var(--line-strong);box-shadow:var(--sh-2);transform:translateY(-1px)}
 .card .r1{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
-.chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px}
-.chip.done{background:var(--green-50);color:var(--green)}
 .store{font-size:13px;font-weight:700;color:var(--navy)}
-.cat{font-size:11px;color:var(--t3);border:1px solid var(--line);padding:2px 7px;border-radius:5px}
 .card h3{font-size:15.5px;font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
 /* 제목을 눌러 상세로 들어갑니다 */
 .card h3.tlink{cursor:pointer;display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -307,9 +303,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:13px;
   font-weight:600;background:var(--card);outline:none;max-width:150px
 }
-.rolebadge{font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:6px;white-space:nowrap}
-.rolebadge.adm{background:var(--navy);color:var(--card)}
-.rolebadge.viw{background:var(--surface-3);color:var(--t2)}
 .lockbar{
   background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-fg);border-radius:9px;
   padding:10px 14px;font-size:13px;margin-bottom:14px;display:flex;align-items:center;gap:8px
@@ -356,10 +349,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .stot2.z{color:var(--red)}
 .sitem .sp2{font-size:11.5px;color:var(--t3);margin-top:2px}
 .swhere{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
-.wtag{font-size:11.5px;font-weight:700;background:var(--bg);border:1px solid var(--line);
-  color:var(--t2);padding:3px 9px;border-radius:6px}
-.wtag.wh{background:var(--navy-100);border-color:var(--navy-line);color:var(--navy)}
-.wtag.none{background:var(--risk-bg);border-color:var(--risk-line);color:var(--red)}
 
 .inrow{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;
@@ -373,10 +362,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .inrow .q.back{background:var(--green-50);color:var(--green)}
 .inrow .m{font-size:12.5px;color:var(--t3)}
 /* 예상 / 확정 / 반납 상태 배지 */
-.use{font-size:11px;font-weight:800;padding:2px 8px;border-radius:5px;white-space:nowrap}
-.use.plan{background:var(--orange-50);color:var(--warn-fg)}
-.use.ok{background:var(--green-50);color:var(--green)}
-.use.back{background:var(--surface-3);color:var(--t2)}
 .btn.sm.ok{background:var(--green-50);color:var(--green);border-color:var(--ok-line)}
 
 /* ===== 업무량 순위 ===== */
@@ -400,7 +385,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .fixc{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:var(--r);padding:13px 15px}
 .fixc .th{display:flex;align-items:center;gap:8px;margin-bottom:6px}
 .fixc .th b{font-size:14.5px;line-height:1.35}
-.fixc .cnt2{background:var(--orange-50);color:var(--warn-fg);font-size:11px;font-weight:800;padding:2px 8px;border-radius:5px;margin-left:auto;flex-shrink:0}
 .fixc .tw{font-size:12.5px;color:var(--t2);line-height:1.55;margin-bottom:6px}
 .fixc .tn{font-size:12px;color:var(--t3);line-height:1.55}
 .fcase{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:8px}
@@ -419,7 +403,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .datebar input[type=date]{border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-weight:600;outline:none}
 .datebar .sp{flex:1}
-.chip.duty{background:var(--risk-bg);color:var(--red)}
 
 /* ===== 체크리스트 ===== */
 .cklist{display:flex;flex-direction:column;gap:2px}
@@ -433,9 +416,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .ck input{width:17px;height:17px;flex-shrink:0;margin-top:1px;accent-color:var(--ok-fg)}
 
 /* ===== 경비 · 영수증 ===== */
-.rcpt{font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:5px}
-.rcpt.ok{background:var(--green-50);color:var(--green)}
-.rcpt.no{background:var(--risk-bg);color:var(--red)}
 .shot-btn{
   display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;
   padding:9px 12px;font-size:12.5px;font-weight:600;color:var(--t2);background:var(--card);cursor:pointer
@@ -492,7 +472,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .chap .b{height:5px;background:var(--line-2);border-radius:3px;overflow:hidden}
 .chap .b i{display:block;height:100%;background:var(--green)}
 .chap .f{display:flex;align-items:center;gap:6px;margin-top:7px;font-size:11.5px;color:var(--t3)}
-.chap .soonx{background:var(--surface-3);color:var(--t3);font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:5px}
 
 .sec{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;
@@ -522,10 +501,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .step b{display:block;font-size:14.5px;margin-bottom:5px}
 .step p{font-size:13.5px;color:var(--t2);white-space:pre-line;line-height:1.6}
-.step .mk{
-  display:inline-block;background:var(--orange-50);color:var(--warn-fg);font-size:11px;font-weight:700;
-  padding:2px 8px;border-radius:5px;margin-top:7px
-}
 .shot{
   margin-top:9px;background:var(--surface-3);border:1px dashed var(--t4);border-radius:7px;
   padding:20px;text-align:center;color:var(--t3);font-size:12px
@@ -539,10 +514,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   margin-bottom:9px;cursor:zoom-in
 }
 .shotimg:hover{border-color:var(--navy)}
-.zoomhint{
-  display:inline-block;background:var(--navy-100);color:var(--navy);font-size:11px;font-weight:700;
-  padding:2px 8px;border-radius:5px
-}
 .lbox{
   position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:100;display:none;
   place-items:center;padding:12px;overflow:auto;cursor:zoom-out
@@ -582,7 +553,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .empty .em{margin-bottom:10px;color:var(--t4)}
 .empty b{display:block;font-size:15px;margin-bottom:5px}
 .empty p{color:var(--t2);font-size:13.5px}
-.soon{display:inline-block;background:var(--orange-50);color:var(--warn-fg);font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;margin-bottom:12px}
 .drop{border:2px dashed var(--line-strong);border-radius:var(--r);padding:34px;text-align:center;background:var(--card);margin-top:14px}
 .drop .em{color:var(--t4)}
 .drop b{display:block;margin:8px 0 4px;font-size:14.5px}
@@ -608,9 +578,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .logo-m{display:none}
 /* ===== 마감 손질 ===== */
 .panel{border-radius:var(--r);box-shadow:var(--sh-1);border-color:var(--line)}
-.chip,.cat,.wtag,.rolebadge,.use,.rcpt,.mk,.memo,.soonx,.cnt2{border-radius:var(--r-tag)}
 .card .r1{gap:7px;row-gap:5px}
-.cat{font-size:11px;padding:2px 8px;letter-spacing:0}
 .store{letter-spacing:-.01em}
 .card h3{font-size:16px;line-height:1.4;margin-bottom:7px}
 .meta{font-size:12.5px;line-height:1.55}
@@ -719,11 +687,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .reps{display:flex;flex-direction:column;gap:2px}
 .rep{display:flex;align-items:center;gap:9px;padding:9px 4px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
 .rep:last-child{border-bottom:none}
-.rep-k{
-  font-size:11px;font-weight:800;padding:3px 9px;border-radius:var(--r-tag);
-  background:var(--navy-100);color:var(--navy);flex-shrink:0
-}
-.rep-k.pay{background:var(--orange-50);color:var(--orange-600)}
 .rep-b{font-size:13.5px;flex:1;min-width:0}
 .rep-m{font-size:12px;color:var(--t3)}
 .repbtns{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
@@ -734,11 +697,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .rcpt-drop:hover,.rcpt-drop.over{border-color:var(--navy);background:var(--navy-50)}
 .rcpt-drop.filled{border-color:var(--ok-line);background:var(--green-50);border-style:solid}
 .rcpt-drop b{font-size:14px;display:block;margin-bottom:3px}
-.rcpt-state{
-  display:inline-block;margin-top:8px;font-size:11.5px;font-weight:700;
-  background:var(--bg);color:var(--t3);padding:3px 10px;border-radius:var(--r-tag)
-}
-.rcpt-state.ok{background:var(--green-50);color:var(--green)}
 
 /* 주간 날짜바 — 오더가 있는 날은 진하게 */
 .weekbar{
@@ -826,9 +784,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 /* 배지 3단 위계 — 다 같은 회색이라 뭐가 중한지 안 보이던 것
    1차 .cat.k1 = 구분(무슨 일인가) · 2차 .cat = 분류 · 보조 .cat.k3 = 수량·금액 */
-.cat{color:var(--t2);background:var(--card);border-color:var(--line-strong)}
-.cat.k1{background:var(--navy-100);border-color:var(--on-navy);color:var(--navy);font-weight:700}
-.cat.k3{background:var(--bg);border-color:transparent;color:var(--t3);font-weight:600}
 
 /* 모달 폼 — 세로로 너무 길어서 밀도를 올림 */
 .mbody{padding:18px 22px}
@@ -861,6 +816,67 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .sync.spin .ic{animation:spin .6s var(--ease)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sync .ago{color:var(--t3);font-weight:500;letter-spacing:0}
+
+
+/* ===== 배지 =====
+   종류가 15가지나 되는데 모양이 다 같고 색만 달라서 무엇이 중한지 안 읽혔습니다.
+   ⚠️ 클래스 이름은 그대로 둡니다 — JS 안에서 조건분기로 조립되는 곳이 30군데라
+      이름을 바꾸면 에러 없이 조용히 스타일이 빠집니다. 보이는 모습만 3벌로 묶었습니다.
+
+   1차(상태)  = 지금 무슨 일이 벌어졌나 · 의미색 세 가지
+   2차(분류)  = 무슨 종류인가 · 남색 연한 판
+   보조(메타) = 수량·금액·출처 · 테두리 없는 회색
+*/
+.chip,.cat,.use,.rcpt,.rcpt-state,.wtag,.rolebadge,.mk,.soon,.soonx,
+.cc-z,.cc-ok,.rep-k,.cnt2,.zoomhint{
+  display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
+  font-size:11.5px;font-weight:700;line-height:1.45;
+  padding:2px 8px;border-radius:var(--r-tag);border:1px solid transparent
+}
+
+/* ── 보조(메타) — 기본값 ───────────────────────────── */
+.cat,.cat.k3,.wtag,.mk,.soonx,.zoomhint,.rolebadge.viw,.use.back,.rcpt-state{
+  background:var(--bg);color:var(--t3);border-color:transparent;font-weight:600
+}
+
+/* ── 2차(분류) — 남색 연한 판 ──────────────────────── */
+.cat.k1,.wtag.wh,.rep-k{
+  background:var(--navy-100);color:var(--navy);border-color:transparent;font-weight:700
+}
+/* 역할 배지만 채워서 한 단계 위로 */
+.rolebadge.adm{background:var(--navy);color:var(--card);border-color:var(--navy)}
+
+/* ── 1차(상태) — 의미색 세 가지 ────────────────────── */
+.chip.done,.use.ok,.rcpt.ok,.rcpt-state.ok,.cc-ok{
+  background:var(--ok-bg);color:var(--ok-fg);border-color:var(--ok-line)
+}
+.chip.doing,.use.plan,.soon,.rep-k.pay,.cnt2{
+  background:var(--warn-bg);color:var(--warn-fg);border-color:var(--warn-line)
+}
+.chip.duty,.rcpt.no,.wtag.none,.cc-z{
+  background:var(--risk-bg);color:var(--risk-fg);border-color:var(--risk-line)
+}
+
+/* ── 낱개 조정 ─────────────────────────────────────── */
+.cc-z,.cc-ok{margin-top:9px}
+.mk{margin-top:7px}
+.soon{margin-bottom:12px}
+.rep-k,.cnt2{flex-shrink:0}
+.fixc .cnt2{margin-left:auto}
+.rcpt-state{margin-top:8px}
+.rolebadge{font-size:10.5px;font-weight:800}
+.chap .soonx{flex-shrink:0}
+
+/* 재고 증감은 배지가 아니라 숫자입니다 — 판을 깔지 않고 색과 굵기로만 말합니다.
+   ⚠️ .q.ok 의 'ok' 는 재고 상태(확정)를 뜻하고, 표시하는 값은 '차감 수량'이라
+      빨강이 맞습니다. 이름이 헷갈리게 붙어 있을 뿐입니다. */
+.inrow .q{
+  background:none;border:none;padding:0 2px;font-size:13.5px;font-weight:800;
+  font-variant-numeric:tabular-nums;color:var(--ok-fg)
+}
+.inrow .q.ok{color:var(--risk-fg)}
+.inrow .q.plan{color:var(--warn-fg)}
+.inrow .q.back{color:var(--ok-fg)}
 
 /* 확인 표시 · 목록 불릿 — 규칙이 없어 그동안 색이 안 붙던 자리 */
 .prow .st{display:inline-flex;align-items:center;justify-content:center;color:var(--t4)}
@@ -918,10 +934,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .cc-v{font-size:24px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;line-height:1.15}
 .cc-v small{font-size:12px;font-weight:600;color:var(--t3);margin-left:3px}
 .cc-s{font-size:12px;color:var(--t3);margin-top:2px}
-.cc-z{display:inline-block;margin-top:9px;font-size:11px;font-weight:800;
-  background:var(--risk-bg);color:var(--red);padding:2px 8px;border-radius:var(--r-tag)}
-.cc-ok{display:inline-block;margin-top:9px;font-size:11px;font-weight:700;
-  background:var(--green-50);color:var(--green);padding:2px 8px;border-radius:var(--r-tag)}
 /* 고른 분류의 머리줄 */
 .cathead{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
 .cathead b{font-size:16px;font-weight:700}
@@ -1009,7 +1021,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   .sync .ago{display:none}
   .who{flex-shrink:0}
   .who select{max-width:92px;padding:6px 4px;font-size:12px}
-  .rolebadge{font-size:9.5px;padding:3px 6px}
   /* 목업 배너는 한 줄로 */
   .mockbar{padding:5px 13px;font-size:11px;flex-wrap:nowrap;overflow:hidden}
   .mockbar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
