@@ -965,6 +965,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .ast{flex:1;min-width:0;line-height:1.5;white-space:normal}
 .aswhy{display:block;color:var(--orange-600);font-size:11.5px;font-weight:600;margin-top:2px}
 .asrow .btn.sm{flex-shrink:0;align-self:center}
+/* 좁은 화면에서 표가 잘리는 것을 미리 알려줍니다 */
+.swipe{font-size:11.5px;color:var(--t3);margin:0 2px 7px;display:flex;align-items:center;gap:5px}
+.swipe::before{content:'↔';font-size:13px;color:var(--navy);font-weight:700}
 .explink{
   font-size:12.5px;text-align:left;color:var(--navy);font-weight:600;
   text-decoration:underline;text-underline-offset:3px;text-decoration-color:#C6D3E1
@@ -2635,6 +2638,7 @@ function viewExpense(){
   <div class="panel">
     <h4>당직 · AS 수당</h4>
     ${rows.length ? `
+    <p class="swipe only-mo">옆으로 밀면 지급액 · 지급현황까지 보입니다</p>
     <div class="tabwrap">
       <table class="ktab exp">
         <tr><th>당직자</th><th>주당직 기간</th><th>수</th><th>AS 방문 (주당직 제외)</th><th>수</th>
@@ -2663,6 +2667,7 @@ function viewExpense(){
   <div class="panel">
     <h4>업무에 등록된 경비 <span style="color:var(--t3);font-weight:500">— 업무 상세에서 등록한 것이 그대로 옵니다</span></h4>
     ${exps.length ? `
+    <p class="swipe only-mo">옆으로 밀면 금액 · 영수증까지 보입니다</p>
     <div class="tabwrap">
       <table class="ktab exp">
         <tr><th>일자</th><th>업무</th><th>담당</th><th>항목</th><th>금액</th><th>영수증</th></tr>
