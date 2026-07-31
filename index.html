@@ -140,11 +140,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .top .today{font-size:12.5px;color:var(--t3)}
 .top .sp{flex:1}
 .search{
-  display:flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);
+  display:flex;align-items:center;gap:7px;color:var(--t3);background:var(--bg);border:1px solid var(--line);
   border-radius:8px;padding:6px 10px;width:240px
 }
 .search input{border:none;background:none;outline:none;width:100%;font-size:13px}
-.bell{position:relative;font-size:17px;padding:6px}
+.bell{position:relative;padding:6px;color:var(--t2)}
 .bell .dot{
   position:absolute;top:1px;right:0;background:var(--orange);color:var(--card);font-size:9.5px;
   font-weight:700;min-width:15px;height:15px;line-height:15px;border-radius:8px;text-align:center
@@ -256,7 +256,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .modal{background:var(--card);border-radius:14px;width:100%;max-width:540px;box-shadow:var(--sh-2)}
 .mhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center}
 .mhead b{font-size:16.5px}
-.mhead button{margin-left:auto;font-size:20px;color:var(--t3);line-height:1}
+.mhead button{margin-left:auto;color:var(--t3);line-height:1;padding:2px}
 .mbody{padding:20px 22px;max-height:64vh;overflow-y:auto}
 .f{margin-bottom:15px}
 .f > label{display:block;font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:6px}
@@ -295,7 +295,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .noti .nh{padding:12px 15px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px}
 .noti .ni{padding:11px 15px;border-bottom:1px solid var(--surface-3);font-size:13px;cursor:pointer;display:flex;gap:9px}
 .noti .ni:hover{background:var(--bg)}
-.noti .ni .em{font-size:15px}
+.noti .ni .ic{margin-top:1px;color:var(--t3)}
 .noti .ni b{font-weight:600}
 .noti .ni time{display:block;color:var(--t3);font-size:11.5px;margin-top:2px}
 .noti .ni.new{background:var(--orange-50)}
@@ -471,7 +471,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .mprog b{font-size:15px}
 .mprog .pc{margin-left:auto;font-size:13px;color:var(--green);font-weight:700}
 .msearch{
-  display:flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);
+  display:flex;align-items:center;gap:8px;color:var(--t3);background:var(--card);border:1px solid var(--line);
   border-radius:9px;padding:10px 13px;margin-bottom:14px
 }
 .msearch input{border:none;outline:none;width:100%;font-size:14px}
@@ -499,10 +499,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   margin-bottom:9px;cursor:pointer;display:flex;align-items:center;gap:12px;width:100%;text-align:left
 }
 .sec:hover{border-color:var(--navy)}
-.sec .ck{font-size:17px;flex-shrink:0}
+.sec .rd{flex-shrink:0;color:var(--t4)}
+.sec .rd.ok{color:var(--ok-fg)}
 .sec .t{font-size:14.5px;font-weight:600}
 .sec .s{font-size:12.5px;color:var(--t3);margin-top:2px}
-.sec .go{margin-left:auto;color:var(--t3);flex-shrink:0}
+.sec .go{margin-left:auto;color:var(--t4);flex-shrink:0;display:flex}
 
 .lead{
   background:var(--navy);color:var(--card);border-radius:var(--r);padding:16px 18px;margin-bottom:14px
@@ -578,12 +579,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 /* ===== 빈/안내 ===== */
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:var(--r);padding:44px 20px;text-align:center}
-.empty .em{font-size:32px;margin-bottom:10px}
+.empty .em{margin-bottom:10px;color:var(--t4)}
 .empty b{display:block;font-size:15px;margin-bottom:5px}
 .empty p{color:var(--t2);font-size:13.5px}
 .soon{display:inline-block;background:var(--orange-50);color:var(--warn-fg);font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:6px;margin-bottom:12px}
 .drop{border:2px dashed var(--line-strong);border-radius:var(--r);padding:34px;text-align:center;background:var(--card);margin-top:14px}
-.drop .em{font-size:28px}
+.drop .em{color:var(--t4)}
 .drop b{display:block;margin:8px 0 4px;font-size:14.5px}
 .drop p{color:var(--t3);font-size:12.5px}
 
@@ -603,7 +604,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .mockbar b{color:var(--orange)}
 
 /* ===== 모바일 ===== */
-.burger{display:none;font-size:19px;padding:5px}
+.burger{display:none;padding:5px;color:var(--t2)}
 .logo-m{display:none}
 /* ===== 마감 손질 ===== */
 .panel{border-radius:var(--r);box-shadow:var(--sh-1);border-color:var(--line)}
@@ -658,7 +659,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 /* 빈 화면은 큰 이모지 대신 담백하게 */
 .empty{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:40px 22px;box-shadow:var(--sh-1)}
-.empty .em{font-size:22px;margin-bottom:8px;opacity:.5}
+.empty .em{margin-bottom:9px;color:var(--t4)}
 .empty b{font-size:15px;letter-spacing:-.015em}
 .empty p{color:var(--t2);font-size:13.5px;margin-top:5px}
 
@@ -861,6 +862,24 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 @keyframes spin{to{transform:rotate(360deg)}}
 .sync .ago{color:var(--t3);font-weight:500;letter-spacing:0}
 
+/* 확인 표시 · 목록 불릿 — 규칙이 없어 그동안 색이 안 붙던 자리 */
+.prow .st{display:inline-flex;align-items:center;justify-content:center;color:var(--t4)}
+.prow .st.ok{color:var(--ok-fg)}
+.prow .st.dot{width:5px;height:5px;border-radius:50%;background:var(--t3);margin-top:.55em}
+.ktab td.no{color:var(--t4)}
+.tsub{color:var(--t3);font-size:12px}
+.lockbar .ic{flex-shrink:0}
+
+/* ===== 아이콘 =====
+   컬러 이모지를 걷어내고 전부 같은 규격의 선 아이콘으로 통일했습니다.
+   글자색을 따라가므로(currentColor) 배지·버튼 안에서도 색이 어긋나지 않습니다. */
+.ic{
+  width:16px;height:16px;flex-shrink:0;fill:none;stroke:currentColor;
+  stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.15em
+}
+.ic-sm{width:14px;height:14px}
+.ic-lg{width:22px;height:22px;stroke-width:1.4}
+
 /* 업무일이 휴일일 때 모달 안에서 바로 알려주는 줄 */
 .dhint{display:none;margin-top:6px;font-size:12px;color:var(--orange-600)}
 .dhint.on{display:block}
@@ -895,7 +914,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .catcard:active{transform:scale(.995)}
 .cc-h{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 .cc-h b{font-size:15px;font-weight:700}
-.cc-go{margin-left:auto;color:var(--t3);font-size:17px}
+.cc-go{margin-left:auto;color:var(--t4);display:flex}
 .cc-v{font-size:24px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;line-height:1.15}
 .cc-v small{font-size:12px;font-weight:600;color:var(--t3);margin-left:3px}
 .cc-s{font-size:12px;color:var(--t3);margin-top:2px}
@@ -1047,6 +1066,25 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <symbol id="i-report" viewBox="0 0 24 24"><path d="M3.5 3.5v15a2 2 0 0 0 2 2h15"/><path d="m7.2 15.4 3.6-4.2 3.1 2.7L20 7.2"/></symbol>
   <symbol id="i-duty" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.3V12l3.1 1.9"/></symbol>
   <symbol id="i-holiday" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><circle cx="12" cy="15" r="1.9" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m15.8 15.8 4.2 4.2"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18.2 16.5V11a6.2 6.2 0 1 0-12.4 0v5.5L4 18.6h16z"/><path d="M10 21.2a2.2 2.2 0 0 0 4 0"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.8" y="10.4" width="14.4" height="10.1" rx="2.2"/><path d="M8.2 10.4V7.6a3.8 3.8 0 0 1 7.6 0v2.8"/></symbol>
+  <symbol id="i-paperclip" viewBox="0 0 24 24"><path d="M20 11.3 12.2 19a4.6 4.6 0 0 1-6.5-6.5l8.2-8.2a3.1 3.1 0 0 1 4.4 4.4l-8.2 8.2a1.6 1.6 0 0 1-2.2-2.2l7.4-7.4"/></symbol>
+  <symbol id="i-upload" viewBox="0 0 24 24"><path d="M20.5 15.5V19a1.8 1.8 0 0 1-1.8 1.8H5.3A1.8 1.8 0 0 1 3.5 19v-3.5"/><path d="M12 15.6V3.8m0 0L8.4 7.4M12 3.8l3.6 3.6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="3.3" y="5.2" width="17.4" height="13.6" rx="2.2"/><path d="m3.8 7 8.2 5.6L20.2 7"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M20.4 12.2c0 3.8-3.7 6.9-8.3 6.9-.9 0-1.7-.1-2.5-.3L4.6 20.4l1.2-3.4a6.6 6.6 0 0 1-2.2-4.8c0-3.8 3.7-6.9 8.4-6.9s8.4 3.1 8.4 6.9z"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6.8h16M4 12h16M4 17.2h16"/></symbol>
+  <symbol id="i-close" viewBox="0 0 24 24"><path d="m6.4 6.4 11.2 11.2M17.6 6.4 6.4 17.6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.6 4.9 4.9L19.2 7.2"/></symbol>
+  <symbol id="i-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="7.6"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="m8.1 12.2 2.7 2.7 5.1-5.6"/></symbol>
+  <symbol id="i-x-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.4"/><path d="m9.2 9.2 5.6 5.6M14.8 9.2l-5.6 5.6"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="M14.6 5.6 8.2 12l6.4 6.4"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9.4 5.6 6.4 6.4-6.4 6.4"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19.4 12H4.6m0 0 5.8-5.8M4.6 12l5.8 5.8"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4.6 12h14.8m0 0-5.8-5.8M19.4 12l-5.8 5.8"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.8 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z"/></symbol>
+  <symbol id="i-swipe" viewBox="0 0 24 24"><path d="M3.6 12h16.8m0 0-3.6-3.6M20.4 12l-3.6 3.6M3.6 12l3.6-3.6M3.6 12l3.6 3.6"/></symbol>
   <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20.2 11.4a8.2 8.2 0 1 1-2.4-5.4"/><path d="M20.5 3.6v5.2h-5.2"/></symbol>
   <symbol id="i-expense" viewBox="0 0 24 24"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8.4h6M9 12.2h6"/></symbol>
   <symbol id="i-plan" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 9.5h17M8.5 3v4M15.5 3v4"/><path d="m9 14.4 1.9 1.9 3.6-3.9"/></symbol>
@@ -1097,17 +1135,17 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <!-- 본문 -->
   <div class="main">
     <header class="top">
-      <button class="burger" onclick="toggleSide()">☰</button>
+      <button class="burger" onclick="toggleSide()" aria-label="메뉴"><svg class="ic"><use href="#i-menu"/></svg></button>
       <img src="assets/logo.png" alt="포스온" class="logo-m">
       <h1 id="pageTitle">오늘 업무</h1>
       <span class="today">2026-07-29 (수)</span>
       <span class="sp"></span>
-      <div class="search"><span>🔍</span><input placeholder="업무·매장·매뉴얼 검색"></div>
+      <div class="search"><svg class="ic"><use href="#i-search"/></svg><input placeholder="업무·매장·매뉴얼 검색"></div>
       <button class="sync" id="syncBtn" onclick="doRefresh(true)" title="지금 새로 불러오기">
         <svg class="ic" viewBox="0 0 24 24"><use href="#i-refresh"/></svg>
         <span class="ago" id="syncAgo">방금</span>
       </button>
-      <button class="bell" onclick="toggleNoti(event)">🔔<span class="dot" id="notiCnt">3</span></button>
+      <button class="bell" onclick="toggleNoti(event)" aria-label="알림"><svg class="ic"><use href="#i-bell"/></svg><span class="dot" id="notiCnt">3</span></button>
       <span class="who" id="who"></span>
 
       <div class="noti" id="noti">
@@ -1123,7 +1161,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 <!-- 업무 등록 모달 -->
 <div class="mask" id="mask">
   <div class="modal">
-    <div class="mhead"><b>업무 등록</b><button onclick="closeNew()">✕</button></div>
+    <div class="mhead"><b>업무 등록</b><button onclick="closeNew()" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button></div>
     <div class="mbody">
       <div class="f">
         <label>제목</label>
@@ -1168,7 +1206,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       </div>
       <div class="f">
         <label>첨부 (사진·전표·매뉴얼 페이지)</label>
-        <input type="text" value="📎 파일 선택 — 목업에서는 비활성" disabled style="background:var(--bg);color:var(--t3)">
+        <input type="text" value="파일 선택" disabled style="background:var(--bg);color:var(--t3)">
       </div>
       <div class="f">
         <label>공유 대상</label>
@@ -1195,7 +1233,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 <!-- 현장 경비 정산서 -->
 <div class="mask" id="sheetMask">
   <div class="modal" style="max-width:640px">
-    <div class="mhead"><b>현장 경비 정산서</b><button onclick="closeSheet()">✕</button></div>
+    <div class="mhead"><b>현장 경비 정산서</b><button onclick="closeSheet()" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button></div>
     <div class="mbody" id="sheetBody"></div>
     <div class="mfoot">
       <button class="btn" onclick="closeSheet()">닫기</button>
@@ -1294,10 +1332,10 @@ let TASKS = [
 ];
 
 let NOTIS = [
-  {em:'📨', b:'김두혁', t:'님이 업무를 공유했습니다 — 산타아울렛모드니 오픈 지원', time:'10분 전', tid:1, isNew:true},
-  {em:'💬', b:'임영준', t:'님이 댓글을 남겼습니다 — 컨베이어벨트 불량 장애 접수', time:'39분 전', tid:1, isNew:true},
-  {em:'🔔', b:'리마인드', t:' — 아직 확인하지 않은 업무가 1건 있습니다', time:'1시간 전', tid:1, isNew:true},
-  {em:'✅', b:'김두혁', t:'님이 내 업무를 확인했습니다 — OK마트 수내 네트워크 점검', time:'어제', tid:3, isNew:false}
+  {ic:'i-mail', b:'김두혁', t:'님이 업무를 공유했습니다 — 산타아울렛모드니 오픈 지원', time:'10분 전', tid:1, isNew:true},
+  {ic:'i-message', b:'임영준', t:'님이 댓글을 남겼습니다 — 컨베이어벨트 불량 장애 접수', time:'39분 전', tid:1, isNew:true},
+  {ic:'i-bell', b:'리마인드', t:' — 아직 확인하지 않은 업무가 1건 있습니다', time:'1시간 전', tid:1, isNew:true},
+  {ic:'i-check-circle', b:'김두혁', t:'님이 내 업무를 확인했습니다 — OK마트 수내 네트워크 점검', time:'어제', tid:3, isNew:false}
 ];
 
 /* 매뉴얼 챕터 (PDF 목차 실측 · 문서 내부 페이지) */
@@ -1435,7 +1473,7 @@ function renderWho(){
 }
 function switchUser(n){ ME = n; cur.taskId=null; bump(); render(); toast(`${n} 계정으로 전환 — ${isAdmin()?'편집 가능':'조회만 가능'}`); }
 function lockNote(what){
-  return `<div class="lockbar">🔒 <span><b>${esc(what)}</b>은 관리자만 할 수 있습니다. 지금은 조회만 가능합니다.
+  return `<div class="lockbar"><svg class="ic"><use href="#i-lock"/></svg> <span><b>${esc(what)}</b>은 관리자만 할 수 있습니다. 지금은 조회만 가능합니다.
     (우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꾸면 편집 화면이 열립니다)</span></div>`;
 }
 
@@ -1498,7 +1536,7 @@ function viewStock(){
 
   <div class="stockbar">
     <div class="msearch" style="margin:0;flex:1;min-width:180px">
-      <span>🔍</span>
+      <svg class="ic"><use href="#i-search"/></svg>
       <input value="${esc(q)}" placeholder="품목 검색 — 분류와 상관없이 전체에서 찾습니다"
              oninput="cur.sq=this.value;cur.scat=null" onkeydown="if(event.key==='Enter')render()">
     </div>
@@ -1527,7 +1565,7 @@ function viewStock(){
     const catZero = list.filter(i => itemTot(i)===0).length;
     return head + `
       <div class="cathead">
-        <button class="btn sm" onclick="backStockCat()">← 분류 전체</button>
+        <button class="btn sm" onclick="backStockCat()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> 분류 전체</button>
         <b>${esc(cat)}</b>
         <span class="cat k3">${list.length}품목</span>
         <span class="cat k3">총 ${catTot.toLocaleString()}개</span>
@@ -1546,7 +1584,7 @@ function viewStock(){
     const z    = list.filter(i => itemTot(i)===0).length;
     const off  = list.reduce((s,i)=> s + (i.q.office||0), 0);
     return `<button class="catcard" onclick="openStockCat('${esc(c)}')">
-      <div class="cc-h"><b>${esc(c)}</b><span class="cc-go">›</span></div>
+      <div class="cc-h"><b>${esc(c)}</b><span class="cc-go"><svg class="ic"><use href="#i-chevron-right"/></svg></span></div>
       <div class="cc-v">${tot.toLocaleString()}<small>개</small></div>
       <div class="cc-s">${list.length}품목 · 사무실 ${off.toLocaleString()}개</div>
       ${z?`<span class="cc-z">재고 0 — ${z}종</span>`:'<span class="cc-ok">전 품목 재고 있음</span>'}
@@ -1665,7 +1703,7 @@ function viewAudit(){
       기존 수량과 차이나는 항목만 골라서 보여주고, 확인 후 반영합니다.
     </p>
     <div class="drop" ${isAdmin()?`onclick="toast('실제 앱에서는 여기서 엑셀을 읽어 차이 목록을 보여줍니다')" style="cursor:pointer"`:''}>
-      <div class="em">📥</div>
+      <div class="em"><svg class="ic ic-lg"><use href="#i-upload"/></svg></div>
       <b>재고 실사 엑셀을 끌어다 놓으세요</b>
       <p>.xlsx / .csv · 목업에서는 비활성</p>
     </div>
@@ -1674,9 +1712,9 @@ function viewAudit(){
   <div class="panel">
     <h4>실사 이력</h4>
     <div class="plist">
-      <div class="prow"><span class="st ok">✓</span><span class="nm">2026-04-30</span>
+      <div class="prow"><span class="st ok"><svg class="ic ic-sm"><use href="#i-check"/></svg></span><span class="nm">2026-04-30</span>
         <span class="tm">월말 전체 실사 · 60품목 · 김두혁</span></div>
-      <div class="prow"><span class="st ok">✓</span><span class="nm">2026-04-15</span>
+      <div class="prow"><span class="st ok"><svg class="ic ic-sm"><use href="#i-check"/></svg></span><span class="nm">2026-04-15</span>
         <span class="tm">사무실 재고 일일체크 · 김기홍</span></div>
     </div>
     <p style="font-size:12px;color:var(--t3);margin-top:10px">
@@ -1702,7 +1740,7 @@ function viewTasks(){
   const week = weekOf(cur.date);
   const DOW = ['일','월','화','수','목','금','토'];
   let h = `<div class="weekbar">
-    <button class="btn wk" onclick="moveDate(-7)" title="지난 주">◀</button>
+    <button class="btn wk" onclick="moveDate(-7)" title="지난 주"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
     <div class="days">
       ${week.map(d=>{
         const n = TASKS.filter(t=>t.date===d).length;
@@ -1717,7 +1755,7 @@ function viewTasks(){
         </button>`;
       }).join('')}
     </div>
-    <button class="btn wk" onclick="moveDate(7)" title="다음 주">▶</button>
+    <button class="btn wk" onclick="moveDate(7)" title="다음 주"><svg class="ic"><use href="#i-chevron-right"/></svg></button>
     <button class="btn wk today" onclick="cur.date='2026-07-29';render()">오늘</button>
   </div>
   ${isHoliday(cur.date)?`<div class="note w" style="margin-bottom:12px"><b>${esc(holidayName(cur.date)||'주말')}</b>이 날 업무는 당직비 대상입니다.</div>`:''}
@@ -1725,7 +1763,7 @@ function viewTasks(){
 
   /* 필터 탭 줄은 제거 — 같은 구분이 왼쪽 메뉴에 이미 있음 (2차 피드백) */
   const list = filtered();
-  if(!list.length) return h + `<div class="empty"><div class="em">✓</div><b>여기에 걸린 업무가 없습니다</b>
+  if(!list.length) return h + `<div class="empty"><b>여기에 걸린 업무가 없습니다</b>
     <p>새 업무가 들어오면 이 자리에 뜹니다. 지금 넣을 게 있으면 왼쪽 아래 <b>+ 새 업무 등록</b>을 눌러주세요.</p></div>`;
 
   h += list.map(t => {
@@ -1747,11 +1785,11 @@ function viewTasks(){
         ${dotsOf(t)}
         <span class="ackn">확인 ${ackDone(t)}/${ackTotal(t)}</span>
         ${un.length ? `<span class="unread">미확인: ${un.slice(0,3).map(esc).join(', ')}${un.length>3?` 외 ${un.length-3}명`:''}</span>`
-                    : '<span class="unread" style="color:var(--green);font-weight:600">전원 확인 완료 ✓</span>'}
+                    : '<span class="unread" style="color:var(--green);font-weight:600">전원 확인 완료</span>'}
         <span class="acts">
           ${t.mine ? '' : (acked
-            ? `<button class="btn ok" disabled>확인함 ✓</button>`
-            : `<button class="btn pri" onclick="doAck(${t.id})">확인함 ✓</button>`)}
+            ? `<button class="btn ok" disabled>확인함</button>`
+            : `<button class="btn pri" onclick="doAck(${t.id})">확인함</button>`)}
         </span>
       </div>
     </div>`;
@@ -1779,7 +1817,7 @@ function viewDetail(id){
   }).join('');
 
   return `
-  <button class="back" onclick="cur.taskId=null;render()">← 목록으로</button>
+  <button class="back" onclick="cur.taskId=null;render()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> 목록으로</button>
   ${rookieBox(t)}
   <div class="panel">
     <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span>
@@ -1791,8 +1829,8 @@ function viewDetail(id){
     </div>
     <div class="desc">${esc(t.body)}</div>
     ${t.mine ? '' : (iAcked(t)
-      ? `<button class="btn ok" disabled>확인함 ✓</button>`
-      : `<button class="btn pri" onclick="doAck(${t.id})">확인함 ✓</button>`)}
+      ? `<button class="btn ok" disabled>확인함</button>`
+      : `<button class="btn pri" onclick="doAck(${t.id})">확인함</button>`)}
   </div>
 
   ${checklistBox(t)}
@@ -1809,7 +1847,7 @@ function viewDetail(id){
   ${expenseBox(t)}
 
   ${t.mine ? `<div class="panel" style="text-align:right">
-    <button class="btn ok" onclick="doneTask(${t.id})">업무 완료 처리 ✓</button>
+    <button class="btn ok" onclick="doneTask(${t.id})">업무 완료 처리</button>
   </div>` : ''}`;
 }
 
@@ -1825,7 +1863,7 @@ function isHoliday(dstr){
 function dutyBadge(t){
   if(!t.date) return '';
   return isHoliday(t.date)
-    ? `<span class="chip duty">🗓 휴일 · 당직비 대상</span>`
+    ? `<span class="chip duty">휴일 · 당직비 대상</span>`
     : `<span class="cat k3">주중</span>`;
 }
 
@@ -1870,7 +1908,7 @@ function tickCheck(id, i){
   const bar = document.getElementById(`ckbar_${id}`);
   if(bar) bar.style.width = Math.round(done/items.length*100) + '%';
 
-  if(all) toast('체크리스트 완료 ✓');
+  if(all) toast('체크리스트를 모두 마쳤습니다');
 }
 
 /* ===== 신입 담당자에게 붙는 매뉴얼 추천 ===== */
@@ -1959,7 +1997,7 @@ function usedBox(t){
     const it = itemOf(u.itemId) || {name:'(삭제됨)', unit:'', price:null};
     const amt = it.price ? (it.price*u.qty).toLocaleString()+'원' : '단가 미등록';
     return `<div class="prow">
-      <span class="st ${u.confirmed?'ok':''}">${u.confirmed?'✓':'·'}</span>
+      <span class="st ${u.confirmed?'ok':''}">${u.confirmed?'<svg class="ic ic-sm"><use href="#i-check"/></svg>':'·'}</span>
       <span class="nm" style="min-width:auto;flex:1">${esc(it.name)}</span>
       <span class="cat k3">${u.qty}${esc(it.unit||'')}</span>
       <span class="use ${u.confirmed?'ok':'plan'}">${u.confirmed?'실사용 확정':'예상 (선차감)'}</span>
@@ -2129,7 +2167,7 @@ function doAck(id){
   if(iAcked(t)) return;
   const now = new Date();
   t.acks.push({n:ME, t:`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`, note:''});
-  NOTIS.unshift({em:'✅', b:ME, t:`님이 확인했습니다 — ${t.title}`, time:'방금', tid:id, isNew:false});
+  NOTIS.unshift({ic:'i-check-circle', b:ME, t:`님이 확인했습니다 — ${t.title}`, time:'방금', tid:id, isNew:false});
   toast(`확인 완료 — 등록자(${t.author})에게 알림이 갑니다`);
   bump(); render();
 }
@@ -2185,7 +2223,7 @@ function openNew(){
   $('#fKind').innerHTML = WORK_KINDS.map(k=>`<option>${k}</option>`).join('');
   $('#fCat').innerHTML  = WORK_CATS.map(c=>`<option>${c}</option>`).join('');
   $('#people').innerHTML = TEAM.filter(t=>t.name!==ME).map(t=>
-    `<label><input type="checkbox" value="${t.name}">${t.name}${ROOKIES.has(t.name)?' 🎓':''}</label>`).join('');
+    `<label><input type="checkbox" value="${t.name}">${t.name}${ROOKIES.has(t.name)?' <span class="cat k3">신입</span>':''}</label>`).join('');
   markNewDate();
   $('#mask').classList.add('on');
 }
@@ -2257,7 +2295,7 @@ document.addEventListener('click', e=>{
 function renderNoti(){
   $('#notiList').innerHTML = NOTIS.map((n,i)=>`
     <div class="ni ${n.isNew?'new':''}" onclick="fromNoti(${i})">
-      <span class="em">${n.em}</span>
+      <svg class="ic"><use href="#${n.ic}"/></svg>
       <div><b>${esc(n.b)}</b>${esc(n.t)}<time>${esc(n.time)}</time></div>
     </div>`).join('');
   const c = NOTIS.filter(n=>n.isNew).length;
@@ -2278,7 +2316,7 @@ function isRead(id){ return !!lsGet()[id]; }
 function toggleRead(id){
   const o = lsGet();
   if(o[id]){ delete o[id]; toast('학습 완료를 해제했습니다'); }
-  else { o[id] = 1; toast('학습 완료 ✓ 진도에 반영됐습니다'); }
+  else { o[id] = 1; toast('학습 완료 진도에 반영됐습니다'); }
   lsSet(o); render();
 }
 function secsOf(no){ return LESSONS[no] || []; }
@@ -2311,12 +2349,12 @@ function manualHome(){
     return manualSearchBar() + (hits.length
       ? hits.map(({c,s})=>`
         <button class="sec" onclick="openSec(${c.no},'${s.id}')">
-          <span class="ck ${isRead(s.id)?'ok':''}">${isRead(s.id)?'✓':'○'}</span>
+          <span class="rd ${isRead(s.id)?'ok':''}">${isRead(s.id)?'<svg class="ic"><use href="#i-check-circle"/></svg>':'<svg class="ic"><use href="#i-circle"/></svg>'}</span>
           <span><span class="t">${esc(s.title)}</span>
             <span class="s">${c.no}. ${esc(c.t)} · ${esc(s.summary.slice(0,40))}…</span></span>
-          <span class="go">›</span>
+          <span class="go"><svg class="ic"><use href="#i-chevron-right"/></svg></span>
         </button>`).join('')
-      : `<div class="empty"><div class="em">🔍</div><b>"${esc(q)}" 검색 결과가 없습니다</b>
+      : `<div class="empty"><b>"${esc(q)}" 검색 결과가 없습니다</b>
          <p>아직 변환된 챕터는 7장·8장입니다.</p></div>`);
   }
 
@@ -2346,7 +2384,7 @@ function manualHome(){
   </div>`;
 }
 function manualSearchBar(){
-  return `<div class="msearch"><span>🔍</span>
+  return `<div class="msearch"><svg class="ic"><use href="#i-search"/></svg>
     <input id="mq" value="${esc(cur.mq)}" placeholder="기능 이름으로 찾기 (예: 재고, 폐기, 핸디)"
            oninput="cur.mq=this.value" onkeydown="if(event.key==='Enter')render()">
     ${cur.mq?`<button class="btn sm" onclick="cur.mq='';render()">지우기</button>`:''}
@@ -2357,7 +2395,7 @@ function manualChapter(){
   const c = CHAPTERS.find(x=>x.no===cur.mchap);
   const pr = progOf(c.no);
   return `
-  <button class="back" onclick="cur.mchap=null;render()">← 챕터 목록</button>
+  <button class="back" onclick="cur.mchap=null;render()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> 챕터 목록</button>
   <div class="mprog">
     <div class="r"><b>${c.no}. ${esc(c.t)}</b><span class="pc">${pr.done}/${pr.total} (${pr.pct}%)</span></div>
     <div class="bar"><i style="width:${pr.pct}%"></i></div>
@@ -2365,10 +2403,10 @@ function manualChapter(){
   </div>
   ${secsOf(c.no).map(s=>`
     <button class="sec" onclick="openSec(${c.no},'${s.id}')">
-      <span class="ck ${isRead(s.id)?'ok':''}">${isRead(s.id)?'✓':'○'}</span>
+      <span class="rd ${isRead(s.id)?'ok':''}">${isRead(s.id)?'<svg class="ic"><use href="#i-check-circle"/></svg>':'<svg class="ic"><use href="#i-circle"/></svg>'}</span>
       <span><span class="t">${s.no}) ${esc(s.title)}</span>
         <span class="s">${esc(s.summary.slice(0,52))}…</span></span>
-      <span class="go">›</span>
+      <span class="go"><svg class="ic"><use href="#i-chevron-right"/></svg></span>
     </button>`).join('')}`;
 }
 
@@ -2404,7 +2442,7 @@ function manualSection(){
   const table = tableOf(s.table) + tableOf(s.table2);
 
   return `
-  <button class="back" onclick="cur.msec=null;render()">← ${c.no}. ${esc(c.t)}</button>
+  <button class="back" onclick="cur.msec=null;render()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> ${c.no}. ${esc(c.t)}</button>
   <div class="lead">
     <div class="k">${c.no}장 ${s.no}) · 원문 p.${s.page}</div>
     <h2 style="font-size:19px;font-weight:700;margin-bottom:8px">${esc(s.title)}</h2>
@@ -2432,13 +2470,13 @@ function manualSection(){
 
   <div class="donebar">
     <button class="btn ${read?'ok':'pri'}" onclick="toggleRead('${s.id}')">
-      ${read?'학습 완료 ✓ (해제하려면 클릭)':'학습 완료로 표시'}</button>
+      ${read?'학습 완료 (해제하려면 클릭)':'학습 완료로 표시'}</button>
     <button class="btn" onclick="toast('업무 등록 화면에 이 항목이 첨부됩니다')">업무에 첨부</button>
   </div>
 
   <div class="donebar">
-    ${i>0?`<button class="btn" onclick="openSec(${c.no},'${list[i-1].id}')">◀ ${esc(list[i-1].title)}</button>`:''}
-    ${i<list.length-1?`<button class="btn" onclick="openSec(${c.no},'${list[i+1].id}')">${esc(list[i+1].title)} ▶</button>`:''}
+    ${i>0?`<button class="btn" onclick="openSec(${c.no},'${list[i-1].id}')"><svg class="ic ic-sm"><use href="#i-chevron-left"/></svg> ${esc(list[i-1].title)}</button>`:''}
+    ${i<list.length-1?`<button class="btn" onclick="openSec(${c.no},'${list[i+1].id}')">${esc(list[i+1].title)} <svg class="ic ic-sm"><use href="#i-chevron-right"/></svg></button>`:''}
   </div>`;
 }
 
@@ -2453,7 +2491,7 @@ function answer(id, pick){
   const s = secsOf(cur.mchap).find(x=>x.id===id);
   const ok = pick === s.quiz.a;
   document.getElementById('qres_'+id).innerHTML =
-    `<div class="res ${ok?'ok':'no'}">${ok?'⭕ 정답입니다.':'❌ 아닙니다.'} ${esc(s.quiz.why)}</div>`;
+    `<div class="res ${ok?'ok':'no'}">${ok?'<svg class="ic ic-sm"><use href="#i-check-circle"/></svg> 정답입니다.':'<svg class="ic ic-sm"><use href="#i-x-circle"/></svg> 아닙니다.'} ${esc(s.quiz.why)}</div>`;
 }
 
 /* ================= 당직 일정 =================
@@ -2476,9 +2514,9 @@ function viewDuty(){
   return `
   <div class="mprog">
     <div class="r">
-      <button class="btn sm" onclick="moveDutyMonth(-1)">◀</button>
+      <button class="btn sm" onclick="moveDutyMonth(-1)"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
       <b>전화 당직 일정 — ${yy}년 ${mm}월</b>
-      <button class="btn sm" onclick="moveDutyMonth(1)">▶</button>
+      <button class="btn sm" onclick="moveDutyMonth(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>
       ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">${pay.length}주 · ${Object.keys(cnt).length}명</span>
     </div>
@@ -2638,7 +2676,7 @@ function viewExpense(){
       <span class="asd">${fmt(a.d)}</span>
       <span class="ast">${esc(a.t)}${a.why ? `<span class="aswhy">${esc(a.why)}</span>` : ''}</span>
       ${canEdit
-        ? `<button class="btn sm ${a.pay ? 'ok' : ''}" onclick="toggleAsPay(${i})">${a.pay ? '지급 ✓' : '지급 안 함'}</button>`
+        ? `<button class="btn sm ${a.pay ? 'ok' : ''}" onclick="toggleAsPay(${i})">${a.pay ? '지급함' : '지급 안 함'}</button>`
         : `<span class="cat ${a.pay ? 'k1' : 'k3'}">${a.pay ? '지급' : '해당 없음'}</span>`}
     </div>`;
   };
@@ -2646,9 +2684,9 @@ function viewExpense(){
   return `
   <div class="mprog">
     <div class="r">
-      <button class="btn sm" onclick="moveExpMonth(-1)">◀</button>
+      <button class="btn sm" onclick="moveExpMonth(-1)"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
       <b>경비 정산 — ${yy}년 ${mm}월</b>
-      <button class="btn sm" onclick="moveExpMonth(1)">▶</button>
+      <button class="btn sm" onclick="moveExpMonth(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>
       ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.em='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">${won(totDuty + totExp)}</span>
     </div>
@@ -2788,9 +2826,9 @@ function viewHoliday(){
   <div class="mprog">
     <div class="r">
       ${q ? `<b>공휴일 검색 — "${esc(q)}"</b>`
-          : `<button class="btn sm" onclick="moveHolYear(-1)">◀</button>
+          : `<button class="btn sm" onclick="moveHolYear(-1)"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
              <b>공휴일 — ${cur.hy}년</b>
-             <button class="btn sm" onclick="moveHolYear(1)">▶</button>`}
+             <button class="btn sm" onclick="moveHolYear(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>`}
       <span class="pc">${list.length}일</span>
     </div>
     <div style="font-size:12.5px;color:var(--t3)">
@@ -2801,7 +2839,7 @@ function viewHoliday(){
   </div>
 
   <div class="msearch">
-    <span>🔍</span>
+    <svg class="ic"><use href="#i-search"/></svg>
     <input value="${esc(q)}" oninput="holSearch(this.value)"
            placeholder="공휴일 이름이나 날짜로 찾기 (예: 추석, 10-03, 2027)">
     ${q?`<button class="btn sm" onclick="holSearch('')">지우기</button>`:''}
@@ -2962,7 +3000,7 @@ function saveNotice(){ NOTICE = $('#ntIn').value; toast('전달 사항 저장 �
 /* ================= 거래처 관리 (관리자 전용) ================= */
 function viewStores(){
   if(!isAdmin()){
-    return `<div class="empty"><div class="em">🔒</div><b>관리자만 볼 수 있는 화면입니다</b>
+    return `<div class="empty"><div class="em"><svg class="ic ic-lg"><use href="#i-lock"/></svg></div><b>관리자만 볼 수 있는 화면입니다</b>
       <p>거래처 등록·수정은 관리자 계정에서만 열립니다.<br>
       우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꿔보세요.</p></div>`;
   }
@@ -2983,7 +3021,7 @@ function viewStores(){
   </div>
 
   <div class="msearch">
-    <span>🔍</span>
+    <svg class="ic"><use href="#i-search"/></svg>
     <input value="${esc(cur.stq||'')}" placeholder="이름 일부 · 코드 · 주소로 검색 (예: 수내, 다팜)"
            oninput="cur.stq=this.value" onkeydown="if(event.key==='Enter')render()">
     ${q?`<button class="btn sm" onclick="cur.stq='';render()">지우기</button>`:''}
@@ -3016,7 +3054,7 @@ function addStore(){
 /* ================= 월 업무량 집계 (관리자 전용) ================= */
 function viewReport(){
   if(!isAdmin()){
-    return `<div class="empty"><div class="em">🔒</div>
+    return `<div class="empty"><div class="em"><svg class="ic ic-lg"><use href="#i-lock"/></svg></div>
       <b>관리자만 볼 수 있는 화면입니다</b>
       <p>직원별 업무량 집계는 관리자 계정에서만 열립니다.<br>
       우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꿔보세요.</p></div>`;
@@ -3076,7 +3114,7 @@ function viewReport(){
   <div class="panel" style="margin-top:18px">
     <h4>주요 이슈</h4>
     <div class="plist">
-      ${m.issues.map(s=>`<div class="prow"><span class="st">■</span>
+      ${m.issues.map(s=>`<div class="prow"><span class="st dot"></span>
         <span class="nm" style="min-width:auto;flex:1;font-weight:500">${esc(s)}</span></div>`).join('')}
     </div>
   </div>
@@ -3116,7 +3154,7 @@ function fieldDetail(){
     for(const s of LESSONS[ch]) if(ids.includes(s.id)) lessons.push({ch:Number(ch), s});
 
   return `
-  <button class="back" onclick="cur.fcase=null;render()">← 필드 매뉴얼</button>
+  <button class="back" onclick="cur.fcase=null;render()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> 필드 매뉴얼</button>
 
   <div class="lead">
     <div class="k">${esc(c.cat)} · ${esc(c.k)} · ${esc(c.d)}</div>
@@ -3135,7 +3173,7 @@ function fieldDetail(){
     </table></div>
     <div class="stockbar" style="margin-top:12px">
       <button class="btn pri" onclick="toast('업무 등록 화면에 이 사례가 첨부됩니다')">업무에 첨부</button>
-      <button class="btn" onclick="toast('즐겨찾기에 담았습니다 ⭐')">즐겨찾기</button>
+      <button class="btn" onclick="toast('즐겨찾기에 담았습니다')">즐겨찾기</button>
     </div>
   </div>
 
@@ -3153,7 +3191,7 @@ function fieldDetail(){
         <button class="sec" style="margin-bottom:6px" onclick="openFieldCase(${FIELD_CASES.indexOf(x)})">
           <span><span class="t">${esc(x.sym)}</span>
             <span class="s">${esc(x.store)} · ${esc(x.by)} · ${esc(x.d)}</span></span>
-          <span class="go">›</span>
+          <span class="go"><svg class="ic"><use href="#i-chevron-right"/></svg></span>
         </button>`).join('')}
     </div>
     <p style="font-size:12px;color:var(--t3);margin-top:6px">
@@ -3167,7 +3205,7 @@ function fieldDetail(){
       ${store.slice(0,6).map(x=>`
         <button class="sec" style="margin-bottom:6px" onclick="openFieldCase(${FIELD_CASES.indexOf(x)})">
           <span><span class="t">${esc(x.sym)}</span><span class="s">${esc(x.d)} · ${esc(x.by)}</span></span>
-          <span class="go">›</span>
+          <span class="go"><svg class="ic"><use href="#i-chevron-right"/></svg></span>
         </button>`).join('')}
     </div>
   </div>` : ''}
@@ -3216,7 +3254,7 @@ function viewField(){
   </div>
 
   <div class="msearch" style="margin:16px 0 10px">
-    <span>🔍</span>
+    <svg class="ic"><use href="#i-search"/></svg>
     <input value="${esc(cur.fq||'')}" placeholder="증상으로 찾기 (예: 책갈피, 팅김, 서버마감, 스캔)"
            oninput="cur.fq=this.value" onkeydown="if(event.key==='Enter')render()">
     ${cur.fq?`<button class="btn sm" onclick="cur.fq='';render()">지우기</button>`:''}
@@ -3231,9 +3269,9 @@ function viewField(){
       <div class="fs"><span class="cat k1">${esc(c.cat)}</span><span class="cat">${esc(c.k)}</span>
         <b>${esc(c.sym)}</b></div>
       <div class="ff">→ ${esc(c.fix)}</div>
-      <div class="fm">${esc(c.store)} · ${esc(c.by)} · ${esc(c.d)}<span class="fgo">자세히 ›</span></div>
+      <div class="fm">${esc(c.store)} · ${esc(c.by)} · ${esc(c.d)}<span class="fgo">자세히 <svg class="ic ic-sm"><use href="#i-chevron-right"/></svg></span></div>
     </div>`).join('')
-   : `<div class="empty"><div class="em">🔍</div><b>"${esc(q)}" 결과가 없습니다</b>
+   : `<div class="empty"><b>"${esc(q)}" 결과가 없습니다</b>
       <p>다른 단어로 찾아보세요. 처리 기록이 쌓일수록 검색이 잘 됩니다.</p></div>`}
 
   <p style="font-size:12px;color:var(--t3);margin-top:14px">
@@ -3268,16 +3306,16 @@ function viewErp(){
       이슈 공유 게시판에 초안으로 올려줍니다. 결과는 엑셀로 만들어 메일 발송도 가능합니다.
     </p>
     <div class="drop">
-      <div class="em">📥</div>
+      <div class="em"><svg class="ic ic-lg"><use href="#i-upload"/></svg></div>
       <b>여기에 ERP 엑셀 파일을 끌어다 놓으세요</b>
       <p>.xlsx / .csv · 목업에서는 비활성</p>
     </div>
   </div>
   <div class="panel">
     <h4>요약 결과 예시</h4>
-    <div class="desc">🔴 미수금 30일 초과 3개 매장 (합계 1,240만원) — 이마트 분당점 외 2건
-🟡 A/S 접수 후 3일 이상 미처리 2건 — CU 일산점 핸디터미널 외 1건
-🟢 이번 주 신규 설치 5건 완료 · 매출 전주 대비 +8%</div>
+    <div class="desc"><span class="chip duty">위험</span> 미수금 30일 초과 3개 매장 (합계 1,240만원) — 이마트 분당점 외 2건
+<span class="chip doing">주의</span> A/S 접수 후 3일 이상 미처리 2건 — CU 일산점 핸디터미널 외 1건
+<span class="chip done">정상</span> 이번 주 신규 설치 5건 완료 · 매출 전주 대비 +8%</div>
   </div>`;
 }
 function viewMembers(){
@@ -3343,19 +3381,19 @@ function viewMembers(){
     <h4>권한이 하는 일</h4>
     <div class="tabwrap"><table class="ktab">
       <tr><th>기능</th><th>관리자</th><th>일반 직원 (뷰어)</th></tr>
-      <tr><td>업무 등록 · 공유</td><td>○</td><td>○</td></tr>
-      <tr><td>담당자 확인 · 댓글</td><td>○</td><td>○</td></tr>
-      <tr><td>내 업무의 사용 재고 · 경비 등록</td><td>○</td><td>○ (본인 업무만)</td></tr>
-      <tr><td>재고 현황 조회</td><td>○</td><td>○</td></tr>
-      <tr><td>품목 추가 · 단가 입력</td><td>○</td><td>✕</td></tr>
-      <tr><td>입고 등록</td><td>○</td><td>✕</td></tr>
-      <tr><td>재고 실사 · 엑셀 업로드</td><td>○</td><td>✕</td></tr>
-      <tr><td>직원 초대 · 권한 · 신입 지정</td><td>○</td><td>✕</td></tr>
-      <tr><td>차량 재고 대상자 지정</td><td>○</td><td>✕</td></tr>
-      <tr><td>거래처 등록 · 수정</td><td>○</td><td>✕</td></tr>
+      <tr><td>업무 등록 · 공유</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td></tr>
+      <tr><td>담당자 확인 · 댓글</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td></tr>
+      <tr><td>내 업무의 사용 재고 · 경비 등록</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td><svg class="ic ic-sm"><use href="#i-check"/></svg> <span class="tsub">본인 업무만</span></td></tr>
+      <tr><td>재고 현황 조회</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td></tr>
+      <tr><td>품목 추가 · 단가 입력</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td class="no"><svg class="ic ic-sm"><use href="#i-close"/></svg></td></tr>
+      <tr><td>입고 등록</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td class="no"><svg class="ic ic-sm"><use href="#i-close"/></svg></td></tr>
+      <tr><td>재고 실사 · 엑셀 업로드</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td class="no"><svg class="ic ic-sm"><use href="#i-close"/></svg></td></tr>
+      <tr><td>직원 초대 · 권한 · 신입 지정</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td class="no"><svg class="ic ic-sm"><use href="#i-close"/></svg></td></tr>
+      <tr><td>차량 재고 대상자 지정</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td class="no"><svg class="ic ic-sm"><use href="#i-close"/></svg></td></tr>
+      <tr><td>거래처 등록 · 수정</td><td><svg class="ic ic-sm"><use href="#i-check"/></svg></td><td class="no"><svg class="ic ic-sm"><use href="#i-close"/></svg></td></tr>
     </table></div>
     <p style="font-size:12px;color:var(--t3);margin-top:10px">
-      🎓 신입으로 지정된 직원에게 업무를 공유하면, 그 업무의 분류에 맞는 매뉴얼 항목이 자동으로 붙습니다.</p>
+      신입으로 지정된 직원에게 업무를 공유하면, 그 업무의 분류에 맞는 매뉴얼 항목이 자동으로 붙습니다.</p>
   </div>`;
 }
 function toggleRookie(n){
