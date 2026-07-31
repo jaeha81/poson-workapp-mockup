@@ -86,10 +86,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   display:flex;flex-direction:column;position:sticky;top:0;height:100vh
 }
 .side .brand{padding:16px 16px 14px;border-bottom:1px solid rgba(255,255,255,.12)}
-/* 로고가 어두운 바탕에서 묻히지 않게 흰 판 위에 올림 */
+/* 판때기 없이 글자·심볼만.
+   어두운 바탕이라 검정 글자만 흰색으로 바꾼 logo-white.png 를 씁니다
+   (브랜드 파랑과 ON 배지는 원본 그대로) */
 .side .brand .logo{
-  display:block;width:100%;max-width:150px;height:auto;
-  background:#fff;border-radius:10px;padding:9px 12px;margin-bottom:8px
+  display:block;width:100%;max-width:138px;height:auto;margin-bottom:9px
 }
 .side .brand span{font-size:11px;color:#9DB3CC;letter-spacing:0}
 .nav{padding:12px 10px;flex:1;overflow-y:auto}
@@ -888,6 +889,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 빈 화면 */
 .empty p{max-width:31em;margin-left:auto;margin-right:auto;line-height:1.6}
 
+/* 모바일 메뉴 뒷막 — 메뉴를 안 고르고 바깥을 눌러도 닫히게 */
+.side-bd{
+  position:fixed;inset:0;background:rgba(19,39,65,.42);backdrop-filter:blur(1px);
+  z-index:65;display:none;animation:fadeIn .18s var(--ease)
+}
+.side-bd.on{display:block}
+@media (min-width:901px){ .side-bd{display:none!important} }
+
 .only-mo{display:none}
 @media (max-width:900px){
   .side{
@@ -981,9 +990,10 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 <div class="app">
   <!-- 사이드바 -->
+  <div class="side-bd" id="sideBd" onclick="closeSide()"></div>
   <aside class="side" id="side">
     <div class="brand">
-      <img src="assets/logo.png" alt="포스온" class="logo">
+      <img src="assets/logo-white.png" alt="포스온" class="logo">
       <span>업무관리 · TIPS POS</span>
     </div>
     <nav class="nav" id="nav">
@@ -1016,7 +1026,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   <!-- 본문 -->
   <div class="main">
     <header class="top">
-      <button class="burger" onclick="document.getElementById('side').classList.toggle('open')">☰</button>
+      <button class="burger" onclick="toggleSide()">☰</button>
       <img src="assets/logo.png" alt="포스온" class="logo-m">
       <h1 id="pageTitle">오늘 업무</h1>
       <span class="today">2026-07-29 (수)</span>
@@ -1228,7 +1238,8 @@ const CHAPTERS = [
   {no:11,t:'설정 관리', p:86, sub:'연결·환경설정 / 업데이트 / A/S 업무'}
 ];
 let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null,
-           mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29'};
+           mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
+           dm:'2026-07', em:'2026-07'};
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -1284,9 +1295,19 @@ document.getElementById('nav').addEventListener('click', e => {
   cur.view = a.dataset.view; cur.filter = a.dataset.filter || null; cur.taskId = null;
   cur.mchap = null; cur.msec = null; cur.mq = ''; cur.fcase = null;
   $('#pageTitle').textContent = a.textContent.replace(/\d+$/,'').trim();
-  document.getElementById('side').classList.remove('open');
+  closeSide();
   render();
 });
+
+/* 모바일 메뉴 — 메뉴를 고르지 않아도 바깥(뒷막)을 누르면 닫힙니다 */
+function toggleSide(){
+  const on = document.getElementById('side').classList.toggle('open');
+  document.getElementById('sideBd').classList.toggle('on', on);
+}
+function closeSide(){
+  document.getElementById('side').classList.remove('open');
+  document.getElementById('sideBd').classList.remove('on');
+}
 
 let lastScreen = null;
 function render(){
@@ -2298,79 +2319,102 @@ function answer(id, pick){
 }
 
 /* ================= 당직 일정 =================
-   「POSON 07월 전화 당직 일정」 표를 그대로 옮겼습니다.
-   야간당직은 매일, 주말당직은 토·일만. 편집은 관리자만. */
+   ⚠️ 한 주의 기준이 금요일입니다. 금요일에 정한 사람이 차주 목요일까지 7일을 섭니다.
+   달은 좌우 화살표로 넘깁니다. 편집은 관리자만. */
 function viewDuty(){
-  const m = DUTY['2026-07'];
-  const DOW = ['월','화','수','목','금','토','일'];
+  const ym = cur.dm;
+  const [yy, mm] = ym.split('-').map(Number);
+  const weeks = dutyWeeksOfMonth(ym);
   const today = dutyOf(cur.date);
   const canEdit = isAdmin();
+  const DOW = ['금','토','일','월','화','수','목'];
+  const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
 
-  const cell = (name, i, wk, kind) => {
-    if(i < 5 && kind === 'weekend') return `<td class="dt-x"></td>`;
-    const cls = name ? (name === ME ? 'dt-me' : '') : 'dt-none';
-    return canEdit
-      ? `<td class="${cls}"><select class="dt-sel" onchange="setDuty(${wk},'${kind}',${i},this.value)">
-           <option value="">—</option>
-           ${DUTY_MEMBERS.map(n=>`<option ${n===name?'selected':''}>${n}</option>`).join('')}
-         </select></td>`
-      : `<td class="${cls}">${name ? esc(name) : '—'}</td>`;
-  };
+  /* 이 달에 온전히 들어간 주당직만 지급 대상 — 걸친 주는 그 달로 넘어갑니다 */
+  const pay = dutyPayWeeks(ym);
+  const cnt = {};
+  pay.forEach(w => { if(w.name) cnt[w.name] = (cnt[w.name]||0) + 1; });
 
   return `
   <div class="mprog">
-    <div class="r"><b>전화 당직 일정 — 2026년 7월</b>
-      <span class="pc">당직 인원 ${DUTY_MEMBERS.length}명</span></div>
+    <div class="r">
+      <button class="btn sm" onclick="moveDutyMonth(-1)">◀</button>
+      <b>전화 당직 일정 — ${yy}년 ${mm}월</b>
+      <button class="btn sm" onclick="moveDutyMonth(1)">▶</button>
+      ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
+      <span class="pc">${pay.length}주 · ${Object.keys(cnt).length}명</span>
+    </div>
     <div style="font-size:12.5px;color:var(--t3)">
-      ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주말당직은 토·일에 섭니다.
-      ${canEdit?'칸을 눌러 담당자를 바꿀 수 있습니다.':'변경은 관리자만 가능합니다.'}
+      주당직은 <b>금요일에 시작해 차주 목요일까지</b> 7일입니다.
+      ${canEdit ? '오른쪽 칸에서 담당자를 고르면 그 주 7일이 한 번에 정해집니다.'
+                : '변경은 관리자만 가능합니다.'}
     </div>
   </div>
 
   ${today ? `
   <div class="duty-now">
     <span class="dn-d">${esc(cur.date)}</span>
-    <span class="dn-i"><b>야간당직</b>${today.night?esc(today.night):'없음'}</span>
-    ${today.weekend?`<span class="dn-i"><b>주말당직</b>${esc(today.weekend)}</span>`:''}
-    ${(today.night===ME||today.weekend===ME)?`<span class="chip duty">내 당직입니다</span>`:''}
-  </div>`:''}
+    <span class="dn-i"><b>주당직</b>${esc(today.name)}</span>
+    <span class="dn-i"><b>기간</b>${fmt(today.from)} ~ ${fmt(today.to)}</span>
+    ${today.name === ME ? `<span class="chip duty">내 당직입니다</span>` : ''}
+  </div>` : ''}
 
   <div class="tabwrap">
     <table class="ktab dt">
-      <tr><th>구분</th>${DOW.map((d,i)=>`<th class="${i===5?'sat':''}${i===6?'sun':''}">${d}</th>`).join('')}</tr>
-      ${m.weeks.map(w=>{
-        const base = new Date(w.from+'T00:00:00');
-        const days = [...Array(7)].map((_,i)=>{ const d=new Date(base); d.setDate(base.getDate()+i); return d; });
-        return `
-        <tr class="dt-wk"><td>${w.no}주차</td>
+      <tr><th>기간</th>${DOW.map((d,i)=>`<th class="${i===1?'sat':''}${i===2?'sun':''}">${d}</th>`).join('')}<th>당직자</th></tr>
+      ${weeks.map(w => {
+        const base = new Date(w.from + 'T00:00:00');
+        const days = [...Array(7)].map((_,i)=>{ const d = new Date(base); d.setDate(base.getDate()+i); return d; });
+        const whole = w.from.slice(0,7) === ym && w.to.slice(0,7) === ym;
+        return `<tr>
+          <td class="dt-h" style="white-space:nowrap">${fmt(w.from)}~${fmt(w.to)}
+            ${whole ? '' : '<span class="dt-none" style="font-size:10.5px"> · 걸침</span>'}</td>
           ${days.map((d,i)=>{
-            const inMonth = d.getMonth() === 6;
+            const inMonth = d.getMonth() === mm - 1;
             const isCur = ymd(d) === cur.date;
-            return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${i===5?'sat':''}${i===6?'sun':''}">${d.getDate()}</td>`;
+            return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${i===1?'sat':''}${i===2?'sun':''}">${d.getDate()}</td>`;
           }).join('')}
-        </tr>
-        <tr><td class="dt-h">주말당직</td>${w.weekend.map((n,i)=>cell(n,i,w.no,'weekend')).join('')}</tr>
-        <tr><td class="dt-h">야간당직</td>${w.night.map((n,i)=>cell(n,i,w.no,'night')).join('')}</tr>`;
+          <td class="${w.name ? (w.name===ME?'dt-me':'') : 'dt-none'}">${
+            canEdit
+              ? `<select class="dt-sel" onchange="setDuty('${w.from}', this.value)">
+                   <option value="">—</option>
+                   ${DUTY_MEMBERS.map(n=>`<option ${n===w.name?'selected':''}>${n}</option>`).join('')}
+                 </select>`
+              : (w.name ? esc(w.name) : '—')}</td>
+        </tr>`;
       }).join('')}
     </table>
   </div>
 
   <div class="panel" style="margin-top:14px">
+    <h4>${mm}월 주당직 횟수 <span style="color:var(--t3);font-weight:500">— 이 달에 온전히 들어간 주만 셉니다</span></h4>
+    ${pay.length
+      ? `<div class="plist">${DUTY_MEMBERS.map(n=>`
+          <div class="prow"><span class="nm">${esc(n)}</span>
+            <span class="cat k3">${cnt[n]||0}주</span>
+            <span class="tm">${pay.filter(w=>w.name===n).map(w=>`${fmt(w.from)}~${fmt(w.to)}`).join(' · ') || '없음'}</span>
+          </div>`).join('')}</div>
+         <p style="font-size:12px;color:var(--t3);margin-top:10px">
+           수당은 <b>경비 정산</b> 화면에서 자동으로 계산됩니다.</p>`
+      : `<div class="desc" style="margin:0">이 달에 배정된 주당직이 없습니다.</div>`}
+  </div>
+
+  <div class="panel">
     <h4>특이사항</h4>
     ${canEdit
       ? `<div class="cmtform" style="margin-top:0">
-           <input id="dtNote" value="${esc(m.note)}" placeholder="당직 관련 전달 사항">
+           <input id="dtNote" value="${esc(DUTY_NOTE[ym]||'')}" placeholder="당직 관련 전달 사항">
            <button class="btn pri" onclick="saveDutyNote()">저장</button></div>`
-      : `<div class="desc" style="margin:0">${esc(m.note) || '특이사항 없음'}</div>`}
+      : `<div class="desc" style="margin:0">${esc(DUTY_NOTE[ym]||'') || '특이사항 없음'}</div>`}
   </div>`;
 }
-function setDuty(wk, kind, i, name){
-  const w = DUTY['2026-07'].weeks.find(x=>x.no===wk);
-  w[kind][i] = name || null;
-  toast(name ? `${wk}주차 ${kind==='night'?'야간':'주말'}당직 → ${name}` : '당직 해제');
+function moveDutyMonth(n){ cur.dm = shiftMonth(cur.dm, n); render(); }
+function setDuty(from, name){
+  if(name) DUTY_ASSIGN[from] = name; else delete DUTY_ASSIGN[from];
+  toast(name ? `${from} 시작 주당직 → ${name}` : '당직 해제');
   render();
 }
-function saveDutyNote(){ DUTY['2026-07'].note = $('#dtNote').value; toast('특이사항 저장'); render(); }
+function saveDutyNote(){ DUTY_NOTE[cur.dm] = $('#dtNote').value; toast('특이사항 저장'); render(); }
 
 /* ================= 예정 업무 =================
    지금 쓰시는 「Services Schedule (일일)」 엑셀을 대체합니다.
