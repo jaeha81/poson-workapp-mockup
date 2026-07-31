@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- 포스온 로고의 파란 배지 + 큐브 심볼 (16px 에서도 뭉치지 않게 단순화) -->
+  <rect width="32" height="32" rx="8" fill="#1178F0"/>
+  <g fill="#fff">
+    <path d="M16 6.5 23.5 11 16 15.5 8.5 11z"/>
+    <path d="M8.5 12.6 15.4 16.7v8.2L8.5 20.8z" opacity=".8"/>
+    <path d="M23.5 12.6 16.6 16.7v8.2l6.9-4.1z" opacity=".55"/>
+  </g>
+</svg>
