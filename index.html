@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>포스온 업무관리 — 화면 초안 (Mockup v1)</title>
+<title>포스온 업무관리</title>
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <link rel="apple-touch-icon" href="assets/logo.png">
 <meta name="theme-color" content="#1E3A5F">
@@ -100,10 +100,10 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   display:block;width:100%;max-width:138px;height:auto
 }
 .nav{padding:12px 10px;flex:1;overflow-y:auto}
-.nav-label{font-size:10px;color:var(--on-navy-2);padding:12px 10px 6px;letter-spacing:.5px}
+.nav-label{font-size:11px;color:var(--on-navy-2);padding:12px 10px 6px;letter-spacing:.5px}
 .nav a{
   display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:var(--r-in);
-  color:var(--on-navy);text-decoration:none;font-size:13.5px;margin-bottom:1px;position:relative;
+  color:var(--on-navy);text-decoration:none;font-size:14px;margin-bottom:1px;position:relative;
   transition:background .18s var(--ease),color .18s var(--ease),padding-left .2s var(--ease)
 }
 .nav a:hover{background:rgba(255,255,255,.07);color:var(--card);padding-left:14px}
@@ -118,7 +118,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .nav a.on .ic{opacity:1}
 .nav a .cnt{
-  margin-left:auto;background:var(--orange);color:var(--card);font-size:10.5px;
+  margin-left:auto;background:var(--orange);color:var(--card);font-size:12px;
   font-weight:700;padding:1px 7px;border-radius:9px;letter-spacing:0
 }
 .nav a.on .cnt{background:var(--orange)}
@@ -135,8 +135,8 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   background:var(--card);border-bottom:1px solid var(--line);padding:0 22px;height:58px;
   display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:20
 }
-.top h1{font-size:17px;font-weight:700;letter-spacing:-.3px}
-.top .today{font-size:12.5px;color:var(--t3)}
+.top h1{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.top .today{font-size:12px;color:var(--t3)}
 .top .sp{flex:1}
 .search{
   display:flex;align-items:center;gap:7px;color:var(--t3);background:var(--bg);border:1px solid var(--line);
@@ -145,14 +145,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .search input{border:none;background:none;outline:none;width:100%;font-size:13px}
 .bell{position:relative;padding:6px;color:var(--t2)}
 .bell .dot{
-  position:absolute;top:1px;right:0;background:var(--orange);color:var(--card);font-size:9.5px;
+  position:absolute;top:1px;right:0;background:var(--orange);color:var(--card);font-size:12px;
   font-weight:700;min-width:15px;height:15px;line-height:15px;border-radius:8px;text-align:center
 }
 .me{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;padding:5px 8px;border-radius:8px}
 .me:hover{background:var(--bg)}
 .av{
   width:27px;height:27px;border-radius:50%;background:var(--navy-100);color:var(--navy);
-  font-size:11.5px;font-weight:700;display:grid;place-items:center
+  font-size:12px;font-weight:700;display:grid;place-items:center
 }
 .body{padding:20px 22px 60px;max-width:1080px;width:100%}
 
@@ -174,12 +174,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .card:hover{border-color:var(--line-strong);box-shadow:var(--sh-2);transform:translateY(-1px)}
 .card .r1{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
 .store{font-size:13px;font-weight:700;color:var(--navy)}
-.card h3{font-size:15.5px;font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
+.card h3{font-size:16px;font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
 /* 제목을 눌러 상세로 들어갑니다 */
 .card h3.tlink{cursor:pointer;display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
 .card h3.tlink:hover{color:var(--navy);text-decoration:underline;text-underline-offset:3px}
 .card h3.tlink:active{opacity:.7}
-.meta{font-size:12.5px;color:var(--t2);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.meta{font-size:12px;color:var(--t2);display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .meta .to-me{color:var(--orange);font-weight:700}
 .sep{color:var(--t3)}
 .ackrow{
@@ -189,11 +189,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .dots{display:flex;gap:3px}
 .dots i{width:8px;height:8px;border-radius:50%;background:var(--line-strong);display:block}
 .dots i.f{background:var(--green)}
-.ackn{font-size:12.5px;color:var(--t2);font-weight:600}
+.ackn{font-size:12px;color:var(--t2);font-weight:600}
 .unread{font-size:12px;color:var(--t3)}
 .acts{margin-left:auto;display:flex;gap:6px}
 .btn{
-  font-size:12.5px;padding:7px 13px;border-radius:var(--r-in);border:1px solid var(--line);
+  font-size:12px;padding:7px 13px;border-radius:var(--r-in);border:1px solid var(--line);
   background:var(--card);font-weight:600;color:var(--t2);
   transition:background .18s var(--ease),border-color .18s var(--ease),
              color .18s var(--ease),transform .12s var(--ease),box-shadow .18s var(--ease)
@@ -202,8 +202,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .btn:active{transform:translateY(1px) scale(.985)}
 .btn.pri{background:var(--navy);color:var(--card);border-color:var(--navy);box-shadow:var(--sh-1)}
 .btn.pri:hover{background:var(--navy-700);border-color:var(--navy-700);box-shadow:var(--sh-2)}
-.btn.ok{background:var(--green-50);color:var(--green);border-color:var(--ok-line)}
-.btn.ok:hover{background:var(--ok-bg);border-color:var(--ok-line)}
+/* 누르면 완료되는 행동 */
+.btn.ok{background:var(--ok-bg);color:var(--ok-fg);border-color:var(--ok-line)}
+.btn.ok:hover{background:#DFF0E8;border-color:var(--ok-fg)}
+/* 켜짐/꺼짐 토글 — 완료(초록)와 구분해서 남색 판으로 */
+.btn.is-on{background:var(--navy-100);color:var(--navy);border-color:var(--navy-line);font-weight:700}
+.btn.is-on:hover{background:var(--navy-50);border-color:var(--navy)}
 .btn:disabled{cursor:default;transform:none;opacity:.85}
 .btn:disabled:hover{background:var(--green-50);border-color:var(--ok-line)}
 .btn-new{transition:background .18s var(--ease),transform .12s var(--ease),box-shadow .2s var(--ease)}
@@ -213,7 +217,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .back{font-size:13px;color:var(--t2);margin-bottom:12px;display:inline-flex;gap:5px;align-items:center}
 .back:hover{color:var(--navy)}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;margin-bottom:14px}
-.panel h2{font-size:19px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
+.panel h2{font-size:20px;font-weight:700;letter-spacing:-.4px;margin-bottom:8px}
 .desc{color:var(--t2);font-size:14px;background:var(--bg);padding:12px 14px;border-radius:8px;margin:12px 0;white-space:pre-line}
 .panel h4{
   position:relative;padding-left:11px;font-size:13px;font-weight:700;color:var(--t2);
@@ -226,19 +230,19 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .bar{height:8px;background:var(--line-2);border-radius:5px;overflow:hidden;margin:6px 0 14px}
 .bar > i{display:block;height:100%;background:var(--green);border-radius:5px;transition:width .35s}
 .plist{display:flex;flex-direction:column;gap:2px}
-.prow{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--surface-3);font-size:13.5px}
+.prow{display:flex;align-items:center;gap:10px;padding:8px 4px;border-bottom:1px solid var(--surface-3);font-size:14px}
 .prow:last-child{border-bottom:none}
 .prow .st{width:17px;text-align:center}
 .prow .nm{font-weight:600;min-width:56px}
-.prow .tm{color:var(--t3);font-size:12.5px}
-.prow .note{color:var(--t2);font-size:12.5px;font-style:italic}
+.prow .tm{color:var(--t3);font-size:12px}
+.prow .note{color:var(--t2);font-size:12px;font-style:italic}
 .prow .rm{margin-left:auto}
-.btn.sm{font-size:11.5px;padding:4px 9px}
+.btn.sm{font-size:12px;padding:4px 9px}
 .cmt{display:flex;gap:10px;padding:11px 0;border-bottom:1px solid var(--surface-3)}
 .cmt .av{width:30px;height:30px;flex-shrink:0}
 .cmt .b b{font-size:13px}
-.cmt .b time{font-size:11.5px;color:var(--t3);margin-left:6px}
-.cmt .b p{font-size:13.5px;color:var(--t2);margin-top:2px}
+.cmt .b time{font-size:12px;color:var(--t3);margin-left:6px}
+.cmt .b p{font-size:14px;color:var(--t2);margin-top:2px}
 .cmtform{display:flex;gap:8px;margin-top:14px}
 .cmtform input{flex:1;border:1px solid var(--line);border-radius:8px;padding:9px 12px;outline:none}
 .cmtform input:focus{border-color:var(--navy)}
@@ -251,11 +255,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .mask.on{display:grid}
 .modal{background:var(--card);border-radius:14px;width:100%;max-width:540px;box-shadow:var(--sh-2)}
 .mhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center}
-.mhead b{font-size:16.5px}
+.mhead b{font-size:16px}
 .mhead button{margin-left:auto;color:var(--t3);line-height:1;padding:2px}
 .mbody{padding:20px 22px;max-height:64vh;overflow-y:auto}
 .f{margin-bottom:15px}
-.f > label{display:block;font-size:12.5px;font-weight:700;color:var(--t2);margin-bottom:6px}
+.f > label{display:block;font-size:12px;font-weight:700;color:var(--t2);margin-bottom:6px}
 .f input[type=text],.f select,.f textarea,.f input[type=date],.f input[type=time]{
   width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 11px;outline:none;background:var(--card)
 }
@@ -271,16 +275,16 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .radios input:checked + span{color:var(--navy);font-weight:700}
 .radios label:has(input:checked){border-color:var(--navy);background:var(--navy-100)}
 .shareBox{border:1px solid var(--line);border-radius:9px;padding:13px;background:var(--bg)}
-.shareBox .opt{display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:8px;cursor:pointer}
+.shareBox .opt{display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:8px;cursor:pointer}
 .people{display:flex;gap:6px;flex-wrap:wrap;padding-left:24px;margin-bottom:6px}
 .people label{
   border:1px solid var(--line);background:var(--card);border-radius:18px;padding:5px 11px;
-  font-size:12.5px;cursor:pointer
+  font-size:12px;cursor:pointer
 }
 .people label:has(input:checked){background:var(--navy);color:var(--card);border-color:var(--navy);font-weight:600}
 .people input{display:none}
 .mfoot{padding:15px 22px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end}
-.mfoot .btn{padding:9px 18px;font-size:13.5px}
+.mfoot .btn{padding:9px 18px;font-size:14px}
 
 /* ===== 알림 ===== */
 .noti{
@@ -288,12 +292,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   border-radius:11px;box-shadow:var(--sh-2);display:none;z-index:50;overflow:hidden
 }
 .noti.on{display:block}
-.noti .nh{padding:12px 15px;border-bottom:1px solid var(--line);font-weight:700;font-size:13.5px}
+.noti .nh{padding:12px 15px;border-bottom:1px solid var(--line);font-weight:700;font-size:14px}
 .noti .ni{padding:11px 15px;border-bottom:1px solid var(--surface-3);font-size:13px;cursor:pointer;display:flex;gap:9px}
 .noti .ni:hover{background:var(--bg)}
 .noti .ni .ic{margin-top:1px;color:var(--t3)}
 .noti .ni b{font-weight:600}
-.noti .ni time{display:block;color:var(--t3);font-size:11.5px;margin-top:2px}
+.noti .ni time{display:block;color:var(--t3);font-size:12px;margin-top:2px}
 .noti .ni.new{background:var(--orange-50)}
 
 
@@ -315,27 +319,29 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .stot{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 15px;flex:1;min-width:118px
 }
-.stot .k{font-size:11.5px;color:var(--t3);font-weight:700;margin-bottom:3px}
+.stot .k{font-size:12px;color:var(--t3);font-weight:700;margin-bottom:3px}
 .stot .v{font-size:20px;font-weight:800;letter-spacing:-.5px}
 .stot .v small{font-size:12px;font-weight:600;color:var(--t3);margin-left:3px}
 .stot.car{border-color:var(--navy-line);background:var(--navy-50)}
 
 .stab{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);min-width:640px}
 .stab th{
-  background:var(--navy);color:var(--card);padding:9px 8px;font-size:12px;white-space:nowrap;
-  position:sticky;top:0;z-index:2;text-align:center
+  background:var(--navy-50);color:var(--t2);padding:10px 8px;font-size:12px;white-space:nowrap;
+  position:sticky;top:0;z-index:2;text-align:center;font-weight:700;
+  border-bottom:2px solid var(--navy-line)
 }
 .stab th:first-child{text-align:left;min-width:180px}
-.stab th.wh{background:var(--navy-700)}
+.stab th.wh{color:var(--navy);box-shadow:inset 0 3px 0 var(--navy)}
 .stab td{padding:8px;border-bottom:1px solid var(--surface-3);text-align:center;white-space:nowrap}
 .stab td:first-child{text-align:left;font-weight:600;white-space:normal}
 .stab td.z{color:var(--t4)}
 .stab td.tot{font-weight:800;background:var(--surface-2)}
 .stab tr.catrow td{
-  background:var(--navy-100);color:var(--navy);font-weight:800;font-size:12px;text-align:left
+  background:var(--surface-2);color:var(--navy);font-weight:800;font-size:12px;text-align:left;
+  box-shadow:inset 3px 0 0 var(--navy)
 }
 .stab tr.low td.tot{color:var(--red)}
-.stab .prc{font-size:11.5px;color:var(--t3);font-weight:500;display:block}
+.stab .prc{font-size:12px;color:var(--t3);font-weight:500;display:block}
 .scroll{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:var(--r)}
 /* 모바일 재고 카드 */
 .scat{font-size:12px;font-weight:800;color:var(--navy);background:var(--navy-100);
@@ -343,24 +349,24 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .sitem{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
 .sitem.zero{border-color:var(--risk-line);background:var(--risk-bg)}
 .sitem .sh{display:flex;align-items:baseline;gap:10px}
-.sitem .sh b{font-size:14.5px;font-weight:600;flex:1;min-width:0;line-height:1.35}
-.stot2{font-size:19px;font-weight:800;letter-spacing:-.5px;flex-shrink:0}
-.stot2 small{font-size:11px;font-weight:600;color:var(--t3);margin-left:2px}
+.sitem .sh b{font-size:14px;font-weight:600;flex:1;min-width:0;line-height:1.35}
+.stot2{font-size:20px;font-weight:800;letter-spacing:-.5px;flex-shrink:0}
+.stot2 small{font-size:12px;font-weight:600;color:var(--t3);margin-left:2px}
 .stot2.z{color:var(--red)}
-.sitem .sp2{font-size:11.5px;color:var(--t3);margin-top:2px}
+.sitem .sp2{font-size:12px;color:var(--t3);margin-top:2px}
 .swhere{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
 
 .inrow{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;
   margin-bottom:9px;display:flex;align-items:center;gap:12px;flex-wrap:wrap
 }
-.inrow .d{font-size:12.5px;color:var(--t3);font-weight:700;min-width:82px}
+.inrow .d{font-size:12px;color:var(--t3);font-weight:700;min-width:82px}
 .inrow .n{font-weight:600;font-size:14px}
 .inrow .q{background:var(--green-50);color:var(--green);font-weight:800;font-size:13px;padding:3px 10px;border-radius:6px}
 .inrow .q.ok{background:var(--risk-bg);color:var(--red)}
 .inrow .q.plan{background:var(--orange-50);color:var(--warn-fg)}
 .inrow .q.back{background:var(--green-50);color:var(--green)}
-.inrow .m{font-size:12.5px;color:var(--t3)}
+.inrow .m{font-size:12px;color:var(--t3)}
 /* 예상 / 확정 / 반납 상태 배지 */
 .btn.sm.ok{background:var(--green-50);color:var(--green);border-color:var(--ok-line)}
 
@@ -370,7 +376,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .rrow:last-child{border-bottom:none}
 .rno{
   width:22px;height:22px;border-radius:50%;background:var(--navy-100);color:var(--navy);
-  font-size:11.5px;font-weight:800;display:grid;place-items:center;flex-shrink:0
+  font-size:12px;font-weight:800;display:grid;place-items:center;flex-shrink:0
 }
 .rrow:first-child .rno{background:var(--navy);color:var(--card)}
 .rnm{font-weight:700;font-size:14px;min-width:56px}
@@ -384,13 +390,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .tops{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:10px}
 .fixc{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:var(--r);padding:13px 15px}
 .fixc .th{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.fixc .th b{font-size:14.5px;line-height:1.35}
-.fixc .tw{font-size:12.5px;color:var(--t2);line-height:1.55;margin-bottom:6px}
+.fixc .th b{font-size:14px;line-height:1.35}
+.fixc .tw{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:6px}
 .fixc .tn{font-size:12px;color:var(--t3);line-height:1.55}
 .fcase{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;margin-bottom:8px}
 .fcase .fs{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px}
-.fcase .fs b{font-size:14.5px;font-weight:600}
-.fcase .ff{font-size:13.5px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:5px}
+.fcase .fs b{font-size:14px;font-weight:600}
+.fcase .ff{font-size:14px;color:var(--green);font-weight:600;line-height:1.55;margin-bottom:5px}
 .fcase .fm{font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .fcase{cursor:pointer;transition:.12s}
 .fcase:hover{border-color:var(--navy);box-shadow:var(--sh-2)}
@@ -408,7 +414,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .cklist{display:flex;flex-direction:column;gap:2px}
 .ck{
   display:flex;align-items:flex-start;gap:10px;padding:10px 8px;border-radius:8px;
-  font-size:13.5px;cursor:pointer;border:1px solid transparent
+  font-size:14px;cursor:pointer;border:1px solid transparent
 }
 .ck:hover{background:var(--bg)}
 .ck.on{background:var(--green-50);border-color:var(--ok-line)}
@@ -418,15 +424,15 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* ===== 경비 · 영수증 ===== */
 .shot-btn{
   display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;
-  padding:9px 12px;font-size:12.5px;font-weight:600;color:var(--t2);background:var(--card);cursor:pointer
+  padding:9px 12px;font-size:12px;font-weight:600;color:var(--t2);background:var(--card);cursor:pointer
 }
 .shot-btn:has(input:checked){background:var(--green-50);color:var(--green);border-color:var(--ok-line)}
 .shot-btn input{width:15px;height:15px;accent-color:var(--ok-fg)}
 .rcp{font-size:13px}
 .rcp-h{display:flex;align-items:baseline;justify-content:space-between;border-bottom:2px solid var(--navy);padding-bottom:9px;margin-bottom:12px}
-.rcp-h b{font-size:17px;color:var(--navy)}
+.rcp-h b{font-size:16px;color:var(--navy)}
 .rcp-h span{font-size:12px;color:var(--t3)}
-.rcp-f{margin-top:14px;padding-top:11px;border-top:1px solid var(--line);text-align:right;font-weight:800;font-size:15px;color:var(--navy)}
+.rcp-f{margin-top:14px;padding-top:11px;border-top:1px solid var(--line);text-align:right;font-weight:800;font-size:16px;color:var(--navy)}
 @media print{
   .side,.top,.mockbar,.mfoot,.mhead button{display:none!important}
   .mask{position:static;background:none;display:block;padding:0}
@@ -448,7 +454,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* ===== 매뉴얼 학습형 ===== */
 .mprog{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;margin-bottom:14px}
 .mprog .r{display:flex;align-items:center;gap:10px;margin-bottom:9px;flex-wrap:wrap}
-.mprog b{font-size:15px}
+.mprog b{font-size:16px}
 .mprog .pc{margin-left:auto;font-size:13px;color:var(--green);font-weight:700}
 .msearch{
   display:flex;align-items:center;gap:8px;color:var(--t3);background:var(--card);border:1px solid var(--line);
@@ -464,14 +470,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .chap .h{display:flex;align-items:center;gap:9px;margin-bottom:6px}
 .chap .num{
   width:26px;height:26px;border-radius:7px;background:var(--navy-100);color:var(--navy);
-  font-size:12.5px;font-weight:800;display:grid;place-items:center;flex-shrink:0
+  font-size:12px;font-weight:800;display:grid;place-items:center;flex-shrink:0
 }
 .chap.done .num{background:var(--green-50);color:var(--green)}
-.chap .t{font-size:14.5px;font-weight:700}
+.chap .t{font-size:14px;font-weight:700}
 .chap .s{font-size:12px;color:var(--t3);line-height:1.45;margin-bottom:10px}
 .chap .b{height:5px;background:var(--line-2);border-radius:3px;overflow:hidden}
 .chap .b i{display:block;height:100%;background:var(--green)}
-.chap .f{display:flex;align-items:center;gap:6px;margin-top:7px;font-size:11.5px;color:var(--t3)}
+.chap .f{display:flex;align-items:center;gap:6px;margin-top:7px;font-size:12px;color:var(--t3)}
 
 .sec{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;
@@ -480,15 +486,15 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .sec:hover{border-color:var(--navy)}
 .sec .rd{flex-shrink:0;color:var(--t4)}
 .sec .rd.ok{color:var(--ok-fg)}
-.sec .t{font-size:14.5px;font-weight:600}
-.sec .s{font-size:12.5px;color:var(--t3);margin-top:2px}
+.sec .t{font-size:14px;font-weight:600}
+.sec .s{font-size:12px;color:var(--t3);margin-top:2px}
 .sec .go{margin-left:auto;color:var(--t4);flex-shrink:0;display:flex}
 
 .lead{
   background:var(--navy);color:var(--card);border-radius:var(--r);padding:16px 18px;margin-bottom:14px
 }
-.lead .k{font-size:11px;color:var(--on-navy-2);font-weight:700;margin-bottom:5px}
-.lead p{font-size:15px;line-height:1.55}
+.lead .k{font-size:12px;color:var(--on-navy-2);font-weight:700;margin-bottom:5px}
+.lead p{font-size:16px;line-height:1.55}
 .stepn{counter-reset:st;margin-bottom:14px}
 .step{
   background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 14px 52px;
@@ -497,10 +503,10 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .step::before{
   counter-increment:st;content:counter(st);position:absolute;left:14px;top:13px;
   width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--card);
-  font-size:12.5px;font-weight:800;display:grid;place-items:center
+  font-size:12px;font-weight:800;display:grid;place-items:center
 }
-.step b{display:block;font-size:14.5px;margin-bottom:5px}
-.step p{font-size:13.5px;color:var(--t2);white-space:pre-line;line-height:1.6}
+.step b{display:block;font-size:14px;margin-bottom:5px}
+.step p{font-size:14px;color:var(--t2);white-space:pre-line;line-height:1.6}
 .shot{
   margin-top:9px;background:var(--surface-3);border:1px dashed var(--t4);border-radius:7px;
   padding:20px;text-align:center;color:var(--t3);font-size:12px
@@ -508,7 +514,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 원문 화면캡처 */
 .shots{margin-bottom:14px}
 .shots .cap{font-size:12px;color:var(--t3);margin:0 2px 7px;display:flex;align-items:center;gap:6px}
-.shots .cap b{color:var(--t2);font-size:12.5px}
+.shots .cap b{color:var(--t2);font-size:12px}
 .shotimg{
   display:block;width:100%;border:1px solid var(--line);border-radius:9px;background:var(--card);
   margin-bottom:9px;cursor:zoom-in
@@ -521,12 +527,15 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .lbox.on{display:grid}
 .lbox img{max-width:100%;height:auto;border-radius:5px}
 .lbh{position:fixed;bottom:16px;left:0;right:0;text-align:center;color:var(--t3);font-size:12px}
-.note{border-radius:var(--r);padding:13px 15px;margin-bottom:11px;font-size:13.5px;line-height:1.6}
+.note{border-radius:var(--r);padding:13px 15px;margin-bottom:11px;font-size:14px;line-height:1.6}
 .note.w{background:var(--risk-bg);border:1px solid var(--risk-line);color:var(--risk-fg)}
 .note.i{background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn-fg)}
 .note b{display:block;margin-bottom:4px}
 .ktab{width:100%;border-collapse:collapse;font-size:13px;background:var(--card);border-radius:8px;overflow:hidden}
-.ktab th{background:var(--navy);color:var(--card);padding:9px 11px;text-align:left;font-size:12.5px}
+.ktab th{
+  background:var(--navy-50);color:var(--t2);padding:10px 11px;text-align:left;font-size:12px;
+  font-weight:700;border-bottom:2px solid var(--navy-line)
+}
 .ktab td{padding:9px 11px;border-bottom:1px solid var(--surface-3);vertical-align:top}
 .ktab td:first-child{font-weight:700;color:var(--navy);white-space:nowrap}
 .ktab tr:last-child td{border-bottom:none}
@@ -535,14 +544,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .tabwrap{overflow-x:auto;border:1px solid var(--line);border-radius:8px;margin-bottom:11px}
 
 .quiz{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin-bottom:14px}
-.quiz .q{font-size:14.5px;font-weight:600;margin-bottom:12px}
+.quiz .q{font-size:14px;font-weight:600;margin-bottom:12px}
 .quiz .ox{display:flex;gap:9px}
 .quiz .ox button{
   flex:1;border:1px solid var(--line);border-radius:9px;padding:13px;font-size:16px;
   font-weight:800;background:var(--card);color:var(--t2)
 }
 .quiz .ox button:hover{border-color:var(--navy);color:var(--navy)}
-.quiz .res{margin-top:12px;font-size:13.5px;line-height:1.6;padding:12px 14px;border-radius:8px}
+.quiz .res{margin-top:12px;font-size:14px;line-height:1.6;padding:12px 14px;border-radius:8px}
 .quiz .res.ok{background:var(--green-50);color:var(--ok-fg)}
 .quiz .res.no{background:var(--risk-bg);color:var(--risk-fg)}
 .donebar{display:flex;gap:9px;margin-bottom:20px}
@@ -551,24 +560,24 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* ===== 빈/안내 ===== */
 .empty{background:var(--card);border:1px dashed var(--line);border-radius:var(--r);padding:44px 20px;text-align:center}
 .empty .em{margin-bottom:10px;color:var(--t4)}
-.empty b{display:block;font-size:15px;margin-bottom:5px}
-.empty p{color:var(--t2);font-size:13.5px}
+.empty b{display:block;font-size:16px;margin-bottom:5px}
+.empty p{color:var(--t2);font-size:14px}
 .drop{border:2px dashed var(--line-strong);border-radius:var(--r);padding:34px;text-align:center;background:var(--card);margin-top:14px}
 .drop .em{color:var(--t4)}
-.drop b{display:block;margin:8px 0 4px;font-size:14.5px}
-.drop p{color:var(--t3);font-size:12.5px}
+.drop b{display:block;margin:8px 0 4px;font-size:14px}
+.drop p{color:var(--t3);font-size:12px}
 
 /* ===== 토스트 ===== */
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);
-  background:var(--t1);color:var(--card);padding:12px 20px;border-radius:9px;font-size:13.5px;
+  background:var(--t1);color:var(--card);padding:12px 20px;border-radius:9px;font-size:14px;
   font-weight:500;opacity:0;transition:.25s;z-index:90;box-shadow:var(--sh-2)
 }
 .toast.on{transform:translateX(-50%) translateY(0);opacity:1}
 
 /* ===== 목업 배너 ===== */
 .mockbar{
-  background:var(--navy-900);color:var(--on-navy);font-size:11.5px;padding:6px 22px;
+  background:var(--navy-900);color:var(--on-navy);font-size:12px;padding:6px 22px;
   display:flex;gap:10px;align-items:center;flex-wrap:wrap
 }
 .mockbar b{color:var(--orange)}
@@ -581,7 +590,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .card .r1{gap:7px;row-gap:5px}
 .store{letter-spacing:-.01em}
 .card h3{font-size:16px;line-height:1.4;margin-bottom:7px}
-.meta{font-size:12.5px;line-height:1.55}
+.meta{font-size:12px;line-height:1.55}
 
 /* 눌러서 들어가는 것들 — 같은 반응으로 통일 */
 .sec,.fcase,.chap,.sitem{transition:border-color .2s var(--ease),box-shadow .2s var(--ease),transform .14s var(--ease)}
@@ -628,8 +637,8 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 빈 화면은 큰 이모지 대신 담백하게 */
 .empty{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:40px 22px;box-shadow:var(--sh-1)}
 .empty .em{margin-bottom:9px;color:var(--t4)}
-.empty b{font-size:15px;letter-spacing:-.015em}
-.empty p{color:var(--t2);font-size:13.5px;margin-top:5px}
+.empty b{font-size:16px;letter-spacing:-.015em}
+.empty p{color:var(--t2);font-size:14px;margin-top:5px}
 
 .mockbar{background:var(--navy-900);color:var(--on-navy-2)}
 .mockbar b{color:var(--orange)}
@@ -649,23 +658,23 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   border-radius:var(--r);padding:12px 15px;margin-bottom:14px;box-shadow:var(--sh-1)
 }
 .dn-d{font-size:13px;font-weight:700;color:var(--navy)}
-.dn-i{font-size:13.5px;display:flex;align-items:center;gap:7px}
-.dn-i b{font-size:11px;font-weight:800;color:var(--t3);background:var(--bg);padding:2px 8px;border-radius:var(--r-tag)}
+.dn-i{font-size:14px;display:flex;align-items:center;gap:7px}
+.dn-i b{font-size:12px;font-weight:800;color:var(--t3);background:var(--bg);padding:2px 8px;border-radius:var(--r-tag)}
 .ktab.dt{min-width:520px}   /* 좁은 화면에서는 가로로 밀어서 봅니다 */
-.ktab.dt td,.ktab.dt th{text-align:center;padding:7px 6px;font-size:12.5px;white-space:nowrap}
+.ktab.dt td,.ktab.dt th{text-align:center;padding:7px 6px;font-size:12px;white-space:nowrap}
 .ktab.dt td:first-child,.ktab.dt th:first-child{text-align:center;min-width:62px}
-.ktab.dt th.sat{background:var(--sat)}
-.ktab.dt th.sun{background:var(--sun)}
+.ktab.dt th.sat{color:var(--sat)}
+.ktab.dt th.sun{color:var(--sun)}
 .dt-wk td{background:var(--navy-50);font-weight:700;color:var(--t2);border-bottom:none}
 .dt-day.off{color:var(--t4)}
 .dt-day.sat{color:var(--sat)}
 .dt-day.sun{color:var(--sun)}
 .dt-day.cur{background:var(--navy);color:var(--card);border-radius:5px}
-.dt-h{font-size:11.5px!important;font-weight:700;color:var(--t3)!important;background:var(--surface-2)}
+.dt-h{font-size:12px!important;font-weight:700;color:var(--t3)!important;background:var(--surface-2)}
 .dt-x{background:var(--surface-2)}
 .dt-none{color:var(--t4)}
 .dt-me{background:var(--orange-50);color:var(--orange-600);font-weight:800}
-.dt-sel{border:1px solid transparent;background:none;font-size:12.5px;padding:2px 4px;
+.dt-sel{border:1px solid transparent;background:none;font-size:12px;padding:2px 4px;
   border-radius:5px;font-weight:600;max-width:72px}
 .dt-sel:hover{border-color:var(--line);background:var(--card)}
 
@@ -680,14 +689,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* 인원 한도 */
 .limits{display:flex;flex-direction:column;gap:8px}
 .lim{display:flex;align-items:center;gap:9px;padding:9px 12px;background:var(--bg);border-radius:var(--r-in)}
-.lim .ln{flex:1;font-size:13.5px;font-weight:600;color:var(--t2)}
+.lim .ln{flex:1;font-size:14px;font-weight:600;color:var(--t2)}
 .lim b{font-size:16px;min-width:34px;text-align:center;font-variant-numeric:tabular-nums}
 
 /* 현장 보고 */
 .reps{display:flex;flex-direction:column;gap:2px}
 .rep{display:flex;align-items:center;gap:9px;padding:9px 4px;border-bottom:1px solid var(--line-2);flex-wrap:wrap}
 .rep:last-child{border-bottom:none}
-.rep-b{font-size:13.5px;flex:1;min-width:0}
+.rep-b{font-size:14px;flex:1;min-width:0}
 .rep-m{font-size:12px;color:var(--t3)}
 .repbtns{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
 .repbtns .btn{flex:1;min-width:72px}
@@ -713,12 +722,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .day:hover{background:var(--navy-50)}
 .day:active{transform:scale(.96)}
-.day .dw{font-size:10.5px;color:var(--t3);font-weight:600;letter-spacing:0}
+.day .dw{font-size:12px;color:var(--t3);font-weight:600;letter-spacing:0}
 .day .dw.sun{color:var(--sun-soft)}
 .day .dw.sat{color:var(--sat-soft)}
-.day .dd{font-size:15px;font-weight:600;color:var(--t4);line-height:1.2}
+.day .dd{font-size:16px;font-weight:600;color:var(--t4);line-height:1.2}
 .day .dn{
-  height:16px;min-width:16px;margin-top:2px;border-radius:8px;font-size:10.5px;font-weight:800;
+  height:16px;min-width:16px;margin-top:2px;border-radius:8px;font-size:12px;font-weight:800;
   line-height:16px;background:var(--navy-100);color:var(--navy);padding:0 5px
 }
 .day .dn.empty{background:none}
@@ -750,9 +759,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 }
 .ac-i:last-child{border-bottom:none}
 .ac-i:hover{background:var(--navy-50)}
-.ac-n{display:block;font-size:13.5px;font-weight:600}
-.ac-m{display:block;font-size:11.5px;color:var(--t3);margin-top:1px}
-.ac-none{padding:12px 13px;font-size:12.5px;color:var(--t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ac-n{display:block;font-size:14px;font-weight:600}
+.ac-m{display:block;font-size:12px;color:var(--t3);margin-top:1px}
+.ac-none{padding:12px 13px;font-size:12px;color:var(--t3);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 
 /* 확인자 — 이름 자체로 표시. 확인=진한 남색, 미확인=연한 회색(누르면 리마인드) */
 .whos{display:flex;flex-wrap:wrap;gap:6px}
@@ -830,7 +839,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .chip,.cat,.use,.rcpt,.rcpt-state,.wtag,.rolebadge,.mk,.soon,.soonx,
 .cc-z,.cc-ok,.rep-k,.cnt2,.zoomhint{
   display:inline-flex;align-items:center;gap:4px;white-space:nowrap;
-  font-size:11.5px;font-weight:700;line-height:1.45;
+  font-size:12px;font-weight:700;line-height:1.45;
   padding:2px 8px;border-radius:var(--r-tag);border:1px solid transparent
 }
 
@@ -864,14 +873,14 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .rep-k,.cnt2{flex-shrink:0}
 .fixc .cnt2{margin-left:auto}
 .rcpt-state{margin-top:8px}
-.rolebadge{font-size:10.5px;font-weight:800}
+.rolebadge{font-size:12px;font-weight:800}
 .chap .soonx{flex-shrink:0}
 
 /* 재고 증감은 배지가 아니라 숫자입니다 — 판을 깔지 않고 색과 굵기로만 말합니다.
    ⚠️ .q.ok 의 'ok' 는 재고 상태(확정)를 뜻하고, 표시하는 값은 '차감 수량'이라
       빨강이 맞습니다. 이름이 헷갈리게 붙어 있을 뿐입니다. */
 .inrow .q{
-  background:none;border:none;padding:0 2px;font-size:13.5px;font-weight:800;
+  background:none;border:none;padding:0 2px;font-size:14px;font-weight:800;
   font-variant-numeric:tabular-nums;color:var(--ok-fg)
 }
 .inrow .q.ok{color:var(--risk-fg)}
@@ -905,11 +914,11 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .hlist{display:flex;flex-direction:column;gap:1px}
 .hrow{
   display:flex;align-items:center;gap:11px;padding:9px 4px;
-  border-bottom:1px solid var(--line-2);font-size:13.5px;flex-wrap:wrap
+  border-bottom:1px solid var(--line-2);font-size:14px;flex-wrap:wrap
 }
 .hrow:last-child{border-bottom:none}
 .hd{font-weight:700;font-variant-numeric:tabular-nums;min-width:92px;color:var(--t2)}
-.hw{width:16px;text-align:center;color:var(--t3);font-size:12.5px;font-weight:600}
+.hw{width:16px;text-align:center;color:var(--t3);font-size:12px;font-weight:600}
 .hd.red,.hw.red{color:var(--red)}
 .hd.blue,.hw.blue{color:var(--sat)}
 .hn{flex:1;min-width:0;font-weight:600}
@@ -929,7 +938,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .catcard:hover{border-color:var(--line-strong);box-shadow:var(--sh-2);transform:translateY(-1px)}
 .catcard:active{transform:scale(.995)}
 .cc-h{display:flex;align-items:center;gap:8px;margin-bottom:7px}
-.cc-h b{font-size:15px;font-weight:700}
+.cc-h b{font-size:16px;font-weight:700}
 .cc-go{margin-left:auto;color:var(--t4);display:flex}
 .cc-v{font-size:24px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;line-height:1.15}
 .cc-v small{font-size:12px;font-weight:600;color:var(--t3);margin-left:3px}
@@ -964,13 +973,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 /* ===== 경비 정산 ===== */
 .ktab.exp{min-width:760px}
-.ktab.exp td{vertical-align:middle;font-size:12.5px}
+.ktab.exp td{vertical-align:middle;font-size:12px}
 .ktab.exp th{white-space:nowrap;text-align:center}
 .ktab.exp th:nth-child(2),.ktab.exp th:nth-child(4){text-align:left}
 /* 단가는 표 밖 카드에서 바로 고칩니다 */
 .rate-in{
   width:5.4em;border:1px solid var(--line);border-radius:var(--r-in);padding:2px 7px;
-  font-size:19px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
+  font-size:20px;font-weight:800;letter-spacing:-.045em;font-variant-numeric:tabular-nums;
   background:var(--card);outline:none;text-align:right
 }
 .rate-in:focus{border-color:var(--navy)}
@@ -979,13 +988,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .asrow:last-child{border-bottom:none}
 .asd{font-weight:700;color:var(--t3);flex-shrink:0;min-width:34px}
 .ast{flex:1;min-width:0;line-height:1.5;white-space:normal}
-.aswhy{display:block;color:var(--orange-600);font-size:11.5px;font-weight:600;margin-top:2px}
+.aswhy{display:block;color:var(--orange-600);font-size:12px;font-weight:600;margin-top:2px}
 .asrow .btn.sm{flex-shrink:0;align-self:center}
 /* 좁은 화면에서 표가 잘리는 것을 미리 알려줍니다 */
-.swipe{font-size:11.5px;color:var(--t3);margin:0 2px 7px;display:flex;align-items:center;gap:5px}
+.swipe{font-size:12px;color:var(--t3);margin:0 2px 7px;display:flex;align-items:center;gap:5px}
 .swipe::before{content:'↔';font-size:13px;color:var(--navy);font-weight:700}
 .explink{
-  font-size:12.5px;text-align:left;color:var(--navy);font-weight:600;
+  font-size:12px;text-align:left;color:var(--navy);font-weight:600;
   text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--navy-line)
 }
 .explink:hover{text-decoration-color:var(--navy)}
@@ -1013,7 +1022,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   /* 헤더가 화면 폭을 넘겨 본문 전체가 잘리던 문제 */
   /* 사이드바가 접히는 화면에서는 헤더에 로고를 띄웁니다 */
   .logo-m{display:block;height:20px;width:auto;flex-shrink:0}
-  .top h1{font-size:14.5px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top h1{font-size:14px;min-width:0;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .top .sp{display:none}
   .bell{padding:4px;flex-shrink:0}
   /* 좁은 화면에서는 새로고침 아이콘만 남깁니다 */
@@ -1022,7 +1031,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   .who{flex-shrink:0}
   .who select{max-width:92px;padding:6px 4px;font-size:12px}
   /* 목업 배너는 한 줄로 */
-  .mockbar{padding:5px 13px;font-size:11px;flex-wrap:nowrap;overflow:hidden}
+  .mockbar{padding:5px 13px;font-size:12px;flex-wrap:nowrap;overflow:hidden}
   .mockbar span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   /* 요약 카드 2열 */
   .stotal{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -1222,7 +1231,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <div class="f">
         <label>공유 대상</label>
         <div class="shareBox">
-          <p style="font-size:12.5px;color:var(--t2);margin-bottom:9px">
+          <p style="font-size:12px;color:var(--t2);margin-bottom:9px">
             <b>내용은 전원이 봅니다</b> (기본값). 아래에서 <b>이 업무를 실제로 맡을 사람</b>을 고르면 그 사람들에게만 알림이 갑니다.
             여러 명 동시에 고를 수 있습니다.</p>
           <label style="font-size:12px;font-weight:700;color:var(--t2);display:block;margin-bottom:6px">오더 담당자 (복수 선택)</label>
@@ -1248,7 +1257,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
     <div class="mbody" id="sheetBody"></div>
     <div class="mfoot">
       <button class="btn" onclick="closeSheet()">닫기</button>
-      <button class="btn pri" onclick="window.print()">인쇄 · PDF 저장</button>
+      <button class="btn" onclick="window.print()">인쇄 · PDF 저장</button>
     </div>
   </div>
 </div>
@@ -1472,7 +1481,7 @@ function render(){
 function renderWho(){
   const m = meObj();
   $('#who').innerHTML = `
-    <select onchange="switchUser(this.value)" title="목업에서 계정을 바꿔가며 권한 차이를 볼 수 있습니다">
+    <select onchange="switchUser(this.value)" title="계정 전환">
       ${TEAM.map(t=>`<option value="${t.name}" ${t.name===ME?'selected':''}>${t.name} ${t.rank}</option>`).join('')}
     </select>
     <span class="rolebadge ${m.role==='admin'?'adm':'viw'}">${m.role==='admin'?'관리자':'뷰어'}</span>`;
@@ -1484,8 +1493,7 @@ function renderWho(){
 }
 function switchUser(n){ ME = n; cur.taskId=null; bump(); render(); toast(`${n} 계정으로 전환 — ${isAdmin()?'편집 가능':'조회만 가능'}`); }
 function lockNote(what){
-  return `<div class="lockbar"><svg class="ic"><use href="#i-lock"/></svg> <span><b>${esc(what)}</b>은 관리자만 할 수 있습니다. 지금은 조회만 가능합니다.
-    (우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꾸면 편집 화면이 열립니다)</span></div>`;
+  return `<div class="lockbar"><svg class="ic"><use href="#i-lock"/></svg> <span><b>${esc(what)}</b>은 관리자만 할 수 있습니다. 지금은 조회만 가능합니다.</span></div>`;
 }
 
 /* ================= 재고 ================= */
@@ -1511,7 +1519,7 @@ function stockTable(list){
   return `<div class="scroll only-pc"><table class="stab">
     <tr>
       <th>품목</th>
-      ${LOCATIONS.map(l=>`<th class="${l.kind==='창고'?'wh':''}">${l.name}<br><span style="font-weight:400;font-size:10px;opacity:.75">${l.kind}</span></th>`).join('')}
+      ${LOCATIONS.map(l=>`<th class="${l.kind==='창고'?'wh':''}">${l.name}<br><span style="font-weight:400;font-size:12px;opacity:.75">${l.kind}</span></th>`).join('')}
       <th>합계</th>
     </tr>
     ${list.map(i=>{
@@ -1585,7 +1593,7 @@ function viewStock(){
       ${stockTable(list)}
       <div class="only-mo">${stockCardList(list)}</div>
       <p style="font-size:12px;color:var(--t3);margin:9px 0 20px">
-        구글시트 「재고 실사」 시트의 사무실 + 담당자별 열 구조를 그대로 옮겼습니다. 담당자 열 = 차량 적재분.</p>`;
+        담당자 열은 차량 적재분입니다.</p>`;
   }
 
   /* ---------- 분류 고르기 (첫 화면) ---------- */
@@ -1708,7 +1716,7 @@ function viewAudit(){
   ${isAdmin() ? '' : lockNote('재고 실사 등록 · 엑셀 업로드')}
   <div class="panel">
     <h4>재고 실사 — 엑셀 업로드</h4>
-    <p style="color:var(--t2);font-size:13.5px">
+    <p style="color:var(--t2);font-size:14px">
       지금 쓰시는 구글시트 「재고 실사」를 그대로 내려받아 올리면 됩니다.
       <b>품목명 / 사무실 / 김두혁 / 김기홍 / 임영준 / 김동화 / 장두환</b> 열을 자동으로 읽습니다.
       기존 수량과 차이나는 항목만 골라서 보여주고, 확인 후 반영합니다.
@@ -1716,7 +1724,7 @@ function viewAudit(){
     <div class="drop" ${isAdmin()?`onclick="toast('실제 앱에서는 여기서 엑셀을 읽어 차이 목록을 보여줍니다')" style="cursor:pointer"`:''}>
       <div class="em"><svg class="ic ic-lg"><use href="#i-upload"/></svg></div>
       <b>재고 실사 엑셀을 끌어다 놓으세요</b>
-      <p>.xlsx / .csv · 목업에서는 비활성</p>
+      <p>.xlsx / .csv</p>
     </div>
   </div>
 
@@ -1729,7 +1737,7 @@ function viewAudit(){
         <span class="tm">사무실 재고 일일체크 · 김기홍</span></div>
     </div>
     <p style="font-size:12px;color:var(--t3);margin-top:10px">
-      구글시트의 「사무실 재고 일일체크」 날짜 그리드를 대체합니다. 체크하면 날짜·담당자가 자동 기록됩니다.</p>
+      체크하면 날짜와 담당자가 자동으로 기록됩니다.</p>
   </div>`;
 }
 
@@ -1974,7 +1982,7 @@ function reportBox(t){
     <div class="cmtform">
       <input id="repIn" placeholder="예) 대금결제 440만원(vat포함) 카드결제완료"
              onkeydown="if(event.key==='Enter')addReport(${t.id})">
-      <button class="btn pri" onclick="addReport(${t.id})">보고</button>
+      <button class="btn" onclick="addReport(${t.id})">보고</button>
     </div>
     <p style="font-size:12px;color:var(--t3);margin-top:8px">
       누르면 전원에게 알림이 갑니다. 단톡에 올리던 이동·결제 보고를 여기에 남기면 업무에 붙어서 남습니다.</p>` : ''}
@@ -2022,7 +2030,7 @@ function usedBox(t){
 
   return `<div class="panel">
     <h4>사용 재고 ${plans?`<span style="color:var(--orange)">· 예상 ${plans}건 정산 대기</span>`:''}</h4>
-    <p style="font-size:12.5px;color:var(--t3);margin-bottom:10px">
+    <p style="font-size:12px;color:var(--t3);margin-bottom:10px">
       나가기 전에 <b>쓸 것 같은 재고를 미리</b> 넣으세요. 넣는 즉시 재고에서 빠집니다.
       돌아와서 실제로 쓴 건 <b>사용 확정</b>, 안 쓴 건 <b>반납</b>하면 재고가 되돌아갑니다.</p>
     <div class="plist">${rows}</div>
@@ -2035,7 +2043,7 @@ function usedBox(t){
       <select id="uLoc" style="flex:0 0 120px;border:1px solid var(--line);border-radius:8px;padding:9px">
         ${LOCATIONS.map(l=>`<option value="${l.id}" ${l.name===ME?'selected':''}>${l.name}</option>`).join('')}
       </select>
-      <button class="btn pri" onclick="addUsed(${t.id})">예상 재고 넣기</button>
+      <button class="btn" onclick="addUsed(${t.id})">예상 재고 넣기</button>
     </div>` : ''}
   </div>`;
 }
@@ -2083,9 +2091,9 @@ function expenseBox(t){
     <h4>경비 ${sum ? `<span style="color:var(--orange)">합계 ${sum.toLocaleString()}원</span>` : ''}</h4>
     <div class="plist">${rows}</div>
     ${sum ? `<div class="stockbar" style="margin:12px 0 0">
-      <button class="btn pri" onclick="settleSheet(${t.id})">현장 경비 정산서</button>
+      <button class="btn" onclick="settleSheet(${t.id})">현장 경비 정산서</button>
       <button class="btn" onclick="toast('엑셀로 내려받습니다')">엑셀 내려받기</button>
-      ${noRcpt?`<span style="font-size:12.5px;color:var(--red)">영수증 미첨부 ${noRcpt}건</span>`:''}
+      ${noRcpt?`<span style="font-size:12px;color:var(--red)">영수증 미첨부 ${noRcpt}건</span>`:''}
     </div>`:''}
     ${t.mine||isAdmin() ? `
     <div class="cmtform" style="flex-wrap:wrap;margin-top:12px">
@@ -2094,7 +2102,7 @@ function expenseBox(t){
       </select>
       <input id="eAmt" style="flex:0 0 110px" placeholder="금액(원)">
       <input id="eMemo" placeholder="비고 (선택)">
-      <button class="btn pri" onclick="addExp(${t.id})">경비 등록</button>
+      <button class="btn" onclick="addExp(${t.id})">경비 등록</button>
     </div>
     <div class="drop rcpt-drop" id="rdrop"
          ondragover="event.preventDefault();this.classList.add('over')"
@@ -2374,7 +2382,7 @@ function manualHome(){
     <div class="r"><b>TIPS 관리 프로그램 학습</b>
       <span class="pc">${p.d}/${p.t} 완료 (${p.pct}%)</span></div>
     <div class="bar"><i style="width:${p.pct}%"></i></div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       PDF를 그대로 보는 게 아니라, 매뉴얼 내용을 따라하기 단계로 바꿔 담았습니다. 폰에서도 그대로 읽힙니다.
     </div>
   </div>
@@ -2410,7 +2418,7 @@ function manualChapter(){
   <div class="mprog">
     <div class="r"><b>${c.no}. ${esc(c.t)}</b><span class="pc">${pr.done}/${pr.total} (${pr.pct}%)</span></div>
     <div class="bar"><i style="width:${pr.pct}%"></i></div>
-    <div style="font-size:12.5px;color:var(--t3)">원문 매뉴얼 p.${c.p}~ · ${esc(c.sub)}</div>
+    <div style="font-size:12px;color:var(--t3)">원문 매뉴얼 p.${c.p}~ · ${esc(c.sub)}</div>
   </div>
   ${secsOf(c.no).map(s=>`
     <button class="sec" onclick="openSec(${c.no},'${s.id}')">
@@ -2456,7 +2464,7 @@ function manualSection(){
   <button class="back" onclick="cur.msec=null;render()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> ${c.no}. ${esc(c.t)}</button>
   <div class="lead">
     <div class="k">${c.no}장 ${s.no}) · 원문 p.${s.page}</div>
-    <h2 style="font-size:19px;font-weight:700;margin-bottom:8px">${esc(s.title)}</h2>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:8px">${esc(s.title)}</h2>
     <p>${esc(s.summary)}</p>
   </div>
 
@@ -2480,7 +2488,7 @@ function manualSection(){
   </div>`:''}
 
   <div class="donebar">
-    <button class="btn ${read?'ok':'pri'}" onclick="toggleRead('${s.id}')">
+    <button class="btn ${read?'is-on':'pri'}" onclick="toggleRead('${s.id}')">
       ${read?'학습 완료 (해제하려면 클릭)':'학습 완료로 표시'}</button>
     <button class="btn" onclick="toast('업무 등록 화면에 이 항목이 첨부됩니다')">업무에 첨부</button>
   </div>
@@ -2531,7 +2539,7 @@ function viewDuty(){
       ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">${pay.length}주 · ${Object.keys(cnt).length}명</span>
     </div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       주당직은 <b>금요일에 시작해 차주 목요일까지</b> 7일입니다.
       ${canEdit ? '오른쪽 칸에서 담당자를 고르면 그 주 7일이 한 번에 정해집니다.'
                 : '변경은 관리자만 가능합니다.'}
@@ -2555,7 +2563,7 @@ function viewDuty(){
         const whole = w.from.slice(0,7) === ym && w.to.slice(0,7) === ym;
         return `<tr>
           <td class="dt-h" style="white-space:nowrap">${fmt(w.from)}~${fmt(w.to)}
-            ${whole ? '' : '<span class="dt-none" style="font-size:10.5px"> · 걸침</span>'}</td>
+            ${whole ? '' : '<span class="dt-none" style="font-size:12px"> · 걸침</span>'}</td>
           ${days.map((d,i)=>{
             const ds = ymd(d), hn = holidayName(ds);
             const inMonth = d.getMonth() === mm - 1;
@@ -2593,7 +2601,7 @@ function viewDuty(){
     ${canEdit
       ? `<div class="cmtform" style="margin-top:0">
            <input id="dtNote" value="${esc(DUTY_NOTE[ym]||'')}" placeholder="당직 관련 전달 사항">
-           <button class="btn pri" onclick="saveDutyNote()">저장</button></div>`
+           <button class="btn" onclick="saveDutyNote()">저장</button></div>`
       : `<div class="desc" style="margin:0">${esc(DUTY_NOTE[ym]||'') || '특이사항 없음'}</div>`}
   </div>`;
 }
@@ -2687,7 +2695,7 @@ function viewExpense(){
       <span class="asd">${fmt(a.d)}</span>
       <span class="ast">${esc(a.t)}${a.why ? `<span class="aswhy">${esc(a.why)}</span>` : ''}</span>
       ${canEdit
-        ? `<button class="btn sm ${a.pay ? 'ok' : ''}" onclick="toggleAsPay(${i})">${a.pay ? '지급함' : '지급 안 함'}</button>`
+        ? `<button class="btn sm ${a.pay ? 'is-on' : ''}" onclick="toggleAsPay(${i})">${a.pay ? '지급함' : '지급 안 함'}</button>`
         : `<span class="cat ${a.pay ? 'k1' : 'k3'}">${a.pay ? '지급' : '해당 없음'}</span>`}
     </div>`;
   };
@@ -2701,7 +2709,7 @@ function viewExpense(){
       ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.em='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">${won(totDuty + totExp)}</span>
     </div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       당직 수당은 <b>당직 일정</b>에서, 경비는 <b>업무에 등록한 경비</b>에서 자동으로 모입니다.
       ${canEdit ? '단가와 지급 여부는 여기서 바꿉니다.' : '수정은 관리자만 가능합니다.'}
     </div>
@@ -2733,7 +2741,7 @@ function viewExpense(){
           <td class="tot" style="text-align:center">${r.asPay.length}</td>
           <td class="tot" style="text-align:right">${won(r.duty)}</td>
           <td style="text-align:center">${canEdit
-            ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'ok' : ''}" onclick="togglePaid('${ym}','${esc(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
+            ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'is-on' : ''}" onclick="togglePaid('${ym}','${esc(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
             : `<span class="cat ${PAY_STATE[payKey(ym, r.n)] ? 'k1' : 'k3'}">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</span>`}</td>
         </tr>`).join('')}
         <tr><td class="tot">TOT</td><td class="tot"></td>
@@ -2779,8 +2787,8 @@ function viewExpense(){
         <span class="rm" style="font-weight:800;font-size:16px;color:var(--navy)">${won(totDuty + totExp)}</span></div>
     </div>
     <div class="repbtns">
-      <button class="btn" onclick="toast('엑셀 내려받기 — 목업에서는 비활성')">엑셀 내려받기</button>
-      <button class="btn pri" onclick="window.print()">인쇄 · PDF 저장</button>
+      <button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>
+      <button class="btn" onclick="window.print()">인쇄 · PDF 저장</button>
     </div>
   </div>`;
 }
@@ -2842,7 +2850,7 @@ function viewHoliday(){
              <button class="btn sm" onclick="moveHolYear(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>`}
       <span class="pc">${list.length}일</span>
     </div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       달력에서 <b style="color:var(--red)">빨갛게</b> 칠해지는 날입니다.
       이 날 업무는 당직비 대상이 됩니다.
       ${canEdit ? '아래에서 바로 넣고 뺄 수 있습니다.' : '수정은 관리자만 가능합니다.'}
@@ -2896,7 +2904,6 @@ function viewHoliday(){
 }
 
 /* ================= 예정 업무 =================
-   지금 쓰시는 「Services Schedule (일일)」 엑셀을 대체합니다.
    날짜 / 방문지 / 접수내역 / 담당자 / 확인 / 비고 + 전달사항 */
 let PLANS = [
   {id:1, date:'2026-07-30', store:'금강넷 (서산)', recv:'위임장 직인 날인 및 서류 받아오기', owner:'김두혁', ack:'', memo:''},
@@ -2912,7 +2919,7 @@ function viewPlan(){
   return `
   <div class="mprog">
     <div class="r"><b>예정 업무</b><span class="pc">${esc(cur.date)} · ${day.length}건</span></div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       매일 만드시는 「Services Schedule (일일)」을 대신합니다.
       담당자를 지정하면 그 사람에게 알림이 가고, 확인란에 이름이 남습니다.
     </div>
@@ -2923,7 +2930,7 @@ function viewPlan(){
     ${canEdit
       ? `<div class="cmtform" style="margin-top:0">
            <input id="ntIn" value="${esc(NOTICE)}" placeholder="전 직원에게 전달할 내용">
-           <button class="btn pri" onclick="saveNotice()">저장</button>
+           <button class="btn" onclick="saveNotice()">저장</button>
          </div>`
       : `<div class="desc" style="margin:0">${esc(NOTICE) || '전달 사항 없음'}</div>`}
   </div>
@@ -2961,7 +2968,7 @@ function viewPlan(){
       <div class="ackrow">
         <span class="acts" style="margin-left:0">
           ${!p.ack && (p.owner===ME || !p.owner)
-            ? `<button class="btn pri" onclick="ackPlan(${p.id})">확인 — 내 이름 남기기</button>` : ''}
+            ? `<button class="btn" onclick="ackPlan(${p.id})">확인 — 내 이름 남기기</button>` : ''}
           ${canEdit?`<button class="btn" onclick="toTask(${p.id})">업무로 등록</button>
                      <button class="btn" onclick="delPlan(${p.id})">삭제</button>`:''}
         </span>
@@ -3012,8 +3019,7 @@ function saveNotice(){ NOTICE = $('#ntIn').value; toast('전달 사항 저장 �
 function viewStores(){
   if(!isAdmin()){
     return `<div class="empty"><div class="em"><svg class="ic ic-lg"><use href="#i-lock"/></svg></div><b>관리자만 볼 수 있는 화면입니다</b>
-      <p>거래처 등록·수정은 관리자 계정에서만 열립니다.<br>
-      우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꿔보세요.</p></div>`;
+      <p>거래처 등록·수정은 관리자 계정에서만 열립니다.</p></div>`;
   }
   const q = (cur.stq||'').trim();
   const list = q ? searchStores(q, 999) : STORES;
@@ -3038,7 +3044,7 @@ function viewStores(){
     ${q?`<button class="btn sm" onclick="cur.stq='';render()">지우기</button>`:''}
   </div>
 
-  <p style="font-size:12.5px;color:var(--t3);margin-bottom:10px">
+  <p style="font-size:12px;color:var(--t3);margin-bottom:10px">
     ${list.length}곳 · 매장 ${STORES.filter(s=>s.kind==='매장').length} · 대리점 ${STORES.filter(s=>s.kind==='대리점').length}</p>
 
   ${list.map(s=>`
@@ -3067,8 +3073,7 @@ function viewReport(){
   if(!isAdmin()){
     return `<div class="empty"><div class="em"><svg class="ic ic-lg"><use href="#i-lock"/></svg></div>
       <b>관리자만 볼 수 있는 화면입니다</b>
-      <p>직원별 업무량 집계는 관리자 계정에서만 열립니다.<br>
-      우측 상단에서 김기홍 팀장 · 김두혁 과장으로 바꿔보세요.</p></div>`;
+      <p>직원별 업무량 집계는 관리자 계정에서만 열립니다.</p></div>`;
   }
   const m = MONTHLY['2026-04'];
   const kinds = ['콜업무','AS방문','당직'];
@@ -3091,7 +3096,7 @@ function viewReport(){
   <div class="mprog">
     <div class="r"><b>월 업무량 집계 — 2026년 4월</b>
       <span class="pc">전체 ${m.all['콜업무'].TOT + m.all['AS방문'].TOT}건</span></div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       ${esc(m.from)} ~ ${esc(m.to)} · 개인 합계는 <b>콜업무 + AS방문</b>, 당직은 별도로 집계합니다 (지금 쓰시는 시트 기준과 동일).
       실제 앱에서는 등록된 업무에서 자동으로 계산됩니다.
     </div>
@@ -3137,9 +3142,9 @@ function viewReport(){
   </div>
 
   <div class="stockbar" style="margin-top:14px">
-    <button class="btn pri" onclick="toast('월간 리포트를 엑셀로 내려받습니다')">엑셀 내려받기</button>
+    <button class="btn" onclick="toast('월간 리포트를 엑셀로 내려받습니다')">엑셀 내려받기</button>
     <button class="btn" onclick="window.print()">인쇄 · PDF</button>
-    <span style="font-size:12px;color:var(--t3)">이 화면이 지금 손으로 만드시는 월간 리포트 시트를 대체합니다.</span>
+    
   </div>`;
 }
 
@@ -3169,13 +3174,13 @@ function fieldDetail(){
 
   <div class="lead">
     <div class="k">${esc(c.cat)} · ${esc(c.k)} · ${esc(c.d)}</div>
-    <h2 style="font-size:19px;font-weight:700;margin-bottom:8px">${esc(c.sym)}</h2>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:8px">${esc(c.sym)}</h2>
     <p style="font-size:13px;color:var(--on-navy-2)">고객이 이렇게 말했을 때</p>
   </div>
 
   <div class="panel">
     <h4>이렇게 처리했습니다</h4>
-    <div class="desc" style="color:var(--t1);font-size:14.5px;line-height:1.65">${esc(c.fix)}</div>
+    <div class="desc" style="color:var(--t1);font-size:14px;line-height:1.65">${esc(c.fix)}</div>
     <div class="tabwrap"><table class="ktab">
       <tr><td style="width:74px">매장</td><td>${esc(c.store)}</td></tr>
       <tr><td>처리 담당</td><td>${esc(c.by)}</td></tr>
@@ -3183,7 +3188,7 @@ function fieldDetail(){
       <tr><td>처리일</td><td>2026-${esc(c.d)}</td></tr>
     </table></div>
     <div class="stockbar" style="margin-top:12px">
-      <button class="btn pri" onclick="toast('업무 등록 화면에 이 사례가 첨부됩니다')">업무에 첨부</button>
+      <button class="btn" onclick="toast('업무 등록 화면에 이 사례가 첨부됩니다')">업무에 첨부</button>
       <button class="btn" onclick="toast('즐겨찾기에 담았습니다')">즐겨찾기</button>
     </div>
   </div>
@@ -3247,7 +3252,7 @@ function viewField(){
   <div class="mprog">
     <div class="r"><b>필드 매뉴얼 — 증상으로 찾는 현장 대응</b>
       <span class="pc">${FIELD_CASES.length}건</span></div>
-    <div style="font-size:12.5px;color:var(--t3)">
+    <div style="font-size:12px;color:var(--t3)">
       TIPS 매뉴얼은 <b>프로그램 사용법</b>, 이건 <b>현장에서 실제로 어떻게 처리했는지</b>입니다.
       4월 업무 리포트의 접수내역 → 처리내역을 그대로 정리했습니다.
     </div>
@@ -3286,7 +3291,7 @@ function viewField(){
       <p>다른 단어로 찾아보세요. 처리 기록이 쌓일수록 검색이 잘 됩니다.</p></div>`}
 
   <p style="font-size:12px;color:var(--t3);margin-top:14px">
-    업무를 완료 처리하면 그 <b>접수내역 → 처리내역</b>이 여기에 자동으로 쌓입니다. 쓸수록 두꺼워지는 매뉴얼입니다.</p>`;
+    업무를 완료 처리하면 그 <b>접수내역 → 처리내역</b>이 여기에 자동으로 쌓입니다.</p>`;
 }
 
 /* ================= 이슈 / ERP / 직원 ================= */
@@ -3312,14 +3317,14 @@ function viewErp(){
   <span class="soon">2차 개발 예정</span>
   <div class="panel">
     <h4>ERP 주간 요약 — 엑셀 올리면 AI가 주요 이슈를 정리합니다</h4>
-    <p style="color:var(--t2);font-size:13.5px">
+    <p style="color:var(--t2);font-size:14px">
       ERP에서 내려받은 엑셀/CSV를 올리면 미수금·A/S 지연·재고 이상 같은 주요 이슈를 AI가 뽑아
       이슈 공유 게시판에 초안으로 올려줍니다. 결과는 엑셀로 만들어 메일 발송도 가능합니다.
     </p>
     <div class="drop">
       <div class="em"><svg class="ic ic-lg"><use href="#i-upload"/></svg></div>
       <b>여기에 ERP 엑셀 파일을 끌어다 놓으세요</b>
-      <p>.xlsx / .csv · 목업에서는 비활성</p>
+      <p>.xlsx / .csv</p>
     </div>
   </div>
   <div class="panel">
@@ -3378,14 +3383,14 @@ function viewMembers(){
         ${ROOKIES.has(t.name)?'<span class="cat" style="color:var(--navy);border-color:var(--navy-line)">신입</span>':''}
         <span class="tm">${t.car?`차량 재고 ${ITEMS.reduce((s,i)=>s+(i.q[t.id]||0),0)}개`:'차량 없음'}</span>
         ${isAdmin()?`<span class="rm">
-          <button class="btn sm ${t.car?'ok':''}" onclick="toggleCar('${t.id}')">${t.car?'차량 재고 해제':'차량 재고 지정'}</button>
+          <button class="btn sm ${t.car?'is-on':''}" onclick="toggleCar('${t.id}')">${t.car?'차량 재고 해제':'차량 재고 지정'}</button>
           <button class="btn sm" onclick="toggleRookie('${t.name}')">${ROOKIES.has(t.name)?'신입 해제':'신입 지정'}</button>
           <button class="btn sm" onclick="toggleRole('${t.id}')">${t.role==='admin'?'뷰어로':'관리자로'}</button>
         </span>`:''}
       </div>`).join('')}
     </div>
     ${isAdmin()?`<div style="margin-top:14px">
-      <button class="btn pri" onclick="toast('초대 메일을 발송했습니다')">+ 직원 초대</button></div>`:''}
+      <button class="btn" onclick="toast('초대 메일을 발송했습니다')">+ 직원 초대</button></div>`:''}
   </div>
 
   <div class="panel">
