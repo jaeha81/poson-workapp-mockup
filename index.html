@@ -169,13 +169,15 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .tab .n{opacity:.7;margin-left:4px;font-size:12px}
 
 /* ===== 업무 카드 ===== */
+/* 업무도 목록입니다 — 판은 바깥에 하나, 건마다는 선으로만 나눕니다 */
+.cardlist{background:var(--card);border:1px solid var(--line);border-radius:var(--r-in);overflow:hidden}
 .card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh-1);
-  transition:box-shadow .22s var(--ease),border-color .22s var(--ease),transform .22s var(--ease)
+  padding:14px 16px;border-bottom:1px solid var(--line-2);
+  transition:background .18s var(--ease)
 }
+.card:last-child{border-bottom:none}
 /* 마우스를 올려도 카드가 들리지 않습니다 — 목록 위를 지나갈 때마다 화면이 들썩입니다 */
-.card:hover{border-color:var(--line-strong);background:var(--surface-2)}
+.card:hover{background:var(--surface-2)}
 .card .r1{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
 .store{font-size:13px;font-weight:700;color:var(--navy)}
 .card h3{font-size:16px;font-weight:600;letter-spacing:-.2px;margin-bottom:6px}
@@ -187,8 +189,8 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .meta .to-me{color:var(--orange);font-weight:700}
 .sep{color:var(--t3)}
 .ackrow{
-  display:flex;align-items:center;gap:10px;margin-top:11px;padding-top:11px;
-  border-top:1px dashed var(--line);flex-wrap:wrap
+  display:flex;align-items:center;gap:10px;margin-top:9px;padding-top:9px;
+  border-top:1px solid var(--line-2);flex-wrap:wrap
 }
 .dots{display:flex;gap:3px}
 .dots i{width:8px;height:8px;border-radius:50%;background:var(--line-strong);display:block}
@@ -1805,7 +1807,7 @@ function viewTasks(){
   if(!list.length) return h + `<div class="empty"><b>여기에 걸린 업무가 없습니다</b>
     <p>새 업무가 들어오면 이 자리에 뜹니다. 지금 넣을 게 있으면 왼쪽 아래 <b>+ 새 업무 등록</b>을 눌러주세요.</p></div>`;
 
-  h += list.map(t => {
+  h += '<div class="cardlist">' + list.map(t => {
     const un = unreadNames(t);
     const acked = iAcked(t);
     return `
@@ -1832,7 +1834,7 @@ function viewTasks(){
         </span>
       </div>
     </div>`;
-  }).join('');
+  }).join('') + '</div>';
   return h;
 }
 function setFilter(k){
@@ -2975,7 +2977,7 @@ function viewPlan(){
     <button class="btn pri" onclick="addPlan()">예정 업무 추가</button>
   </div>` : ''}
 
-  ${day.length ? day.map(p=>`
+  ${day.length ? `<div class="cardlist">` + day.map(p=>`
     <div class="card">
       <div class="r1"><span class="store">${esc(p.store)}</span>
         ${p.ack?`<span class="chip done">확인 ${esc(p.ack)}</span>`
@@ -2993,7 +2995,7 @@ function viewPlan(){
                      <button class="btn" onclick="delPlan(${p.id})">삭제</button>`:''}
         </span>
       </div>
-    </div>`).join('')
+    </div>`).join('') + `</div>`
    : `<div class="empty"><b>${esc(cur.date)} 예정 업무가 없습니다</b>
       <p>위에서 추가하거나, 왼쪽 주간 막대에서 다른 날짜를 골라보세요.</p></div>`}`;
 }
@@ -3324,13 +3326,13 @@ function viewIssues(){
   ];
   return `
   <p style="color:var(--t2);margin-bottom:14px">단톡에서 흘러가던 노하우를 주제별로 쌓아두는 곳입니다.</p>
-  ${rows.map(r=>`
+  <div class="cardlist">${rows.map(r=>`
     <div class="card">
       <div class="r1"><span class="cat">${r.tag}</span></div>
       <h3>${esc(r.t)}</h3>
       <div class="meta"><span>${esc(r.by)}</span><span class="sep">·</span><span>${r.d}</span>
         <span class="sep">·</span><span>댓글 ${r.c}</span></div>
-    </div>`).join('')}`;
+    </div>`).join('')}</div>`;
 }
 function viewErp(){
   return `
