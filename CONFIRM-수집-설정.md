@@ -17,6 +17,16 @@
 ## 3) 아래 코드를 통째로 붙여넣기 (기존 내용은 지우고)
 
 ```javascript
+/* 시트에 넣기 전에 안전하게 다듬습니다.
+   ⛔ = + - @ 로 시작하는 글은 구글 시트가 '수식'으로 실행합니다.
+      주소를 아는 사람은 누구나 보낼 수 있으니, 앞에 ' 를 붙여 글자로만 저장합니다. */
+function safeCell(v) {
+  var s = (v === null || v === undefined) ? '' : String(v);
+  if (s.length > 20000) s = s.slice(0, 20000);   // 지나치게 긴 글은 자릅니다
+  if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;       // 수식으로 실행되지 않게
+  return s;
+}
+
 function doPost(e) {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
   var sh = ss.getSheetByName('컨펌') || ss.insertSheet('컨펌');
@@ -30,9 +40,9 @@ function doPost(e) {
   }
   sh.appendRow([
     new Date(),
-    d.who || '',
-    d.text || '',
-    JSON.stringify(d.answers || {})
+    safeCell(d.who).slice(0, 100),
+    safeCell(d.text),
+    safeCell(JSON.stringify(d.answers || {}))
   ]);
 
   return ContentService.createTextOutput('ok');
@@ -69,6 +79,8 @@ const CONFIRM_ENDPOINT = '';   // ← 여기 따옴표 안에 붙여넣기
 ## ⛔ 보안 — 꼭 읽어주세요
 
 - 이 주소를 아는 사람은 **누구나 시트에 줄을 추가**할 수 있습니다. (시트 내용을 읽거나 지우지는 못합니다)
+- 그래서 위 코드에 `safeCell()` 이 들어 있습니다 — `=SUM(...)` 같은 **수식 공격을 글자로 바꿔** 막습니다.
+  코드를 줄여 쓰지 마시고 그대로 붙여넣어 주세요.
 - 주소가 **공개 GitHub 저장소에 들어갑니다.** 검색 로봇이 주워 갈 수 있고, 그러면 광고성 줄이 들어올 수 있습니다.
 - 그래서 **컨펌이 끝나면 반드시 배포를 중지**하세요 — Apps Script → 배포 → 배포 관리 → **보관처리**.
 - 개인정보는 받지 않습니다(이름·직함과 업무 의견만).

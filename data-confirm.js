@@ -224,21 +224,28 @@ function resetConfirm(){
 }
 
 /* 구글 시트로 전송 — 주소가 비어 있으면 버튼 자체가 안 나옵니다.
-   no-cors 로 보내므로 서버 응답은 읽을 수 없습니다(네트워크 실패만 잡힙니다). */
+   ⛔ no-cors 로 보내면 안 됩니다. 서버가 403·500 을 줘도 성공으로 보여서
+      "보냈습니다" 라고 거짓 안내를 하게 됩니다. 응답을 실제로 읽어 확인합니다.
+      (text/plain 이라 사전요청(preflight)이 없고, Apps Script 는 응답에 CORS 허용을 붙여줍니다) */
 function sendConfirm(btn){
   if(!CONFIRM_ENDPOINT) return;
+  const back = () => { if(btn){ btn.disabled = false; btn.textContent = '보내기'; } };
   if(btn){ btn.disabled = true; btn.textContent = '보내는 중…'; }
   fetch(CONFIRM_ENDPOINT, {
     method: 'POST',
-    mode: 'no-cors',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
     body: JSON.stringify({ who: CONFIRM_WHO, at: new Date().toISOString(),
                            answers: CONFIRM_ANS, text: confirmText() })
-  }).then(() => {
+  })
+  .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+  .then(t => {
+    if(String(t).indexOf('ok') === -1) throw new Error('응답 확인 실패');
     CONFIRM_SENT = '✓ 보냈습니다. 확인 후 연락드리겠습니다.';
     toast('보냈습니다 — 감사합니다'); render();
-  }).catch(() => {
-    CONFIRM_SENT = '✕ 전송이 안 됐습니다 — 「결과 복사하기」로 보내주세요.';
+  })
+  .catch(() => {
+    back();
+    CONFIRM_SENT = '✕ 전송이 확인되지 않았습니다 — 「결과 복사하기」로 보내주세요.';
     toast('전송 실패 — 복사해서 보내주세요'); render();
   });
 }
