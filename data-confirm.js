@@ -64,7 +64,7 @@ const CONFIRM_ITEMS = [
 /* ⬇⬇ 여기에 구글 Apps Script 웹앱 주소를 붙여넣으면 「보내기」 버튼이 살아납니다.
    비워 두면 복사 방식만 동작합니다 (앱은 정상 작동합니다).
    주소 예: https://script.google.com/macros/s/AKfycb....../exec           */
-const CONFIRM_ENDPOINT = '';
+const CONFIRM_ENDPOINT = 'https://script.google.com/macros/s/AKfycby0FsUwG5mB7sbTEBUJd3fjnF2igeMJVfuuIZzOq7vvmTf6p1dC5ZrJZbg-PNZS9QUPQg/exec';
 
 /* 구글 쪽에서 "우리 앱이 보낸 것"인지 1차로 걸러내는 표시입니다.
    ⚠️ 진짜 비밀번호가 아닙니다(앱 소스에 그대로 들어갑니다). 떠도는 로봇의 무작위 전송을 막는 용도입니다.
