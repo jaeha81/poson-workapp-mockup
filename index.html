@@ -2591,18 +2591,23 @@ function viewDuty(){
   const [yy, mm] = ym.split('-').map(Number);
   const m = DUTY[ym];
   const DOW = ['월','화','수','목','금','토','일'];
-  const today = dutyOf(cur.date);
+  /* 오늘 당직 요약은 보고 있는 달과 오늘이 같은 달일 때만 (8월 표에 7월 당직자가 붙지 않게) */
+  const today = cur.date.slice(0, 7) === ym ? dutyOf(cur.date) : null;
   const canEdit = isAdmin();
 
-  const cell = (name, i, wk, kind) => {
+  const cell = (name, i, w, kind) => {
     if(i < 5 && kind === 'weekend') return `<td class="dt-x"></td>`;
-    const cls = name ? (name === ME ? 'dt-me' : '') : 'dt-none';
-    return canEdit
-      ? `<td class="${cls}"><select class="dt-sel" onchange="setDuty(${wk},'${kind}',${i},this.value)">
+    /* 주가 달에 걸치면 다른 달 날짜도 표에 나옵니다. 그 칸은 읽기 전용 —
+       같은 날이 두 달 표에 따로 저장돼 있어, 여기서 고치면 한쪽만 바뀝니다. */
+    const d = new Date(w.from + 'T00:00:00'); d.setDate(d.getDate() + i);
+    const inM = d.getMonth() === mm - 1;
+    const cls = `${name ? (name === ME ? 'dt-me' : '') : 'dt-none'}${inM ? '' : ' off'}`;
+    return (canEdit && inM)
+      ? `<td class="${cls}"><select class="dt-sel" onchange="setDuty(${w.no},'${kind}',${i},this.value)">
            <option value="">—</option>
            ${DUTY_MEMBERS.map(n=>`<option ${n===name?'selected':''}>${n}</option>`).join('')}
          </select></td>`
-      : `<td class="${cls}">${name ? esc(name) : '—'}</td>`;
+      : `<td class="${cls}" ${inM ? '' : 'title="다른 달 날짜입니다 — 그 달 화면에서 수정하세요"'}>${name ? esc(name) : '—'}</td>`;
   };
 
   const head = `
@@ -2649,8 +2654,8 @@ function viewDuty(){
                       title="${hn?esc(hn):''}">${d.getDate()}${hn?'<i class="hdot"></i>':''}</td>`;
           }).join('')}
         </tr>
-        <tr><td class="dt-h">주말당직</td>${w.weekend.map((n,i)=>cell(n,i,w.no,'weekend')).join('')}</tr>
-        <tr><td class="dt-h">야간당직</td>${w.night.map((n,i)=>cell(n,i,w.no,'night')).join('')}</tr>`;
+        <tr><td class="dt-h">주말당직</td>${w.weekend.map((n,i)=>cell(n,i,w,'weekend')).join('')}</tr>
+        <tr><td class="dt-h">야간당직</td>${w.night.map((n,i)=>cell(n,i,w,'night')).join('')}</tr>`;
       }).join('')}
     </table>
   </div>
