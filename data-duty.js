@@ -32,7 +32,36 @@ const DUTY_2026_07 = {
   note: ''
 };
 
-let DUTY = { '2026-07': DUTY_2026_07 };
+/* 8월 — 7월 5주차에서 이어지는 순번 그대로입니다.
+   (금~일을 선 사람이 다음 주 월~목을 서는 7월 규칙을 따랐습니다) */
+const DUTY_2026_08 = {
+  month: '2026-08',
+  weeks: [
+    /* 8/1 이 토요일이라 1주차는 7/27(월)부터 셉니다. 7월에 든 날은 비워 둡니다. */
+    { no:1, from:'2026-07-27',
+      night:  [null, null, null, null, null, '김기홍', '김기홍'],
+      weekend:[null, null, null, null, null, '김기홍', '김기홍'] },
+    { no:2, from:'2026-08-03',
+      night:  ['김기홍','김기홍','김기홍','김기홍','김두혁','김두혁','김두혁'],
+      weekend:[null,    null,    null,    null,    null,   '김두혁','김두혁'] },
+    { no:3, from:'2026-08-10',
+      night:  ['김두혁','김두혁','김두혁','김두혁','임영준','임영준','임영준'],
+      weekend:[null,    null,    null,    null,    null,   '임영준','임영준'] },
+    { no:4, from:'2026-08-17',
+      night:  ['임영준','임영준','임영준','임영준','김기홍','김기홍','김기홍'],
+      weekend:[null,    null,    null,    null,    null,   '김기홍','김기홍'] },
+    { no:5, from:'2026-08-24',
+      night:  ['김기홍','김기홍','김기홍','김기홍','김두혁','김두혁','김두혁'],
+      weekend:[null,    null,    null,    null,    null,   '김두혁','김두혁'] },
+    /* 8/31(월) 하루만 8월입니다. 9/1 부터는 9월 표에서 셉니다. */
+    { no:6, from:'2026-08-31',
+      night:  ['김두혁', null, null, null, null, null, null],
+      weekend:[null,     null, null, null, null, null, null] }
+  ],
+  note: ''
+};
+
+let DUTY = { '2026-07': DUTY_2026_07, '2026-08': DUTY_2026_08 };
 
 /* 지급 단가 — 야간·주말은 하루치, AS 방문은 한 건당 */
 let DUTY_PAY = { night: 15000, weekend: 30000, asVisit: 50000 };
