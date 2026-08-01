@@ -1399,7 +1399,7 @@ const CHAPTERS = [
 ];
 let cur = {view:'tasks', filter:'today', taskId:null, tedit:false, planId:null, mchap:null, msec:null,
            mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
-           em:'2026-07', hy:'2026', hq:'', scat:null};
+           em:'2026-07', dm:'2026-07', hy:'2026', hq:'', scat:null};
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -2587,7 +2587,9 @@ function answer(id, pick){
    「POSON 07월 전화 당직 일정」 표를 그대로 옮겼습니다.
    야간당직은 매일, 주말당직은 토·일만. 편집은 관리자만. */
 function viewDuty(){
-  const m = DUTY['2026-07'];
+  const ym = cur.dm;
+  const [yy, mm] = ym.split('-').map(Number);
+  const m = DUTY[ym];
   const DOW = ['월','화','수','목','금','토','일'];
   const today = dutyOf(cur.date);
   const canEdit = isAdmin();
@@ -2603,16 +2605,26 @@ function viewDuty(){
       : `<td class="${cls}">${name ? esc(name) : '—'}</td>`;
   };
 
-  return `
+  const head = `
   <div class="mprog">
-    <div class="r"><b>전화 당직 일정 — 2026년 7월</b>
+    <div class="r">
+      <button class="btn sm" onclick="moveDutyMonth(-1)"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
+      <b>전화 당직 일정 — ${yy}년 ${mm}월</b>
+      <button class="btn sm" onclick="moveDutyMonth(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>
+      ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">당직 인원 ${DUTY_MEMBERS.length}명</span></div>
     <div style="font-size:12px;color:var(--t3)">
       ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주말당직은 토·일에 섭니다.
       ${canEdit?'칸을 눌러 담당자를 바꿀 수 있습니다.':'변경은 관리자만 가능합니다.'}
     </div>
-  </div>
+  </div>`;
 
+  if(!m) return head + `
+  <div class="panel" style="margin-top:14px">
+    <div class="desc" style="margin:0">${yy}년 ${mm}월 당직 일정은 아직 등록되지 않았습니다.</div>
+  </div>`;
+
+  return head + `
   ${today ? `
   <div class="duty-now">
     <span class="dn-d">${esc(cur.date)}</span>
@@ -2631,7 +2643,7 @@ function viewDuty(){
         <tr class="dt-wk"><td>${w.no}주차</td>
           ${days.map(d=>{
             const ds = ymd(d), hn = holidayName(ds);
-            const inMonth = d.getMonth() === 6;
+            const inMonth = d.getMonth() === mm - 1;
             const isCur = ds === cur.date;
             return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${isRedDay(ds)?'red':''} ${isBlueDay(ds)?'blue':''}"
                       title="${hn?esc(hn):''}">${d.getDate()}${hn?'<i class="hdot"></i>':''}</td>`;
@@ -2652,13 +2664,14 @@ function viewDuty(){
       : `<div class="desc" style="margin:0">${esc(m.note) || '특이사항 없음'}</div>`}
   </div>`;
 }
+function moveDutyMonth(n){ cur.dm = shiftMonth(cur.dm, n); render(); }
 function setDuty(wk, kind, i, name){
-  const w = DUTY['2026-07'].weeks.find(x=>x.no===wk);
+  const w = DUTY[cur.dm].weeks.find(x=>x.no===wk);
   w[kind][i] = name || null;
   toast(name ? `${wk}주차 ${kind==='night'?'야간':'주말'}당직 → ${name}` : '당직 해제');
   render();
 }
-function saveDutyNote(){ DUTY['2026-07'].note = $('#dtNote').value; toast('특이사항 저장'); render(); }
+function saveDutyNote(){ DUTY[cur.dm].note = $('#dtNote').value; toast('특이사항 저장'); render(); }
 
 /* ================= 경비 정산 =================
    「포스온 AS부서 N월 당직현황」 표를 화면으로 옮긴 것입니다.
