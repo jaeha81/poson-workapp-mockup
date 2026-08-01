@@ -82,6 +82,10 @@ function notifyNew() {
   var cnt = (pr.getProperty('mailDate') === today) ? Number(pr.getProperty('mailCount') || 0) : 0;
   if (cnt >= 하루최대) return;   // ⛔ 커서를 그대로 둡니다 — 오늘 못 보낸 건 내일 보냅니다
 
+  // 밀린 게 50건을 넘으면(도배 등) 최근 것부터 따라잡습니다. 건너뛴 건 시트에 그대로 있습니다.
+  var skipped = 0;
+  if (now - last > 50) { skipped = (now - 한번에) - last; last = now - 한번에; }
+
   var end  = Math.min(now, last + 한번에);                   // 한 번에 최대 5건씩만
   var rows = sh.getRange(last + 1, 1, end - last, 3).getValues();
   var body = rows.map(function (r) {
@@ -93,17 +97,22 @@ function notifyNew() {
   try {
     MailApp.sendEmail({
       to: 받는사람,
-      subject: '[포스온컨펌] 새 응답 ' + rows.length + '건',
-      body: body + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
+      subject: '[포스온컨펌] 새 응답 ' + rows.length + '건'
+               + (skipped > 0 ? ' (앞선 ' + skipped + '건은 시트 확인)' : ''),
+      body: body + (skipped > 0 ? '\n\n※ 한꺼번에 몰려서 앞선 ' + skipped + '건은 메일에서 뺐습니다. 시트에 있습니다.' : '')
+           + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
     });
     pr.setProperty('mailDate', today);
     pr.setProperty('mailCount', String(cnt + 1));
+    pr.setProperty('lastNotified', String(end));
+    pr.deleteProperty('failCount');
   } catch (err) {
-    // 메일이 실패해도 원본은 시트에 그대로 있습니다
+    // 메일 실패 — 두 번까지는 커서를 그대로 두고 다음 트리거에서 다시 시도합니다.
+    // 세 번 연속 실패하면 넘깁니다(같은 묶음에 갇혀 알림이 영영 안 오는 것을 막습니다).
+    var f = Number(pr.getProperty('failCount') || 0) + 1;
+    if (f >= 3) { pr.setProperty('lastNotified', String(end)); pr.deleteProperty('failCount'); }
+    else { pr.setProperty('failCount', String(f)); }
   }
-
-  // 실패했더라도 다음 줄로 넘깁니다 — 안 그러면 같은 묶음에 갇혀 알림이 영영 안 옵니다
-  pr.setProperty('lastNotified', String(end));
 }
 
 /* ⛔ 트리거를 걸기 전에 이 함수를 딱 한 번 실행하세요.
