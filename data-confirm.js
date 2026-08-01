@@ -61,14 +61,53 @@ const CONFIRM_ITEMS = [
   { id:'free', q:'그 밖에 하고 싶은 말씀을 자유롭게 적어주세요.', opts:[] }
 ];
 
+/* ⬇⬇ 여기에 구글 Apps Script 웹앱 주소를 붙여넣으면 「보내기」 버튼이 살아납니다.
+   비워 두면 복사 방식만 동작합니다 (앱은 정상 작동합니다).
+   주소 예: https://script.google.com/macros/s/AKfycb....../exec           */
+const CONFIRM_ENDPOINT = '';
+
+const CONFIRM_LS = 'poson_confirm_v1';   /* 브라우저에 임시 보관 — 닫았다 켜도 답이 남습니다 */
+
 let CONFIRM_ANS  = {};      /* id -> { pick, note } */
 let CONFIRM_WHO  = '김기홍 팀장';
 let CONFIRM_DONE = false;
+let CONFIRM_SENT = '';      /* 전송 결과 안내문 */
+
+/* ---------- 브라우저 보관 ---------- */
+function loadConfirmLocal(){
+  try{
+    const raw = localStorage.getItem(CONFIRM_LS);
+    if(!raw) return;
+    const o = JSON.parse(raw);
+    if(o && typeof o === 'object'){
+      CONFIRM_ANS = o.ans || {};
+      if(o.who) CONFIRM_WHO = o.who;
+    }
+  }catch(e){ /* 시크릿 모드 등에서 막히면 그냥 넘어갑니다 */ }
+}
+function saveConfirmLocal(){
+  try{ localStorage.setItem(CONFIRM_LS, JSON.stringify({ who:CONFIRM_WHO, ans:CONFIRM_ANS })); }
+  catch(e){}
+}
+loadConfirmLocal();
+
+/* ---------- 입력 즉시 저장 (화면을 옮겨도 답이 남습니다) ---------- */
+function ansOf(id){ return CONFIRM_ANS[id] || (CONFIRM_ANS[id] = { pick:'', note:'' }); }
+function setConfirmPick(id, v){ ansOf(id).pick = v;          saveConfirmLocal(); confirmCount(); }
+function setConfirmNote(id, v){ ansOf(id).note = v.trim();   saveConfirmLocal(); confirmCount(); }
+function setConfirmWho(v){      CONFIRM_WHO = v.trim();      saveConfirmLocal(); }
+function confirmCount(){
+  const el = document.getElementById('cfCnt');
+  if(el) el.textContent = `${confirmDoneCount()} / ${CONFIRM_ITEMS.filter(i=>i.id).length} 응답`;
+}
+function confirmDoneCount(){
+  return CONFIRM_ITEMS.filter(it => it.id && CONFIRM_ANS[it.id] &&
+         (CONFIRM_ANS[it.id].pick || CONFIRM_ANS[it.id].note)).length;
+}
 
 /* ---------- 화면 ---------- */
 function viewConfirm(){
-  const done = CONFIRM_ITEMS.filter(it => it.id && CONFIRM_ANS[it.id] &&
-                (CONFIRM_ANS[it.id].pick || CONFIRM_ANS[it.id].note)).length;
+  const done = confirmDoneCount();
   const total = CONFIRM_ITEMS.filter(it => it.id).length;
 
   if(CONFIRM_DONE) return confirmResult(done, total);
@@ -77,10 +116,12 @@ function viewConfirm(){
     <div class="panel cf-q">
       <div class="cf-t">${esc(it.q)}</div>
       ${it.sub ? `<div class="cf-s">${esc(it.sub)}</div>` : ''}
-      ${it.opts.length ? `<div class="cf-o">${it.opts.map((o, i) => `
+      ${it.opts.length ? `<div class="cf-o">${it.opts.map(o => `
         <label><input type="radio" name="cf_${it.id}" value="${esc(o)}"
+          onchange="setConfirmPick('${it.id}', this.value)"
           ${CONFIRM_ANS[it.id] && CONFIRM_ANS[it.id].pick === o ? 'checked' : ''}>${esc(o)}</label>`).join('')}</div>` : ''}
       <textarea id="cfn_${it.id}" class="cf-n" rows="${it.opts.length ? 2 : 4}"
+        oninput="setConfirmNote('${it.id}', this.value)"
         placeholder="${it.opts.length ? '보충 설명이 있으면 적어주세요 (선택)' : '자유롭게 적어주세요'}"
       >${esc(CONFIRM_ANS[it.id] ? CONFIRM_ANS[it.id].note : '')}</textarea>
     </div>`;
@@ -102,17 +143,18 @@ function viewConfirm(){
 
   <div class="mprog">
     <div class="r"><b>컨펌 체크리스트</b>
-      <span class="pc">${done} / ${total} 응답</span></div>
+      <span class="pc" id="cfCnt">${done} / ${total} 응답</span></div>
     <div style="font-size:12px;color:var(--t3)">
       개발 확인용 임시 화면입니다. 컨펌이 끝나면 지웁니다.
       다 고르신 뒤 맨 아래 <b>「완료 — 정리하기」</b> 를 누르면 한 장으로 정리됩니다.
-      ⚠️ 새로고침하면 답이 사라지니 한 번에 끝까지 진행해 주세요.
+      적는 즉시 이 브라우저에 저장되니, 중간에 닫았다 다시 열어도 이어서 하실 수 있습니다.
     </div>
   </div>
 
   <div class="panel" style="margin-top:10px">
     <div class="cf-t">작성자</div>
-    <input id="cfWho" class="cf-n" value="${esc(CONFIRM_WHO)}" placeholder="이름 · 직함">
+    <input id="cfWho" class="cf-n" value="${esc(CONFIRM_WHO)}" placeholder="이름 · 직함"
+      oninput="setConfirmWho(this.value)">
   </div>
 
   ${CONFIRM_ITEMS.map(it => it.sec
@@ -138,14 +180,18 @@ function confirmResult(done, total){
   <div class="mprog">
     <div class="r"><b>컨펌 결과 정리</b><span class="pc">${done} / ${total} 응답</span></div>
     <div style="font-size:12px;color:var(--t3)">
-      아래 내용을 <b>복사</b>해서 카카오톡이나 메일로 보내주시면 그대로 반영합니다.
+      ${CONFIRM_ENDPOINT
+        ? '<b>「보내기」</b> 를 누르면 담당자에게 바로 전달됩니다. 안 되면 <b>「복사하기」</b> 로 카카오톡·메일에 붙여넣어 주세요.'
+        : '아래 내용을 <b>복사</b>해서 카카오톡이나 메일로 보내주시면 그대로 반영합니다.'}
       ${done < total ? `<b style="color:var(--red)"> · 아직 답하지 않은 항목 ${total - done}개가 있습니다.</b>` : ''}
     </div>
   </div>
 
-  <div class="panel" style="margin-top:10px;display:flex;gap:8px;align-items:center">
-    <button class="btn pri" onclick="copyConfirm()">결과 복사하기</button>
+  <div class="panel" style="margin-top:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+    ${CONFIRM_ENDPOINT ? `<button class="btn pri" onclick="sendConfirm(this)">보내기</button>` : ''}
+    <button class="btn ${CONFIRM_ENDPOINT ? '' : 'pri'}" onclick="copyConfirm()">결과 복사하기</button>
     <button class="btn" onclick="editConfirm()">다시 고치기</button>
+    ${CONFIRM_SENT ? `<span style="font-size:12.5px">${esc(CONFIRM_SENT)}</span>` : ''}
   </div>
 
   <div class="panel" style="margin-top:10px">
@@ -165,9 +211,37 @@ function collectConfirm(){
   });
 }
 
-function submitConfirm(){ collectConfirm(); CONFIRM_DONE = true; render(); toast('정리했습니다 — 복사해서 보내주세요'); }
+function submitConfirm(){
+  collectConfirm(); saveConfirmLocal();
+  CONFIRM_DONE = true; CONFIRM_SENT = ''; render();
+  toast(CONFIRM_ENDPOINT ? '정리했습니다 — 「보내기」를 눌러주세요' : '정리했습니다 — 복사해서 보내주세요');
+}
 function editConfirm(){ CONFIRM_DONE = false; render(); }
-function resetConfirm(){ CONFIRM_ANS = {}; CONFIRM_DONE = false; render(); toast('전부 지웠습니다'); }
+function resetConfirm(){
+  CONFIRM_ANS = {}; CONFIRM_DONE = false; CONFIRM_SENT = '';
+  try{ localStorage.removeItem(CONFIRM_LS); }catch(e){}
+  render(); toast('전부 지웠습니다');
+}
+
+/* 구글 시트로 전송 — 주소가 비어 있으면 버튼 자체가 안 나옵니다.
+   no-cors 로 보내므로 서버 응답은 읽을 수 없습니다(네트워크 실패만 잡힙니다). */
+function sendConfirm(btn){
+  if(!CONFIRM_ENDPOINT) return;
+  if(btn){ btn.disabled = true; btn.textContent = '보내는 중…'; }
+  fetch(CONFIRM_ENDPOINT, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ who: CONFIRM_WHO, at: new Date().toISOString(),
+                           answers: CONFIRM_ANS, text: confirmText() })
+  }).then(() => {
+    CONFIRM_SENT = '✓ 보냈습니다. 확인 후 연락드리겠습니다.';
+    toast('보냈습니다 — 감사합니다'); render();
+  }).catch(() => {
+    CONFIRM_SENT = '✕ 전송이 안 됐습니다 — 「결과 복사하기」로 보내주세요.';
+    toast('전송 실패 — 복사해서 보내주세요'); render();
+  });
+}
 
 function confirmText(){
   const d = new Date();
@@ -200,7 +274,10 @@ function copyFallback(t, ok){
   const ta = document.createElement('textarea');
   ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
   document.body.appendChild(ta); ta.select();
-  try { document.execCommand('copy'); ok(); }
-  catch(e){ toast('복사가 막혀 있습니다 — 아래 글을 직접 드래그해 복사해주세요'); }
+  /* execCommand 는 실패해도 예외 없이 false 만 돌려줍니다 — 반환값까지 봐야 합니다 */
+  let done = false;
+  try { done = document.execCommand('copy') === true; } catch(e){ done = false; }
   document.body.removeChild(ta);
+  if(done) ok();
+  else toast('복사가 막혀 있습니다 — 아래 글을 직접 드래그해 복사해주세요');
 }

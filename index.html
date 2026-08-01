@@ -3657,7 +3657,8 @@ function applyHash(){
   if(['today','order','unread'].includes(p[0])){
     cur.view = 'tasks'; cur.filter = p[0]; return true;
   }
-  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense','holiday'].includes(p[0])){
+  if(['stock','inbound','audit','field','issues','erp','report','members','stores','plan','duty','expense','holiday',
+      'confirm' /* 임시(컨펌용) — 컨펌 끝나면 이 한 단어를 지웁니다 */].includes(p[0])){
     cur.view = p[0]; return true;
   }
   return false;
