@@ -35,6 +35,10 @@ function doPost(e) {
   try { d = JSON.parse(e.postData.contents); }
   catch (err) { d = { text: e.postData ? e.postData.contents : '' }; }
 
+  // 우리 앱이 보낸 것만 받습니다 (떠도는 로봇의 무작위 전송을 걸러냅니다)
+  // ⚠️ 이 값은 data-confirm.js 의 CONFIRM_KEY 와 같아야 합니다
+  if (d.key !== 'poson-confirm-2026') return ContentService.createTextOutput('ng');
+
   if (sh.getLastRow() === 0) {
     sh.appendRow(['받은 시각', '작성자', '정리본', '원본(JSON)']);
   }
@@ -45,19 +49,62 @@ function doPost(e) {
     safeCell(JSON.stringify(d.answers || {}))
   ]);
 
-  // 시트에 쌓는 동시에 메일로도 바로 알립니다 (구글 무료 한도 하루 100통 — 충분합니다)
-  // ⛔ 제목의 [포스온컨펌] 은 그대로 두세요. 이 표시로 메일을 찾아 자동 처리합니다.
-  try {
-    MailApp.sendEmail({
-      to: 'dltkddlf231@gmail.com',                                  // ← 받으실 주소
-      subject: '[포스온컨펌] ' + (safeCell(d.who) || '이름 없음'),
-      body: (d.text || '') + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
-    });
-  } catch (err) { /* 메일이 실패해도 시트 기록은 남깁니다 */ }
-
   return ContentService.createTextOutput('ok');
 }
 ```
+
+### 왜 여기서 메일을 안 보내나 (중요)
+
+주소가 공개되어 있으니 **아무나 이 주소로 수천 번 보낼 수 있습니다.** 여기서 바로 메일을 쏘면
+받은편지함이 도배되고 **구글 하루 발송 한도가 말라서 진짜 컨펌 알림까지 안 옵니다.**
+그래서 **메일은 아래처럼 15분마다 한 통으로 묶어서** 보냅니다. 몇 번을 보내든 메일은 15분에 1통입니다.
+
+## 3-2) 알림 코드 — 위 코드 아래에 이어서 붙여넣기
+
+```javascript
+/* 새로 들어온 컨펌이 있으면 15분에 한 통으로 묶어 알립니다.
+   ⛔ 제목의 [포스온컨펌] 은 그대로 두세요 — 이 표시로 메일을 찾아 자동 처리합니다. */
+var 받는사람 = 'dltkddlf231@gmail.com';   // ← 받으실 주소
+var 하루최대 = 20;                        // 하루 이만큼만 보냅니다 (도배 방지)
+
+function notifyNew() {
+  var pr = PropertiesService.getScriptProperties();
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName('컨펌');
+  if (!sh) return;
+
+  var last = Number(pr.getProperty('lastNotified') || 1);   // 1행은 제목줄
+  var now  = sh.getLastRow();
+  if (now <= last) return;                                   // 새 글 없음
+
+  var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
+  var cnt = (pr.getProperty('mailDate') === today) ? Number(pr.getProperty('mailCount') || 0) : 0;
+  if (cnt >= 하루최대) { pr.setProperty('lastNotified', String(now)); return; }
+
+  var rows = sh.getRange(last + 1, 1, now - last, 3).getValues();
+  var body = rows.map(function (r) {
+    return '■ ' + r[0] + ' / ' + r[1] + '\n' + r[2];
+  }).join('\n\n' + Array(43).join('─') + '\n\n');
+
+  MailApp.sendEmail({
+    to: 받는사람,
+    subject: '[포스온컨펌] 새 응답 ' + rows.length + '건',
+    body: body + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
+  });
+
+  pr.setProperty('lastNotified', String(now));
+  pr.setProperty('mailDate', today);
+  pr.setProperty('mailCount', String(cnt + 1));
+}
+```
+
+## 3-3) 15분마다 확인하도록 예약 걸기
+
+Apps Script 왼쪽 **시계 아이콘(트리거)** → **트리거 추가**
+- 실행할 함수: **notifyNew**
+- 이벤트 소스: **시간 기반**
+- 유형: **분 단위 타이머** → **15분마다**
+- 저장
 
 **저장**(디스크 아이콘 또는 Ctrl+S)
 
@@ -89,8 +136,10 @@ const CONFIRM_ENDPOINT = '';   // ← 여기 따옴표 안에 붙여넣기
 ## ⛔ 보안 — 꼭 읽어주세요
 
 - 이 주소를 아는 사람은 **누구나 시트에 줄을 추가**할 수 있습니다. (시트 내용을 읽거나 지우지는 못합니다)
-- 그래서 위 코드에 `safeCell()` 이 들어 있습니다 — `=SUM(...)` 같은 **수식 공격을 글자로 바꿔** 막습니다.
-  코드를 줄여 쓰지 마시고 그대로 붙여넣어 주세요.
+- 그래서 위 코드에 **방어 세 겹**이 들어 있습니다. 줄여 쓰지 마시고 그대로 붙여넣어 주세요.
+  1. `safeCell()` — `=SUM(...)` 같은 **수식 공격을 글자로** 바꿔 막습니다
+  2. `d.key` 확인 — 우리 앱이 보낸 것만 받습니다 (무작위 로봇 차단)
+  3. **메일은 15분에 1통 · 하루 20통까지** — 도배해도 받은편지함과 구글 발송 한도가 안 터집니다
 - 주소가 **공개 GitHub 저장소에 들어갑니다.** 검색 로봇이 주워 갈 수 있고, 그러면 광고성 줄이 들어올 수 있습니다.
 - 그래서 **컨펌이 끝나면 반드시 배포를 중지**하세요 — Apps Script → 배포 → 배포 관리 → **보관처리**.
 - 개인정보는 받지 않습니다(이름·직함과 업무 의견만).

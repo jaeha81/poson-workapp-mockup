@@ -66,6 +66,11 @@ const CONFIRM_ITEMS = [
    주소 예: https://script.google.com/macros/s/AKfycb....../exec           */
 const CONFIRM_ENDPOINT = '';
 
+/* 구글 쪽에서 "우리 앱이 보낸 것"인지 1차로 걸러내는 표시입니다.
+   ⚠️ 진짜 비밀번호가 아닙니다(앱 소스에 그대로 들어갑니다). 떠도는 로봇의 무작위 전송을 막는 용도입니다.
+      진짜 방어는 구글 쪽 코드에 있습니다 — 메일은 15분마다 최대 1통, 하루 상한도 걸어 둡니다. */
+const CONFIRM_KEY = 'poson-confirm-2026';
+
 const CONFIRM_LS = 'poson_confirm_v1';   /* 브라우저에 임시 보관 — 닫았다 켜도 답이 남습니다 */
 
 let CONFIRM_ANS  = {};      /* id -> { pick, note } */
@@ -242,7 +247,7 @@ function sendConfirm(btn){
   fetch(CONFIRM_ENDPOINT, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ who: CONFIRM_WHO, at: new Date().toISOString(),
+    body: JSON.stringify({ key: CONFIRM_KEY, who: CONFIRM_WHO, at: new Date().toISOString(),
                            answers: CONFIRM_ANS, text: confirmText() })
   })
   .then(r => { if(!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
