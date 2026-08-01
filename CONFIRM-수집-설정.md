@@ -69,17 +69,25 @@ var 하루최대 = 20;                        // 하루 이만큼만 보냅니�
 var 한번에   = 5;                         // 한 통에 담는 최대 건수 (메일이 너무 커지지 않게)
 var 글자상한 = 3000;                      // 한 건당 본문 글자 수 (넘으면 잘라 쓰고 시트에서 보세요)
 
+/* 상태(어디까지 보냈나 · 오늘 몇 통 · 연속 실패)를 ⛔ 한 덩어리로 저장합니다.
+   여러 칸에 나눠 저장하면 한쪽만 저장되는 사고가 나서 한도가 깨지거나 알림이 멈춥니다. */
+function 상태읽기(pr) {
+  try { return JSON.parse(pr.getProperty('state') || '{}'); } catch (e) { return {}; }
+}
+function 상태쓰기(pr, s) { pr.setProperty('state', JSON.stringify(s)); }   // 한 번에 저장
+
 function notifyNew() {
   var pr = PropertiesService.getScriptProperties();
   var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('컨펌');
   if (!sh) return;
 
-  var last = Number(pr.getProperty('lastNotified') || 1);   // 1행은 제목줄
+  var st   = 상태읽기(pr);
+  var last = Number(st.last || 1);                           // 1행은 제목줄
   var now  = sh.getLastRow();
   if (now <= last) return;                                   // 새 글 없음
 
   var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
-  var cnt = (pr.getProperty('mailDate') === today) ? Number(pr.getProperty('mailCount') || 0) : 0;
+  var cnt = (st.date === today) ? Number(st.count || 0) : 0;
   if (cnt >= 하루최대) return;   // ⛔ 커서를 그대로 둡니다 — 오늘 못 보낸 건 내일 보냅니다
 
   // 밀린 게 50건을 넘으면(도배 등) 최근 것부터 따라잡습니다. 건너뛴 건 시트에 그대로 있습니다.
@@ -108,24 +116,15 @@ function notifyNew() {
     // 메일 자체가 실패한 경우입니다 (아래에서 재시도 처리)
   }
 
-  // ⛔ 메일 발송과 기록 저장을 분리합니다.
-  //    보내고 나서 기록만 실패하면, 커서가 안 밀려 같은 메일을 또 보내게 됩니다.
-  //    그래서 보냈으면 커서부터 먼저 밀고, 통계는 실패해도 무시합니다.
   if (sent) {
-    try { pr.setProperty('lastNotified', String(end)); } catch (e1) {}
-    try {
-      pr.setProperty('mailDate', today);
-      pr.setProperty('mailCount', String(cnt + 1));
-      pr.deleteProperty('failCount');
-    } catch (e2) {}
+    // 보냈으면 커서·오늘 통수·실패횟수를 한 번에 저장합니다 (반쪽 저장 없음)
+    상태쓰기(pr, { last: end, date: today, count: cnt + 1, fail: 0 });
   } else {
     // 두 번까지는 커서를 그대로 두고 다음 트리거에서 다시 시도합니다.
     // 세 번 연속 실패하면 넘깁니다 (같은 묶음에 갇혀 알림이 영영 안 오는 것을 막습니다).
-    try {
-      var f = Number(pr.getProperty('failCount') || 0) + 1;
-      if (f >= 3) { pr.setProperty('lastNotified', String(end)); pr.deleteProperty('failCount'); }
-      else { pr.setProperty('failCount', String(f)); }
-    } catch (e3) {}
+    var f = Number(st.fail || 0) + 1;
+    if (f >= 3) 상태쓰기(pr, { last: end, date: st.date, count: st.count, fail: 0 });
+    else        상태쓰기(pr, { last: st.last, date: st.date, count: st.count, fail: f });
   }
 }
 
@@ -133,8 +132,10 @@ function notifyNew() {
    이미 시트에 쌓여 있던 줄을 한꺼번에 메일로 쏘는 것을 막습니다. */
 function 커서초기화() {
   var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('컨펌');
-  PropertiesService.getScriptProperties()
-    .setProperty('lastNotified', String(sh ? sh.getLastRow() : 1));
+  var pr = PropertiesService.getScriptProperties();
+  var st = 상태읽기(pr);
+  st.last = sh ? sh.getLastRow() : 1;
+  상태쓰기(pr, st);
 }
 ```
 
