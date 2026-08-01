@@ -94,6 +94,8 @@ function notifyNew() {
   var st   = 상태읽기(pr);
   var last = Number(st.last || 1);                           // 1행은 제목줄
   var now  = sh.getLastRow();
+  // 시트에서 줄을 지우면 커서가 시트보다 앞서게 됩니다 — 그대로 두면 알림이 영영 안 옵니다
+  if (now < last) { st.last = last = now; 상태쓰기(pr, st); }
   if (now <= last) return;                                   // 새 글 없음
 
   var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
