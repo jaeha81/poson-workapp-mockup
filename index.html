@@ -175,6 +175,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   padding:14px 16px;border-bottom:1px solid var(--line-2);
   transition:background .18s var(--ease)
 }
+/* 펼쳐서 고치는 중인 행 — 왼쪽에 선 하나로만 표시합니다 */
+.card.open{box-shadow:inset 3px 0 0 var(--navy)}
+.card.open h4{font-size:13px;margin-bottom:8px}
 .card:last-child{border-bottom:none}
 /* 마우스를 올려도 카드가 들리지 않습니다 — 목록 위를 지나갈 때마다 화면이 들썩입니다 */
 .card:hover{background:var(--surface-2)}
@@ -718,6 +721,8 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .rep-m{font-size:12px;color:var(--t3)}
 .repbtns{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
 .repbtns .btn{flex:1;min-width:72px}
+/* 수정 폼의 저장·취소 — 늘리지 않고 글자 폭만큼만 */
+.formbtns{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 0}
 
 /* 영수증 드롭 */
 .rcpt-drop{cursor:pointer;padding:20px;margin-top:12px;transition:border-color .18s var(--ease),background .18s var(--ease)}
@@ -1392,9 +1397,9 @@ const CHAPTERS = [
   {no:10,t:'발주 관리', p:84, sub:'발주 등록 / 일괄 등록 / 발주서 인쇄'},
   {no:11,t:'설정 관리', p:86, sub:'연결·환경설정 / 업데이트 / A/S 업무'}
 ];
-let cur = {view:'tasks', filter:'today', taskId:null, mchap:null, msec:null,
+let cur = {view:'tasks', filter:'today', taskId:null, tedit:false, planId:null, mchap:null, msec:null,
            mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
-           dm:'2026-07', em:'2026-07', hy:'2026', hq:'', scat:null};
+           em:'2026-07', hy:'2026', hq:'', scat:null};
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -1857,13 +1862,17 @@ function viewDetail(id){
       : `<button class="who-chip wait" onclick="remind('${esc(n)}')" title="눌러서 리마인드">${esc(n)}${n===ME?' (나)':''}</button>`;
   }).join('');
 
+  /* 등록한 사람 · 오더 담당 · 관리자만 내용을 고칠 수 있습니다 */
+  const canEditTask = t.mine || isAdmin() || (t.owners||[]).includes(ME);
+
   return `
-  <button class="back" onclick="cur.taskId=null;render()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> 목록으로</button>
+  <button class="back" onclick="closeTask()"><svg class="ic ic-sm"><use href="#i-arrow-left"/></svg> 목록으로</button>
   ${rookieBox(t)}
   <div class="panel">
     <div class="r1">${chipOf(t)}<span class="store">${esc(t.store)}</span>
       <span class="cat k1">${esc(t.kind||'')}</span><span class="cat">${esc(t.cat)}</span>
-      ${dutyBadge(t)}</div>
+      ${dutyBadge(t)}${cur.tedit?`<span class="cat k1">수정 중</span>`:''}</div>
+    ${cur.tedit ? taskEditForm(t) : `
     <h2>${esc(t.title)}</h2>
     <div class="meta">
       <span>오더 담당 <b style="color:var(--navy)">${t.owners&&t.owners.length?t.owners.map(esc).join(', '):'미지정'}</b></span>
@@ -1872,6 +1881,7 @@ function viewDetail(id){
     ${t.mine ? '' : (iAcked(t)
       ? `<button class="btn ok" disabled>확인함</button>`
       : `<button class="btn pri" onclick="doAck(${t.id})">확인함</button>`)}
+    ${canEditTask ? `<button class="btn" onclick="cur.tedit=true;render()">수정</button>` : ''}`}
   </div>
 
   ${checklistBox(t)}
@@ -2200,7 +2210,45 @@ function delExp(id,i){
   const t = TASKS.find(x=>x.id===id);
   t.expenses.splice(i,1); toast('경비 삭제'); render();
 }
-function openTask(id){ cur.taskId = id; render(); }
+function openTask(id){ cur.taskId = id; cur.tedit = false; render(); }
+function closeTask(){ cur.taskId = null; cur.tedit = false; render(); }
+
+/* ===== 업무 내용 수정 — 등록한 사람 · 오더 담당 · 관리자 ===== */
+function taskEditForm(t){
+  return `
+    <div class="f"><label>제목</label>
+      <input type="text" id="te_title" value="${esc(t.title)}"></div>
+    <div class="grid3">
+      <div class="f"><label>구분</label>
+        <select id="te_kind">${WORK_KINDS.map(k=>`<option ${k===t.kind?'selected':''}>${k}</option>`).join('')}</select></div>
+      <div class="f"><label>분류</label>
+        <select id="te_cat">${WORK_CATS.map(c=>`<option ${c===t.cat?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="f"><label>업무일 <span style="font-weight:500;color:var(--t3)">— 비워도 됨</span></label>
+        <input type="date" id="te_date" value="${esc(t.date||'')}"></div>
+    </div>
+    <div class="f"><label>매장 / 거래처</label>
+      <input type="text" id="te_store" value="${esc(t.store)}"></div>
+    <div class="f"><label>내용</label>
+      <textarea id="te_body">${esc(t.body)}</textarea></div>
+    <div class="formbtns" style="margin-top:0">
+      <button class="btn pri" onclick="saveTaskEdit(${t.id})">저장</button>
+      <button class="btn" onclick="cur.tedit=false;render()">취소</button>
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:8px">
+      저장하면 공유 대상 전원에게 <b>내용이 바뀌었다는 알림</b>이 갑니다.</p>`;
+}
+function saveTaskEdit(id){
+  const t = TASKS.find(x=>x.id===id);
+  const title = $('#te_title').value.trim(), store = $('#te_store').value.trim();
+  if(!title || !store){ toast('제목과 매장은 비울 수 없습니다'); return; }
+  t.title = title; t.store = store;
+  t.kind  = $('#te_kind').value;
+  t.cat   = $('#te_cat').value;
+  t.date  = $('#te_date').value;
+  t.body  = $('#te_body').value.trim();
+  cur.tedit = false;
+  toast('업무 수정 — 전원에게 알림'); render();
+}
 
 /* ================= 액션 ================= */
 function doAck(id){
@@ -2536,104 +2584,81 @@ function answer(id, pick){
 }
 
 /* ================= 당직 일정 =================
-   ⚠️ 한 주의 기준이 금요일입니다. 금요일에 정한 사람이 차주 목요일까지 7일을 섭니다.
-   달은 좌우 화살표로 넘깁니다. 편집은 관리자만. */
+   「POSON 07월 전화 당직 일정」 표를 그대로 옮겼습니다.
+   야간당직은 매일, 주말당직은 토·일만. 편집은 관리자만. */
 function viewDuty(){
-  const ym = cur.dm;
-  const [yy, mm] = ym.split('-').map(Number);
-  const weeks = dutyWeeksOfMonth(ym);
+  const m = DUTY['2026-07'];
+  const DOW = ['월','화','수','목','금','토','일'];
   const today = dutyOf(cur.date);
   const canEdit = isAdmin();
-  const DOW = ['금','토','일','월','화','수','목'];
-  const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
 
-  /* 이 달에 온전히 들어간 주당직만 지급 대상 — 걸친 주는 그 달로 넘어갑니다 */
-  const pay = dutyPayWeeks(ym);
-  const cnt = {};
-  pay.forEach(w => { if(w.name) cnt[w.name] = (cnt[w.name]||0) + 1; });
+  const cell = (name, i, wk, kind) => {
+    if(i < 5 && kind === 'weekend') return `<td class="dt-x"></td>`;
+    const cls = name ? (name === ME ? 'dt-me' : '') : 'dt-none';
+    return canEdit
+      ? `<td class="${cls}"><select class="dt-sel" onchange="setDuty(${wk},'${kind}',${i},this.value)">
+           <option value="">—</option>
+           ${DUTY_MEMBERS.map(n=>`<option ${n===name?'selected':''}>${n}</option>`).join('')}
+         </select></td>`
+      : `<td class="${cls}">${name ? esc(name) : '—'}</td>`;
+  };
 
   return `
   <div class="mprog">
-    <div class="r">
-      <button class="btn sm" onclick="moveDutyMonth(-1)"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
-      <b>전화 당직 일정 — ${yy}년 ${mm}월</b>
-      <button class="btn sm" onclick="moveDutyMonth(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>
-      ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
-      <span class="pc">${pay.length}주 · ${Object.keys(cnt).length}명</span>
-    </div>
+    <div class="r"><b>전화 당직 일정 — 2026년 7월</b>
+      <span class="pc">당직 인원 ${DUTY_MEMBERS.length}명</span></div>
     <div style="font-size:12px;color:var(--t3)">
-      주당직은 <b>금요일에 시작해 차주 목요일까지</b> 7일입니다.
-      ${canEdit ? '오른쪽 칸에서 담당자를 고르면 그 주 7일이 한 번에 정해집니다.'
-                : '변경은 관리자만 가능합니다.'}
+      ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주말당직은 토·일에 섭니다.
+      ${canEdit?'칸을 눌러 담당자를 바꿀 수 있습니다.':'변경은 관리자만 가능합니다.'}
     </div>
   </div>
 
   ${today ? `
   <div class="duty-now">
     <span class="dn-d">${esc(cur.date)}</span>
-    <span class="dn-i"><b>주당직</b>${esc(today.name)}</span>
-    <span class="dn-i"><b>기간</b>${fmt(today.from)} ~ ${fmt(today.to)}</span>
-    ${today.name === ME ? `<span class="chip duty">내 당직입니다</span>` : ''}
-  </div>` : ''}
+    <span class="dn-i"><b>야간당직</b>${today.night?esc(today.night):'없음'}</span>
+    ${today.weekend?`<span class="dn-i"><b>주말당직</b>${esc(today.weekend)}</span>`:''}
+    ${(today.night===ME||today.weekend===ME)?`<span class="chip duty">내 당직입니다</span>`:''}
+  </div>`:''}
 
   <div class="tabwrap">
     <table class="ktab dt">
-      <tr><th>기간</th>${DOW.map((d,i)=>`<th class="${i===1?'sat':''}${i===2?'sun':''}">${d}</th>`).join('')}<th>당직자</th></tr>
-      ${weeks.map(w => {
-        const base = new Date(w.from + 'T00:00:00');
-        const days = [...Array(7)].map((_,i)=>{ const d = new Date(base); d.setDate(base.getDate()+i); return d; });
-        const whole = w.from.slice(0,7) === ym && w.to.slice(0,7) === ym;
-        return `<tr>
-          <td class="dt-h" style="white-space:nowrap">${fmt(w.from)}~${fmt(w.to)}
-            ${whole ? '' : '<span class="dt-none" style="font-size:12px"> · 걸침</span>'}</td>
-          ${days.map((d,i)=>{
+      <tr><th>구분</th>${DOW.map((d,i)=>`<th class="${i===5?'sat':''}${i===6?'sun':''}">${d}</th>`).join('')}</tr>
+      ${m.weeks.map(w=>{
+        const base = new Date(w.from+'T00:00:00');
+        const days = [...Array(7)].map((_,i)=>{ const d=new Date(base); d.setDate(base.getDate()+i); return d; });
+        return `
+        <tr class="dt-wk"><td>${w.no}주차</td>
+          ${days.map(d=>{
             const ds = ymd(d), hn = holidayName(ds);
-            const inMonth = d.getMonth() === mm - 1;
+            const inMonth = d.getMonth() === 6;
             const isCur = ds === cur.date;
             return `<td class="dt-day ${isCur?'cur':''} ${inMonth?'':'off'} ${isRedDay(ds)?'red':''} ${isBlueDay(ds)?'blue':''}"
                       title="${hn?esc(hn):''}">${d.getDate()}${hn?'<i class="hdot"></i>':''}</td>`;
           }).join('')}
-          <td class="${w.name ? (w.name===ME?'dt-me':'') : 'dt-none'}">${
-            canEdit
-              ? `<select class="dt-sel" onchange="setDuty('${w.from}', this.value)">
-                   <option value="">—</option>
-                   ${DUTY_MEMBERS.map(n=>`<option ${n===w.name?'selected':''}>${n}</option>`).join('')}
-                 </select>`
-              : (w.name ? esc(w.name) : '—')}</td>
-        </tr>`;
+        </tr>
+        <tr><td class="dt-h">주말당직</td>${w.weekend.map((n,i)=>cell(n,i,w.no,'weekend')).join('')}</tr>
+        <tr><td class="dt-h">야간당직</td>${w.night.map((n,i)=>cell(n,i,w.no,'night')).join('')}</tr>`;
       }).join('')}
     </table>
   </div>
 
   <div class="panel" style="margin-top:14px">
-    <h4>${mm}월 주당직 횟수 <span style="color:var(--t3);font-weight:500">— 이 달에 온전히 들어간 주만 셉니다</span></h4>
-    ${pay.length
-      ? `<div class="plist">${DUTY_MEMBERS.map(n=>`
-          <div class="prow"><span class="nm">${esc(n)}</span>
-            <span class="cat k3">${cnt[n]||0}주</span>
-            <span class="tm">${pay.filter(w=>w.name===n).map(w=>`${fmt(w.from)}~${fmt(w.to)}`).join(' · ') || '없음'}</span>
-          </div>`).join('')}</div>
-         <p style="font-size:12px;color:var(--t3);margin-top:10px">
-           수당은 <b>경비 정산</b> 화면에서 자동으로 계산됩니다.</p>`
-      : `<div class="desc" style="margin:0">이 달에 배정된 주당직이 없습니다.</div>`}
-  </div>
-
-  <div class="panel">
     <h4>특이사항</h4>
     ${canEdit
       ? `<div class="cmtform" style="margin-top:0">
-           <input id="dtNote" value="${esc(DUTY_NOTE[ym]||'')}" placeholder="당직 관련 전달 사항">
+           <input id="dtNote" value="${esc(m.note)}" placeholder="당직 관련 전달 사항">
            <button class="btn" onclick="saveDutyNote()">저장</button></div>`
-      : `<div class="desc" style="margin:0">${esc(DUTY_NOTE[ym]||'') || '특이사항 없음'}</div>`}
+      : `<div class="desc" style="margin:0">${esc(m.note) || '특이사항 없음'}</div>`}
   </div>`;
 }
-function moveDutyMonth(n){ cur.dm = shiftMonth(cur.dm, n); render(); }
-function setDuty(from, name){
-  if(name) DUTY_ASSIGN[from] = name; else delete DUTY_ASSIGN[from];
-  toast(name ? `${from} 시작 주당직 → ${name}` : '당직 해제');
+function setDuty(wk, kind, i, name){
+  const w = DUTY['2026-07'].weeks.find(x=>x.no===wk);
+  w[kind][i] = name || null;
+  toast(name ? `${wk}주차 ${kind==='night'?'야간':'주말'}당직 → ${name}` : '당직 해제');
   render();
 }
-function saveDutyNote(){ DUTY_NOTE[cur.dm] = $('#dtNote').value; toast('특이사항 저장'); render(); }
+function saveDutyNote(){ DUTY['2026-07'].note = $('#dtNote').value; toast('특이사항 저장'); render(); }
 
 /* ================= 경비 정산 =================
    「포스온 AS부서 N월 당직현황」 표를 화면으로 옮긴 것입니다.
@@ -2682,25 +2707,26 @@ function viewExpense(){
   const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
   const won = n => n.toLocaleString() + '원';
 
-  const weeks  = dutyPayWeeks(ym);
+  const dc     = dutyDayCount(ym);   /* 이름 -> { night, weekend, nd[], wd[] } */
   const asList = DUTY_AS.filter(a => a.d.startsWith(ym));
   const exps   = taskExpensesOf(ym);
 
   /* 당직 수당 표에는 그 달에 당직을 섰거나 AS를 나간 사람만 올립니다
      (업무 경비만 있는 사람은 아래 경비 표에서 봅니다) */
   const names = [...new Set([
-    ...weeks.map(w => w.name).filter(Boolean),
+    ...Object.keys(dc),
     ...asList.map(a => a.who)
   ])];
 
   const rows = names.map(n => {
-    const wk = weeks.filter(w => w.name === n);
+    const d = dc[n] || { night:0, weekend:0, nd:[], wd:[] };
     const as = asList.filter(a => a.who === n);
     const asPay = as.filter(a => a.pay);
     const ex = exps.filter(e => e.who === n);
-    return { n, wk, as, asPay, ex,
+    return { n, d, as, asPay, ex,
              exAmt: ex.reduce((s, e) => s + e.amt, 0),
-             duty: wk.length * DUTY_PAY.week + asPay.length * DUTY_PAY.asVisit };
+             duty: d.night * DUTY_PAY.night + d.weekend * DUTY_PAY.weekend
+                   + asPay.length * DUTY_PAY.asVisit };
   });
   const totDuty = rows.reduce((s, r) => s + r.duty, 0);
   const totExp  = exps.reduce((s, e) => s + e.amt, 0);
@@ -2740,8 +2766,9 @@ function viewExpense(){
   ${canEdit ? '' : lockNote('단가 수정·지급 처리')}
 
   <div class="stotal">
-    ${rate('week', '주당직', '1주 · 금~목')}
-    ${rate('asVisit', 'AS 방문', '주당직 제외')}
+    ${rate('night', '야간당직', '1일')}
+    ${rate('weekend', '주말당직', '1일')}
+    ${rate('asVisit', 'AS 방문', '1건 · 당직 제외')}
     <div class="stot car"><div class="k">${mm}월 지급액 합계</div>
       <div class="v">${(totDuty + totExp).toLocaleString()}<small>원</small></div></div>
   </div>
@@ -2752,13 +2779,15 @@ function viewExpense(){
     <p class="swipe only-mo">옆으로 밀면 지급액 · 지급현황까지 보입니다</p>
     <div class="tabwrap">
       <table class="ktab exp">
-        <tr><th>당직자</th><th>주당직 기간</th><th>수</th><th>AS 방문 (주당직 제외)</th><th>수</th>
+        <tr><th>당직자</th><th>야간당직</th><th>주말당직</th><th>AS 방문 (당직 제외)</th><th>수</th>
             <th>지급액</th><th>지급현황</th></tr>
         ${rows.map(r => `
         <tr>
           <td>${esc(r.n)}</td>
-          <td>${r.wk.length ? r.wk.map(w => `${fmt(w.from)}~${fmt(w.to)}`).join('<br>') : '<span class="dt-none">—</span>'}</td>
-          <td class="tot" style="text-align:center">${r.wk.length}</td>
+          <td class="tot" style="text-align:center" title="${r.d.nd.map(fmt).join(' · ')}">${
+            r.d.night ? r.d.night + '일' : '<span class="dt-none">—</span>'}</td>
+          <td class="tot" style="text-align:center" title="${r.d.wd.map(fmt).join(' · ')}">${
+            r.d.weekend ? r.d.weekend + '일' : '<span class="dt-none">—</span>'}</td>
           <td>${r.as.length ? r.as.map(asCell).join('') : '<span class="dt-none">—</span>'}</td>
           <td class="tot" style="text-align:center">${r.asPay.length}</td>
           <td class="tot" style="text-align:right">${won(r.duty)}</td>
@@ -2766,8 +2795,9 @@ function viewExpense(){
             ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'is-on' : ''}" onclick="togglePaid('${ym}','${esc(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
             : `<span class="cat ${PAY_STATE[payKey(ym, r.n)] ? 'k1' : 'k3'}">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</span>`}</td>
         </tr>`).join('')}
-        <tr><td class="tot">TOT</td><td class="tot"></td>
-            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.wk.length, 0)}</td>
+        <tr><td class="tot">TOT</td>
+            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.night, 0)}일</td>
+            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.weekend, 0)}일</td>
             <td class="tot"></td>
             <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.asPay.length, 0)}</td>
             <td class="tot" style="text-align:right">${won(totDuty)}</td><td class="tot"></td></tr>
@@ -2977,27 +3007,109 @@ function viewPlan(){
     <button class="btn pri" onclick="addPlan()">예정 업무 추가</button>
   </div>` : ''}
 
-  ${day.length ? `<div class="cardlist">` + day.map(p=>`
+  ${day.length ? `<div class="cardlist">`
+      + day.map(p => cur.planId === p.id ? planEdit(p, canEdit) : planCard(p, canEdit)).join('')
+      + `</div>`
+   : `<div class="empty"><b>${esc(cur.date)} 예정 업무가 없습니다</b>
+      <p>위에서 추가하거나, 왼쪽 주간 막대에서 다른 날짜를 골라보세요.</p></div>`}`;
+}
+
+/* 접힌 카드 — 제목을 누르면 수정·메모 화면이 열립니다 */
+function planCard(p, canEdit){
+  const notes = p.notes || [];
+  return `
     <div class="card">
       <div class="r1"><span class="store">${esc(p.store)}</span>
         ${p.ack?`<span class="chip done">확인 ${esc(p.ack)}</span>`
-                :`<span class="cat k3">확인 대기</span>`}</div>
-      <h3 style="cursor:default">${esc(p.recv)}</h3>
+                :`<span class="cat k3">확인 대기</span>`}
+        ${notes.length?`<span class="cat k3">메모 ${notes.length}</span>`:''}</div>
+      <h3 class="tlink" onclick="openPlan(${p.id})" title="눌러서 수정하거나 메모 남기기">${esc(p.recv)}</h3>
       <div class="meta">
         <span>담당 <b style="color:${p.owner?'var(--navy)':'var(--t3)'}">${p.owner?esc(p.owner):'미정'}</b></span>
         ${p.memo?`<span class="sep">·</span><span>${esc(p.memo)}</span>`:''}
       </div>
       <div class="ackrow">
         <span class="acts" style="margin-left:0">
+          <button class="btn" onclick="openPlan(${p.id})">수정 · 메모</button>
           ${!p.ack && (p.owner===ME || !p.owner)
             ? `<button class="btn" onclick="ackPlan(${p.id})">확인 — 내 이름 남기기</button>` : ''}
           ${canEdit?`<button class="btn" onclick="toTask(${p.id})">업무로 등록</button>
                      <button class="btn" onclick="delPlan(${p.id})">삭제</button>`:''}
         </span>
       </div>
-    </div>`).join('') + `</div>`
-   : `<div class="empty"><b>${esc(cur.date)} 예정 업무가 없습니다</b>
-      <p>위에서 추가하거나, 왼쪽 주간 막대에서 다른 날짜를 골라보세요.</p></div>`}`;
+    </div>`;
+}
+
+/* 펼친 카드 — 내용 수정(관리자)과 메모 쓰기(전원) */
+function planEdit(p, canEdit){
+  const notes = p.notes || [];
+  return `
+    <div class="card open">
+      <div class="r1"><span class="store">${esc(p.store)}</span>
+        <span class="cat k1">수정 중</span></div>
+
+      ${canEdit ? `
+      <div class="grid2" style="margin-top:10px">
+        <div class="f"><label>방문지</label>
+          <input type="text" id="pe_store" value="${esc(p.store)}"></div>
+        <div class="f"><label>담당자 (비워두면 미정)</label>
+          <select id="pe_owner"><option value="">미정</option>
+            ${TEAM.map(t=>`<option ${t.name===p.owner?'selected':''}>${t.name}</option>`).join('')}</select></div>
+      </div>
+      <div class="f"><label>접수내역</label>
+        <input type="text" id="pe_recv" value="${esc(p.recv)}"></div>
+      <div class="f"><label>비고</label>
+        <input type="text" id="pe_memo" value="${esc(p.memo||'')}" placeholder="예) 준공승인 지연 — 오후에 다시 확인"></div>
+      <div class="formbtns" style="margin-top:0">
+        <button class="btn pri" onclick="savePlan(${p.id})">저장</button>
+        <button class="btn" onclick="openPlan(${p.id})">닫기</button>
+      </div>`
+      : `<div class="meta" style="margin-top:8px">
+           <span>담당 <b style="color:${p.owner?'var(--navy)':'var(--t3)'}">${p.owner?esc(p.owner):'미정'}</b></span>
+           ${p.memo?`<span class="sep">·</span><span>${esc(p.memo)}</span>`:''}
+         </div>
+         <div class="desc" style="margin:8px 0 0">${esc(p.recv)}</div>
+         ${lockNote('내용 수정')}`}
+
+      <h4 style="margin-top:14px">메모 ${notes.length?`<span style="color:var(--t3)">${notes.length}</span>`:''}</h4>
+      <div class="reps">
+        ${notes.length ? notes.map((r,i)=>`
+          <div class="rep">
+            <span class="rep-b">${esc(r.b)}</span>
+            <span class="rep-m">${esc(r.n)} · ${esc(r.t)}
+              ${r.n===ME?`<button class="btn sm" style="margin-left:6px" onclick="delPlanNote(${p.id},${i})">삭제</button>`:''}</span>
+          </div>`).join('')
+        : '<p style="color:var(--t3);font-size:13px;padding:8px 0">아직 메모가 없습니다.</p>'}
+      </div>
+      <div class="cmtform">
+        <input id="pe_note" placeholder="예) 담당자와 통화 완료 — 오후 2시 방문으로 조정"
+               onkeydown="if(event.key==='Enter')addPlanNote(${p.id})">
+        <button class="btn" onclick="addPlanNote(${p.id})">메모 남기기</button>
+      </div>
+      ${canEdit?'':`<div class="formbtns"><button class="btn" onclick="openPlan(${p.id})">닫기</button></div>`}
+    </div>`;
+}
+function openPlan(id){ cur.planId = (cur.planId === id ? null : id); render(); }
+function savePlan(id){
+  const p = PLANS.find(x=>x.id===id);
+  const store = $('#pe_store').value.trim(), recv = $('#pe_recv').value.trim();
+  if(!store || !recv){ toast('방문지와 접수내역은 비울 수 없습니다'); return; }
+  p.store = store; p.recv = recv;
+  p.owner = $('#pe_owner').value;
+  p.memo  = $('#pe_memo').value.trim();
+  cur.planId = null;
+  toast(`예정 업무 수정 — ${store}`); render();
+}
+function addPlanNote(id){
+  const p = PLANS.find(x=>x.id===id);
+  const v = $('#pe_note').value.trim(); if(!v) return;
+  p.notes = p.notes || [];
+  p.notes.push({n:ME, t:nowHM(), b:v});
+  toast('메모 등록 — 담당자에게 알림'); render();
+}
+function delPlanNote(id, i){
+  const p = PLANS.find(x=>x.id===id);
+  p.notes.splice(i, 1); toast('메모 삭제'); render();
 }
 function acSearch2(q){
   const box = $('#acList2');
