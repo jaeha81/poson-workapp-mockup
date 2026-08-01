@@ -66,11 +66,12 @@ function doPost(e) {
    ⛔ 제목의 [포스온컨펌] 은 그대로 두세요 — 이 표시로 메일을 찾아 자동 처리합니다. */
 var 받는사람 = 'dltkddlf231@gmail.com';   // ← 받으실 주소
 var 하루최대 = 20;                        // 하루 이만큼만 보냅니다 (도배 방지)
+var 한번에   = 5;                         // 한 통에 담는 최대 건수 (메일이 너무 커지지 않게)
+var 글자상한 = 3000;                      // 한 건당 본문 글자 수 (넘으면 잘라 쓰고 시트에서 보세요)
 
 function notifyNew() {
   var pr = PropertiesService.getScriptProperties();
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sh = ss.getSheetByName('컨펌');
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('컨펌');
   if (!sh) return;
 
   var last = Number(pr.getProperty('lastNotified') || 1);   // 1행은 제목줄
@@ -79,26 +80,47 @@ function notifyNew() {
 
   var today = Utilities.formatDate(new Date(), 'Asia/Seoul', 'yyyy-MM-dd');
   var cnt = (pr.getProperty('mailDate') === today) ? Number(pr.getProperty('mailCount') || 0) : 0;
-  if (cnt >= 하루최대) { pr.setProperty('lastNotified', String(now)); return; }
+  if (cnt >= 하루최대) return;   // ⛔ 커서를 그대로 둡니다 — 오늘 못 보낸 건 내일 보냅니다
 
-  var rows = sh.getRange(last + 1, 1, now - last, 3).getValues();
+  var end  = Math.min(now, last + 한번에);                   // 한 번에 최대 5건씩만
+  var rows = sh.getRange(last + 1, 1, end - last, 3).getValues();
   var body = rows.map(function (r) {
-    return '■ ' + r[0] + ' / ' + r[1] + '\n' + r[2];
-  }).join('\n\n' + Array(43).join('─') + '\n\n');
+    var t = String(r[2] || '');
+    if (t.length > 글자상한) t = t.slice(0, 글자상한) + '\n…(길어서 줄임 — 전체는 시트에서 보세요)';
+    return '■ ' + r[0] + ' / ' + r[1] + '\n' + t;
+  }).join('\n\n────────────────────\n\n');
 
-  MailApp.sendEmail({
-    to: 받는사람,
-    subject: '[포스온컨펌] 새 응답 ' + rows.length + '건',
-    body: body + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
-  });
+  try {
+    MailApp.sendEmail({
+      to: 받는사람,
+      subject: '[포스온컨펌] 새 응답 ' + rows.length + '건',
+      body: body + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
+    });
+    pr.setProperty('mailDate', today);
+    pr.setProperty('mailCount', String(cnt + 1));
+  } catch (err) {
+    // 메일이 실패해도 원본은 시트에 그대로 있습니다
+  }
 
-  pr.setProperty('lastNotified', String(now));
-  pr.setProperty('mailDate', today);
-  pr.setProperty('mailCount', String(cnt + 1));
+  // 실패했더라도 다음 줄로 넘깁니다 — 안 그러면 같은 묶음에 갇혀 알림이 영영 안 옵니다
+  pr.setProperty('lastNotified', String(end));
+}
+
+/* ⛔ 트리거를 걸기 전에 이 함수를 딱 한 번 실행하세요.
+   이미 시트에 쌓여 있던 줄을 한꺼번에 메일로 쏘는 것을 막습니다. */
+function 커서초기화() {
+  var sh = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('컨펌');
+  PropertiesService.getScriptProperties()
+    .setProperty('lastNotified', String(sh ? sh.getLastRow() : 1));
 }
 ```
 
-## 3-3) 15분마다 확인하도록 예약 걸기
+## 3-3) 예약 걸기 전에 — `커서초기화` 한 번 실행
+
+Apps Script 상단 함수 목록에서 **`커서초기화`** 를 고르고 **실행** ▶ 을 한 번 누릅니다.
+(이미 시트에 줄이 있을 때, 그 과거 줄들이 한꺼번에 메일로 날아오는 것을 막습니다)
+
+## 3-4) 15분마다 확인하도록 예약 걸기
 
 Apps Script 왼쪽 **시계 아이콘(트리거)** → **트리거 추가**
 - 실행할 함수: **notifyNew**
