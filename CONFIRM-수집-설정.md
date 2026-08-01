@@ -72,7 +72,17 @@ var 글자상한 = 3000;                      // 한 건당 본문 글자 수 (�
 /* 상태(어디까지 보냈나 · 오늘 몇 통 · 연속 실패)를 ⛔ 한 덩어리로 저장합니다.
    여러 칸에 나눠 저장하면 한쪽만 저장되는 사고가 나서 한도가 깨지거나 알림이 멈춥니다. */
 function 상태읽기(pr) {
-  try { return JSON.parse(pr.getProperty('state') || '{}'); } catch (e) { return {}; }
+  var s = {};
+  try { s = JSON.parse(pr.getProperty('state') || '{}'); } catch (e) { s = {}; }
+  if (s.last === undefined) {          // 옛 방식(칸 나눠 저장)으로 돌던 스크립트에서 넘어온 경우
+    var old = pr.getProperty('lastNotified');
+    if (old) {
+      s.last  = Number(old);
+      s.date  = pr.getProperty('mailDate');
+      s.count = Number(pr.getProperty('mailCount') || 0);
+    }
+  }
+  return s;
 }
 function 상태쓰기(pr, s) { pr.setProperty('state', JSON.stringify(s)); }   // 한 번에 저장
 
