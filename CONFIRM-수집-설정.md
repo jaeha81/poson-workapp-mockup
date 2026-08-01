@@ -94,6 +94,7 @@ function notifyNew() {
     return '■ ' + r[0] + ' / ' + r[1] + '\n' + t;
   }).join('\n\n────────────────────\n\n');
 
+  var sent = false;
   try {
     MailApp.sendEmail({
       to: 받는사람,
@@ -102,16 +103,29 @@ function notifyNew() {
       body: body + (skipped > 0 ? '\n\n※ 한꺼번에 몰려서 앞선 ' + skipped + '건은 메일에서 뺐습니다. 시트에 있습니다.' : '')
            + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
     });
-    pr.setProperty('mailDate', today);
-    pr.setProperty('mailCount', String(cnt + 1));
-    pr.setProperty('lastNotified', String(end));
-    pr.deleteProperty('failCount');
+    sent = true;
   } catch (err) {
-    // 메일 실패 — 두 번까지는 커서를 그대로 두고 다음 트리거에서 다시 시도합니다.
-    // 세 번 연속 실패하면 넘깁니다(같은 묶음에 갇혀 알림이 영영 안 오는 것을 막습니다).
-    var f = Number(pr.getProperty('failCount') || 0) + 1;
-    if (f >= 3) { pr.setProperty('lastNotified', String(end)); pr.deleteProperty('failCount'); }
-    else { pr.setProperty('failCount', String(f)); }
+    // 메일 자체가 실패한 경우입니다 (아래에서 재시도 처리)
+  }
+
+  // ⛔ 메일 발송과 기록 저장을 분리합니다.
+  //    보내고 나서 기록만 실패하면, 커서가 안 밀려 같은 메일을 또 보내게 됩니다.
+  //    그래서 보냈으면 커서부터 먼저 밀고, 통계는 실패해도 무시합니다.
+  if (sent) {
+    try { pr.setProperty('lastNotified', String(end)); } catch (e1) {}
+    try {
+      pr.setProperty('mailDate', today);
+      pr.setProperty('mailCount', String(cnt + 1));
+      pr.deleteProperty('failCount');
+    } catch (e2) {}
+  } else {
+    // 두 번까지는 커서를 그대로 두고 다음 트리거에서 다시 시도합니다.
+    // 세 번 연속 실패하면 넘깁니다 (같은 묶음에 갇혀 알림이 영영 안 오는 것을 막습니다).
+    try {
+      var f = Number(pr.getProperty('failCount') || 0) + 1;
+      if (f >= 3) { pr.setProperty('lastNotified', String(end)); pr.deleteProperty('failCount'); }
+      else { pr.setProperty('failCount', String(f)); }
+    } catch (e3) {}
   }
 }
 
