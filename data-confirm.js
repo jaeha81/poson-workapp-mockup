@@ -105,6 +105,14 @@ function confirmDoneCount(){
          (CONFIRM_ANS[it.id].pick || CONFIRM_ANS[it.id].note)).length;
 }
 
+/* 상단 띠의 「의견 남기기」 버튼 — 어느 화면에서든 컨펌 화면으로 들어갑니다 */
+function goConfirm(e){
+  if(e) e.preventDefault();
+  cur.view = 'confirm';
+  location.hash = '#confirm';
+  render(); markNav();
+}
+
 /* ---------- 화면 ---------- */
 function viewConfirm(){
   const done = confirmDoneCount();

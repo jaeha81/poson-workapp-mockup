@@ -45,6 +45,16 @@ function doPost(e) {
     safeCell(JSON.stringify(d.answers || {}))
   ]);
 
+  // 시트에 쌓는 동시에 메일로도 바로 알립니다 (구글 무료 한도 하루 100통 — 충분합니다)
+  // ⛔ 제목의 [포스온컨펌] 은 그대로 두세요. 이 표시로 메일을 찾아 자동 처리합니다.
+  try {
+    MailApp.sendEmail({
+      to: 'dltkddlf231@gmail.com',                                  // ← 받으실 주소
+      subject: '[포스온컨펌] ' + (safeCell(d.who) || '이름 없음'),
+      body: (d.text || '') + '\n\n— 포스온 목업 컨펌 화면에서 자동 발송'
+    });
+  } catch (err) { /* 메일이 실패해도 시트 기록은 남깁니다 */ }
+
   return ContentService.createTextOutput('ok');
 }
 ```
