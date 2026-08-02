@@ -4454,9 +4454,16 @@ function loadAll(){
   if(typeof s.NOTICE === 'string') NOTICE = s.NOTICE;
   if(typeof s.MANUAL_ON === 'boolean') MANUAL_ON = s.MANUAL_ON;
   refill(ITEMS, s.ITEMS);
-  /* 옛 저장본에는 예전 재고 수량이 들어 있습니다 — 0에서 다시 시작합니다
+  /* 옛 저장본에는 예전 재고 수량이 들어 있습니다 — 0에서 다시 시작합니다.
+     매장에 청구하던 출장비·부품비도 경비에서 빼기로 했으니 옛 기록에서 지웁니다.
      (김기홍 팀장 요청 2026-08-02 3차) */
-  if(s.v < 2) ITEMS.forEach(i => Object.keys(i.q).forEach(k => { i.q[k] = 0; }));
+  if(s.v < 2){
+    ITEMS.forEach(i => Object.keys(i.q).forEach(k => { i.q[k] = 0; }));
+    const gone = ['출장비', '부품비'];
+    TASKS.forEach(t => {
+      if(Array.isArray(t.expenses)) t.expenses = t.expenses.filter(e => !gone.includes(e.kind));
+    });
+  }
   refill(INBOUND, s.INBOUND);
   refill(OUTBOUND, s.OUTBOUND);
   refill(AUDITS, s.AUDITS);
@@ -4665,7 +4672,8 @@ applyHash();
 bump(); render(); markNav(); paintAgo();
 /* 자동 로그인으로 바로 들어온 경우에도 알람을 띄웁니다
    임시(컨펌 알람) — 개발 끝나면 이 두 줄을 지웁니다 */
-if(document.getElementById('login').classList.contains('off')) alarmAfterLogin(false);
+const lgEl = document.getElementById('login');
+if(lgEl && lgEl.classList.contains('off')) alarmAfterLogin(false);
 </script>
 </body>
 </html>
