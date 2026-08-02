@@ -1139,7 +1139,9 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 
 <div class="mockbar">
   <b>화면 초안 (Mockup v1)</b>
-  <span>실제 데이터 아님 · 클릭 동작 테스트용 · 확인/댓글/등록/알림/매뉴얼 전부 눌러보실 수 있습니다</span>
+  <span>실제 데이터 아님 · 넣으신 내용은 <b>이 브라우저에 저장</b>돼 새로고침해도 남습니다
+    <button onclick="resetAll()" style="margin-left:8px;border:1px solid rgba(255,255,255,.5);background:none;
+      color:inherit;border-radius:6px;padding:2px 8px;font:inherit;cursor:pointer">처음으로 되돌리기</button></span>
   <!-- 임시(컨펌용) — 컨펌 끝나면 아래 한 줄을 지웁니다 -->
   <a href="#confirm" onclick="goConfirm(event)" style="margin-left:auto;flex:none;background:var(--orange);
      color:#fff;border-radius:6px;padding:3px 11px;font-weight:700;text-decoration:none">의견 남기기</a>
@@ -1508,6 +1510,7 @@ function render(){
   lastScreen = screen;
   renderNoti(); renderWho();
   if(typeof syncHash === 'function') syncHash();
+  if(typeof saveAll === 'function') saveAll();   /* 바뀐 내용을 이 브라우저에 남깁니다 */
 }
 
 /* ================= 로그인 사용자 · 권한 ================= */
@@ -3742,7 +3745,62 @@ if(typeof window !== 'undefined'){
   setInterval(paintAgo, 30000);
 }
 
+/* ================= 이 브라우저에 저장 =================
+   목업이라 서버가 없습니다. 대신 바뀐 내용을 브라우저에 통째로 담아
+   새로고침하거나 창을 닫았다 켜도 그대로 남게 합니다.
+   (김기홍 팀장 컨펌 1순위 2026-08-02 — 실서비스에서는 서버가 이 자리를 맡습니다) */
+const SAVE_KEY = 'poson_app_v1';
+let saveOn = true;                      /* 불러오는 중에는 저장하지 않습니다 */
+
+function saveAll(){
+  if(!saveOn) return;
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify({
+      v:1, ME, ROOKIES:[...ROOKIES], TASKS, NOTIS, PLANS, NOTICE, PAY_STATE,
+      DUTY, DUTY_PAY, DUTY_AS, STORES, USAGE, ITEMS, INBOUND, CHECKLISTS
+    }));
+  }catch(e){}                           /* 저장 공간이 꽉 차도 화면은 계속 씁니다 */
+}
+
+/* 통째로 바꿀 수 없는 값은 안쪽 내용만 갈아끼웁니다 */
+function refill(target, src){
+  if(!src) return;
+  if(Array.isArray(target)){ target.length = 0; src.forEach(x => target.push(x)); }
+  else { Object.keys(target).forEach(k => delete target[k]); Object.assign(target, src); }
+}
+
+function loadAll(){
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); }catch(e){ return; }
+  if(!s || s.v !== 1) return;
+  saveOn = false;
+  if(s.ME)        ME       = s.ME;
+  if(s.ROOKIES)   ROOKIES  = new Set(s.ROOKIES);
+  if(s.TASKS)     TASKS    = s.TASKS;
+  if(s.NOTIS)     NOTIS    = s.NOTIS;
+  if(s.PLANS)     PLANS    = s.PLANS;
+  if(s.PAY_STATE) PAY_STATE= s.PAY_STATE;
+  if(s.DUTY)      DUTY     = s.DUTY;
+  if(s.DUTY_PAY)  DUTY_PAY = s.DUTY_PAY;
+  if(s.DUTY_AS)   DUTY_AS  = s.DUTY_AS;
+  if(s.STORES)    STORES   = s.STORES;
+  if(s.USAGE)     USAGE    = s.USAGE;
+  if(typeof s.NOTICE === 'string') NOTICE = s.NOTICE;
+  refill(ITEMS, s.ITEMS);
+  refill(INBOUND, s.INBOUND);
+  refill(CHECKLISTS, s.CHECKLISTS);
+  saveOn = true;
+}
+
+/* 시연을 다시 하기 전에 처음 상태로 되돌립니다 */
+function resetAll(){
+  if(!confirm('이 브라우저에 저장된 내용을 지우고 처음 화면으로 되돌립니다. 계속할까요?')) return;
+  try{ localStorage.removeItem(SAVE_KEY); }catch(e){}
+  location.reload();
+}
+
 /* ================= 시작 ================= */
+loadAll();
 applyHash();
 bump(); render(); markNav(); paintAgo();
 </script>
