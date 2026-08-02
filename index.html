@@ -2319,12 +2319,15 @@ document.addEventListener('click', e=>{
 });
 
 /* ================= 등록 모달 ================= */
-function openNew(){
+function openNew(asPlan){
   $('#fKind').innerHTML = WORK_KINDS.map(k=>`<option>${k}</option>`).join('');
   $('#fCat').innerHTML  = WORK_CATS.map(c=>`<option>${c}</option>`).join('');
   $('#people').innerHTML = TEAM.filter(t=>t.name!==ME).map(t=>
     `<label><input type="checkbox" value="${t.name}">${t.name}${ROOKIES.has(t.name)?' <span class="cat k3">신입</span>':''}</label>`).join('');
   markNewDate();
+  /* 예정 업무는 따로 만들지 않고 여기서 체크로 만듭니다 (김기홍 팀장 요청 2026-08-02) */
+  const p = document.getElementById('fPlan');
+  if(p) p.checked = !!asPlan;
   $('#mask').classList.add('on');
 }
 function closeNew(){ $('#mask').classList.remove('on'); }
@@ -3060,25 +3063,14 @@ function viewPlan(){
       : `<div class="desc" style="margin:0">${esc(NOTICE) || '전달 사항 없음'}</div>`}
   </div>
 
-  ${canEdit ? `
   <div class="panel">
-    <h4>예정 업무 추가</h4>
-    <div class="grid2">
-      <div class="f"><label>방문지</label>
-        <div class="ac">
-          <input type="text" id="plStore" autocomplete="off" placeholder="이름 일부만 (예: 산타, 다팜)"
-                 oninput="acSearch2(this.value)" onfocus="acSearch2(this.value)">
-          <div class="ac-list" id="acList2"></div>
-        </div>
-      </div>
-      <div class="f"><label>담당자 (비워두면 미정)</label>
-        <select id="plOwner"><option value="">미정</option>
-          ${TEAM.map(t=>`<option>${t.name}</option>`).join('')}</select></div>
+    <h4>예정 업무는 업무 등록에서 만듭니다</h4>
+    <div class="desc" style="margin:0 0 12px">
+      업무를 등록할 때 <b>「예정 업무로 등록」</b>에 체크하면 여기로 옵니다.
+      날짜가 정해지면 아래 카드를 눌러 <b>업무일</b>을 넣으면 처리할 업무로 넘어갑니다.
     </div>
-    <div class="f"><label>접수내역</label>
-      <input type="text" id="plRecv" placeholder="예) 계산대 입고 확인 (준공승인 지연)"></div>
-    <button class="btn pri" onclick="addPlan()">예정 업무 추가</button>
-  </div>` : ''}
+    <button class="btn pri" onclick="openNew(true)">예정 업무 등록</button>
+  </div>
 
   ${day.length ? `<div class="cardlist">`
       + day.map(p => cur.planId === p.id ? planEdit(p, canEdit) : planCard(p, canEdit)).join('')
@@ -3133,8 +3125,11 @@ function planEdit(p, canEdit){
         <input type="text" id="pe_recv" value="${esc(p.recv)}"></div>
       <div class="f"><label>비고</label>
         <input type="text" id="pe_memo" value="${esc(p.memo||'')}" placeholder="예) 준공승인 지연 — 오후에 다시 확인"></div>
+      <div class="f"><label>업무일 — 날짜를 넣고 아래 버튼을 누르면 처리할 업무로 넘어갑니다</label>
+        <input type="date" id="pe_date" value="${esc(p.date||'')}"></div>
       <div class="formbtns" style="margin-top:0">
         <button class="btn pri" onclick="savePlan(${p.id})">저장</button>
+        <button class="btn" onclick="toTask(${p.id})">이 날짜로 업무 등록</button>
         <button class="btn" onclick="openPlan(${p.id})">닫기</button>
       </div>`
       : `<div class="meta" style="margin-top:8px">
@@ -3184,23 +3179,6 @@ function delPlanNote(id, i){
   const p = PLANS.find(x=>x.id===id);
   p.notes.splice(i, 1); toast('메모 삭제'); render();
 }
-function acSearch2(q){
-  const box = $('#acList2');
-  const hit = searchStores(q, 8);
-  box.innerHTML = hit.length
-    ? hit.map(s=>`<button class="ac-i" onclick="ac2Pick('${esc(s.name).replace(/'/g,"\\'")}')">
-        <span class="ac-n">${esc(s.name)}</span><span class="ac-m">${esc(s.kind)} · ${esc(s.code)}</span></button>`).join('')
-    : `<div class="ac-none">찾은 거래처가 없습니다</div>`;
-  box.classList.add('on');
-}
-function ac2Pick(n){ $('#plStore').value = n; $('#acList2').classList.remove('on'); }
-function addPlan(){
-  const store = $('#plStore').value.trim(), recv = $('#plRecv').value.trim();
-  if(!store || !recv){ toast('방문지와 접수내역을 입력해주세요'); return; }
-  PLANS.push({id:Date.now(), date:cur.date, store, recv, owner:$('#plOwner').value, ack:'', memo:''});
-  $('#plStore').value=''; $('#plRecv').value='';
-  toast(`예정 업무 추가 — ${store}`); render();
-}
 function ackPlan(id){
   const p = PLANS.find(x=>x.id===id);
   p.ack = ME; if(!p.owner) p.owner = ME;
@@ -3209,15 +3187,19 @@ function ackPlan(id){
 function delPlan(id){ PLANS = PLANS.filter(x=>x.id!==id); toast('삭제'); render(); }
 function toTask(id){
   const p = PLANS.find(x=>x.id===id);
+  /* 펼친 카드에서 업무일을 고쳤으면 그 날짜로 넘깁니다 (김기홍 팀장 요청) */
+  const din = document.getElementById('pe_date');
+  const date = (din && din.value) ? din.value : p.date;
   TASKS.unshift({
     id:Date.now(), store:p.store, kind:'AS방문', cat:'POS', title:p.recv,
-    body:`[접수내역] ${p.recv}`, author:ME, date:p.date, due:p.date,
+    body:`[접수내역] ${p.recv}`, author:ME, date, due:date,
     status:'doing', audience:'all', mine:true,
     acks:[], targets:STAFF.filter(n=>n!==ME), owners:p.owner?[p.owner]:[],
     comments:[], used:[], expenses:[], reports:[], checked:{}
   });
   PLANS = PLANS.filter(x=>x.id!==id);
-  toast(`업무로 등록 — ${p.store}`);
+  cur.planId = null; cur.date = date;
+  toast(`업무로 등록 — ${p.store} · ${date}`);
   cur.view='tasks'; cur.filter='today'; render(); markNav();
 }
 function saveNotice(){ NOTICE = $('#ntIn').value; toast('전달 사항 저장 — 전원에게 표시됩니다'); render(); }
