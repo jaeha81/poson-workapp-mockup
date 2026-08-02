@@ -6,19 +6,18 @@
 
 /* 팀 — 시트 담당자 열 순서 그대로
    role  : admin(관리자) · accounting(회계담당자) · engineer(뷰어)
-   duty  : 당직 대상자 — 관리자가 직원 등록 후 켭니다 (김기홍 팀장 요청 2026-08-02) */
+   duty  : 당직 대상자 — 관리자가 직원 등록 후 켭니다 (김기홍 팀장 요청 2026-08-02)
+   uid/pw: 로그인 아이디와 암호. 관리자가 계정을 만들어 직원에게 전달합니다
+           (김기홍 팀장 요청 2026-08-02 3차)
+   ⚠️ 아래 암호는 시연용 임시값입니다. 실서비스에서는 서버에 암호화해서 보관합니다. */
 const TEAM = [
-  {id:'kkh', name:'김기홍', rank:'팀장', role:'admin',    car:true, duty:true },
-  {id:'kdh', name:'김두혁', rank:'과장', role:'admin',    car:true, duty:true },
-  {id:'lyj', name:'임영준', rank:'대리', role:'engineer', car:true, duty:true },
-  {id:'jdh', name:'장두환', rank:'대리', role:'engineer', car:true, duty:false },
-  {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true, duty:false }
+  {id:'kkh', name:'김기홍', rank:'팀장', role:'admin',    car:true, duty:true,  uid:'kkh', pw:'1234'},
+  {id:'kdh', name:'김두혁', rank:'과장', role:'admin',    car:true, duty:true,  uid:'kdh', pw:'1234'},
+  {id:'lyj', name:'임영준', rank:'대리', role:'engineer', car:true, duty:true,  uid:'lyj', pw:'1234'},
+  {id:'jdh', name:'장두환', rank:'대리', role:'engineer', car:true, duty:false, uid:'jdh', pw:'1234'},
+  {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true, duty:false, uid:'kdw', pw:'1234'}
 ];
 
-/* 가입 신청 — 관리자가 승인해야 직원이 됩니다 (김기홍 팀장 요청 2026-08-02) */
-let SIGNUPS = [
-  {id:'sg1', name:'박서준', rank:'사원', email:'seojun@poson.co.kr', at:'2026-08-01 17:20'}
-];
 
 /* 재고 보관 위치 = 창고(사무실) + 차량(담당자별)
    차량은 고정이 아닙니다. 직원 · 권한에서 "차량 재고"를 켠 사람만 열에 나타납니다. */
@@ -50,12 +49,10 @@ const CAT_LESSONS = {
   '신규/교육/오픈': ['1-1','1-2','1-4','11-2','11-3']
 };
 
-/* 경비 항목 */
-const EXPENSE_KINDS = ['출장비', '주차/톨비', '식대', '숙박비', '부품비', '택배비', '기타'];
-
-/* 매장에 청구하는 항목 — 회사가 직원에게 주는 경비가 아니라 매장에서 받는 돈입니다.
-   (김기홍 팀장 확인 2026-08-02) 경비 정산에서 따로 셉니다. */
-const STORE_BILLED = ['출장비', '부품비'];
+/* 경비 항목 — 회사가 직원에게 주는 것만 남깁니다.
+   매장에 청구하는 출장비 · 부품비는 뺐습니다
+   (김기홍 팀장 요청 2026-08-02 3차: "매장에서 지급하는 항목을 아예 삭제") */
+const EXPENSE_KINDS = ['주차/톨비', '식대', '숙박비', '택배비', '기타'];
 
 /* 품목 마스터 + 위치별 수량 (2026-04 재고 실사 기준)
    price: 단가 — 시트에 없음. 관리자가 앱에서 입력하는 필드 */
@@ -129,6 +126,11 @@ const ITEMS = [
   {id:'S11', cat:'용지', name:'반지고리라벨지',                 unit:'롤', price:null, q:{office:61,  kdh:0, kkh:0, lyj:0, kdw:0, jdh:0}}
 ];
 
+/* 재고 수량은 0에서 시작합니다 — 실제 수량은 「입고 등록」(수량 증가)과
+   「재고 실사」(현재고 조정)로 채웁니다.
+   (김기홍 팀장 요청 2026-08-02 3차: "현재 등록된 재고 수량 0개로 초기화") */
+ITEMS.forEach(i => Object.keys(i.q).forEach(k => { i.q[k] = 0; }));
+
 /* 사용 이력 — "어느 날 · 어떤 매장에 · 몇 개 나갔나"
    예상(선차감) → 확정 / 반납 상태가 함께 남습니다 */
 let USAGE = [
@@ -146,3 +148,10 @@ const INBOUND = [
   {id:'IN02', date:'2026-04-22', itemId:'A08', qty:2,  loc:'office', from:'아이코다',  memo:''},
   {id:'IN01', date:'2026-04-14', itemId:'V06', qty:5,  loc:'office', from:'KIS',       memo:'멀티패드 정기 입고'}
 ];
+
+/* 출고 이력 — 택배로 보내거나 손으로 내보낸 것을 직접 적습니다
+   (김기홍 팀장 요청 2026-08-02 3차: "출고 현황을 만들어서 수기로 등록") */
+const OUTBOUND = [];
+
+/* 재고 실사 이력 — 실사한 날 · 품목 · 위치 · 조정 전/후 수량 */
+const AUDITS = [];
