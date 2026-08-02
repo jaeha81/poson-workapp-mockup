@@ -1074,6 +1074,26 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .ast{flex:1;min-width:0;line-height:1.5;white-space:normal}
 .aswhy{display:block;color:var(--orange-600);font-size:12px;font-weight:600;margin-top:2px}
 .asrow .btn.sm{flex-shrink:0;align-self:center}
+/* AS 방문 시각 — 야간(18시~08시)은 눈에 띄게 (김기홍 팀장 요청 2026-08-02 4차) */
+.astm{display:block;font-size:11.5px;font-weight:700;color:var(--navy);margin-top:2px;white-space:nowrap}
+.astm.night{color:var(--orange-600)}
+button.astm{background:none;border:1px dashed var(--line);border-radius:6px;
+  padding:1px 5px;color:var(--t3);cursor:pointer;font-family:inherit}
+button.astm:hover{border-color:var(--navy);color:var(--navy)}
+b.astm.none{color:var(--t4);font-weight:600}
+/* 주당직 주기를 날짜로 (김기홍 팀장 요청 2026-08-02 4차) */
+.wkdays{display:flex;flex-direction:column;gap:3px;align-items:center}
+.wkdays .wk{display:inline-block;padding:2px 7px;border:1px solid var(--navy-line);
+  background:var(--navy-50);color:var(--navy);border-radius:6px;
+  font-size:11.5px;font-weight:800;white-space:nowrap}
+.wkdays small{color:var(--t3);font-weight:600;font-size:11px}
+/* 당직자별로 행이 확실히 갈라져 보이게 (김기홍 팀장 요청 2026-08-02 4차) */
+.ktab.exp td{border-bottom:2px solid var(--line)}
+.ktab.exp tr:last-child td{border-bottom:none}
+.ktab.exp td:first-child{border-left:3px solid var(--navy);background:var(--navy-50)}
+/* 미사용(퇴사) 처리한 직원 줄 */
+.prow.is-off{opacity:.55}
+.prow.is-off .nm{text-decoration:line-through}
 /* 좁은 화면에서 표가 잘리는 것을 미리 알려줍니다 */
 .swipe{font-size:12px;color:var(--t3);margin:0 2px 7px;display:flex;align-items:center;gap:5px}
 .swipe::before{content:'↔';font-size:13px;color:var(--navy);font-weight:700}
@@ -1349,8 +1369,12 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
           <select id="fCat" onchange="fillChecks()"></select>
         </div>
         <div class="f">
-          <label>업무일 <span style="font-weight:500;color:var(--t3)">— 비워도 됨</span></label>
-          <input type="date" id="fDate" value="2026-07-29" onchange="markNewDate()">
+          <label>업무일 · 시각 <span style="font-weight:500;color:var(--t3)">— 비워도 됨</span></label>
+          <!-- 시각은 AS 외근 당직비 판단 근거입니다 (김기홍 팀장 요청 2026-08-02 4차) -->
+          <div style="display:flex;gap:6px">
+            <input type="date" id="fDate" value="2026-07-29" onchange="markNewDate()" style="flex:1;min-width:0">
+            <input type="time" id="fTime" style="flex:0 0 100px" onchange="markNewDate()">
+          </div>
           <span class="dhint" id="fDateHint"></span>
         </div>
       </div>
@@ -1361,6 +1385,13 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <label class="opt planopt">
         <input type="checkbox" id="fPlan" onchange="togglePlanMode()">
         <span><b>예정 업무로 등록</b> — 아직 확정 전이면 체크. 예정 업무 목록으로 들어갑니다</span>
+      </label>
+      <!-- AS 외근을 업무 등록에서 함께 올립니다 (김기홍 팀장 요청 2026-08-02 1차·4차) -->
+      <label class="opt">
+        <input type="checkbox" id="fAs">
+        <span><b>AS 외근으로 함께 등록</b> — 당직 기간 밖 방문이면 체크.
+          경비 정산의 <b>AS 외근 내역</b>에 위 시각과 함께 올라갑니다
+          (18시 이후 · 8시 전이면 야간으로 표시하고 지급 대상으로 올립니다)</span>
       </label>
 
       <!-- 현장 체크리스트 — 등록자가 고르고, 없는 항목은 새로 만듭니다 (김기홍 팀장 요청 2026-08-02) -->
@@ -1443,8 +1474,10 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
 let ME = '임영준';
-/* 직원이 승인돼 늘어나면 바로 반영되도록 그때그때 셉니다 */
-const staffNames = () => TEAM.map(t => t.name);
+/* 직원이 승인돼 늘어나면 바로 반영되도록 그때그때 셉니다.
+   미사용(퇴사) 처리한 사람은 빠집니다 (김기홍 팀장 요청 2026-08-02 4차) */
+const activeTeam = () => TEAM.filter(t => !t.off);
+const staffNames = () => activeTeam().map(t => t.name);
 const meObj  = () => TEAM.find(t => t.name === ME) || TEAM[0];
 const isAdmin = () => meObj().role === 'admin';
 /* 회계담당자 — 경비 정산을 전원 분까지 보고 처리할 수 있는 권한 (김기홍 팀장 요청 2026-08-02) */
@@ -1738,8 +1771,8 @@ function viewStock(){
     ${q?`<button class="btn" onclick="cur.sq='';render()">지우기</button>`:''}
     ${isAdmin()
       ? `<button class="btn pri" onclick="addItem()">+ 품목 추가</button>
-         <button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`
-      : `<button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>`}
+         <button class="btn" onclick="downloadStockCsv()">엑셀 내려받기</button>`
+      : `<button class="btn" onclick="downloadStockCsv()">엑셀 내려받기</button>`}
   </div>`;
 
   /* ---------- 검색 중 ---------- */
@@ -1827,6 +1860,14 @@ function stockCardList(list){
   }).join('');
 }
 
+/* 재고 현황을 엑셀로 — 위치별 수량을 그대로 옮깁니다 */
+function downloadStockCsv(){
+  const out = [['품목', '분류', '단가', '단위', ...LOCATIONS.map(l => `${l.name}(${l.kind})`), '합계']];
+  ITEMS.forEach(i => out.push([i.name, i.cat, i.price || '', i.unit,
+                               ...LOCATIONS.map(l => i.q[l.id] || 0), itemTot(i)]));
+  downloadCsv('포스온_재고현황.csv', out);
+}
+
 function addItem(){
   const name = prompt('추가할 품목명을 입력하세요 (예: KIS-SP420QN 멀티패드)');
   if(!name) return;
@@ -1848,8 +1889,12 @@ function viewInbound(){
   <div class="panel">
     <h4>입고 등록 <span style="color:var(--t3);font-weight:500">— 적은 수량만큼 현재고에 <b>더합니다</b></span></h4>
     <div class="grid2">
-      <div class="f"><label>품목</label>
-        <select id="inItem">${ITEMS.map(i=>`<option value="${i.id}">[${i.cat}] ${esc(i.name)}</option>`).join('')}</select></div>
+      <!-- 품목이 많아 목록만으로는 찾기 어렵습니다 — 쳐서 좁히고 목록에서도 고릅니다
+           (김기홍 팀장 요청 2026-08-02 4차: "드랍리스트와 검색 동시 사용") -->
+      <div class="f"><label>품목 <span style="font-weight:500;color:var(--t3)">— 이름 일부를 치면 목록이 좁혀집니다</span></label>
+        <input type="text" id="inItem" list="itemDL" autocomplete="off"
+               placeholder="예) 용지 · 프린터 — 또는 오른쪽 화살표로 목록에서 고르기">
+        ${itemDatalist()}</div>
       <div class="f"><label>입고일</label><input type="date" id="inDate" value="2026-07-29"></div>
     </div>
     <div class="grid2">
@@ -1876,10 +1921,28 @@ function viewInbound(){
     </div>`;
   }).join('')}`;
 }
+/* 품목 이름 목록 — 입력칸에 붙여 검색과 드롭다운을 함께 씁니다 */
+function itemDatalist(){
+  return `<datalist id="itemDL">${ITEMS.map(i =>
+    `<option value="${esc(i.name)}">[${esc(i.cat)}] ${esc(i.unit)}</option>`).join('')}</datalist>`;
+}
+/* 친 이름으로 품목 찾기 — 정확히 같은 이름 먼저, 없으면 이름에 들어간 품목 하나만 남을 때 */
+function findItemByName(v){
+  const q = (v || '').trim();
+  if(!q) return null;
+  const exact = ITEMS.find(i => i.name === q);
+  if(exact) return exact;
+  const hit = ITEMS.filter(i => i.name.replace(/\s/g, '').includes(q.replace(/\s/g, '')));
+  return hit.length === 1 ? hit[0] : (hit.length > 1 ? {many:hit.length} : null);
+}
+
 function saveInbound(){
-  const id = $('#inItem').value, qty = Number(($('#inQty').value||'').replace(/[^0-9]/g,''));
+  const it = findItemByName($('#inItem').value);
+  if(!it){ toast('품목을 목록에서 골라주세요 — 이름 일부만 쳐도 목록이 나옵니다'); return; }
+  if(it.many){ toast(`이름이 겹치는 품목이 ${it.many}개입니다 — 목록에서 하나를 골라주세요`); return; }
+  const id = it.id, qty = Number(($('#inQty').value||'').replace(/[^0-9]/g,''));
   if(!qty){ toast('수량을 입력해주세요'); return; }
-  const loc = $('#inLoc').value, it = itemOf(id);
+  const loc = $('#inLoc').value;
   const price = ($('#inPrice').value||'').replace(/[^0-9]/g,'');
   if(price) it.price = Number(price);
   it.q[loc] = (it.q[loc]||0) + qty;
@@ -1918,6 +1981,35 @@ function viewAudit(){
       <div class="f"><label>비고</label><input type="text" id="adMemo" placeholder="선택 — 예: 월말 전체 실사"></div>
     </div>
     <button class="btn pri" onclick="saveAudit()">실사 반영</button>
+  </div>
+
+  <!-- 품목과 수량이 많아 한 건씩 넣기 어렵습니다 — 엑셀로 통째로 올립니다
+       (김기홍 팀장 요청 2026-08-02 4차) -->
+  <div class="panel">
+    <h4>엑셀로 한 번에 실사 <span style="color:var(--t3);font-weight:500">— 품목명 · 위치 · 세어본 수량 순서</span></h4>
+    <div class="desc" style="margin:0 0 12px">
+      <b>「실사 양식 내려받기」</b>를 누르면 지금 등록된 수량이 그대로 담긴 파일이 나옵니다.
+      엑셀에서 <b>세어본 수량만 고쳐서</b> 저장한 뒤, 그 파일을 아래에서 고르고 「실사 반영」을 누르세요.<br>
+      엑셀에서 세 칸을 복사해 붙여넣어도 됩니다. 위치를 비우면 <b>사무실</b>로 봅니다.
+      등록된 수량과 같은 줄은 건너뜁니다.
+    </div>
+    <div class="formbtns" style="margin:0 0 12px">
+      <button class="btn" onclick="downloadAuditForm()">실사 양식 내려받기</button>
+    </div>
+    <div class="f"><label>엑셀에서 복사한 내용 붙여넣기</label>
+      <textarea id="adPaste" style="min-height:110px;font-family:ui-monospace,monospace;font-size:12px"
+        placeholder="포스용지 80x80&#9;사무실&#9;120&#10;라벨지 40x30&#9;김두혁&#9;8"
+        oninput="cur.adPaste=this.value">${esc(cur.adPaste||'')}</textarea></div>
+    <div class="formbtns" style="margin-top:0">
+      <button class="btn pri" onclick="uploadAudits()">실사 반영</button>
+      <label class="btn" style="cursor:pointer">
+        CSV 파일 고르기
+        <input type="file" accept=".csv,.txt" style="display:none" onchange="readAuditFile(this)">
+      </label>
+      ${cur.adPaste?`<button class="btn" onclick="cur.adPaste='';render()">지우기</button>`:''}
+    </div>
+    <p style="font-size:12px;color:var(--t3);margin-top:8px">
+      엑셀 파일(.xlsx)을 그대로 올리는 것은 실제 앱에서 지원합니다. 목업에서는 복사·붙여넣기와 CSV로 같은 결과를 확인하실 수 있습니다.</p>
   </div>` : ''}
 
   <h4 style="font-size:13px;font-weight:700;color:var(--t2);margin:0 0 10px">실사 이력</h4>
@@ -1953,6 +2045,72 @@ function saveAudit(){
                   was, now, by:ME, memo:$('#adMemo').value});
   toast(`실사 반영 — ${it.name} · ${locName(loc)} ${was} → ${now}`);
   render();
+}
+
+/* ===== 재고 실사 엑셀 업로드 (김기홍 팀장 요청 2026-08-02 4차)
+   한 줄 = 품목명 / 위치 / 세어본 수량. 거래처 올리기와 같은 방식으로 읽습니다. ===== */
+function downloadAuditForm(){
+  const out = [['품목명', '위치', '세어본 수량']];
+  ITEMS.forEach(i => LOCATIONS.forEach(l => out.push([i.name, l.name, i.q[l.id] || 0])));
+  downloadCsv(`포스온_재고실사양식_${cur.date}.csv`, out);
+}
+function parseAuditRows(text){
+  const out = [], bad = [];
+  (text || '').split(/\r?\n/).forEach((line, i) => {
+    const raw = line.trim();
+    if(!raw) return;
+    const c = splitRow(raw).map(x => x.trim());
+    if(i === 0 && /품목|수량/.test(raw)) return;              /* 제목 줄 건너뛰기 */
+    const name = c[0] || '';
+    const where = c.length >= 3 ? (c[1] || '') : '';
+    const qtyRaw = c.length >= 3 ? c[2] : c[1];
+    const it = ITEMS.find(x => x.name === name)
+            || ITEMS.find(x => x.name.replace(/\s/g, '') === name.replace(/\s/g, ''));
+    const loc = where
+      ? LOCATIONS.find(l => l.name === where || l.id === where)
+      : OFFICE;
+    const q = String(qtyRaw == null ? '' : qtyRaw).replace(/[^0-9]/g, '');
+    if(!it || !loc || q === ''){ bad.push(raw); return; }
+    out.push({ it, loc: loc.id, now: Number(q) });
+  });
+  return { out, bad };
+}
+function uploadAudits(){
+  const { out, bad } = parseAuditRows(cur.adPaste || '');
+  if(!out.length){
+    toast(bad.length ? '읽을 수 있는 줄이 없습니다 — 품목명이 등록된 이름과 같은지 확인해주세요'
+                     : '붙여넣은 내용이 없습니다');
+    return;
+  }
+  const date = ($('#adDate') && $('#adDate').value) || cur.date;
+  let hit = 0, same = 0;
+  out.forEach(r => {
+    const was = r.it.q[r.loc] || 0;
+    if(was === r.now){ same++; return; }
+    r.it.q[r.loc] = r.now;
+    AUDITS.unshift({id:'AD'+Date.now()+'-'+hit, date, itemId:r.it.id, loc:r.loc,
+                    was, now:r.now, by:ME, memo:'엑셀 실사'});
+    hit++;
+  });
+  cur.adPaste = '';
+  toast(`실사 반영 — 바뀐 줄 ${hit}개 · 그대로인 줄 ${same}개${bad.length ? ` · 못 읽은 줄 ${bad.length}` : ''}`);
+  render();
+}
+function readAuditFile(el){
+  const f = el.files && el.files[0]; if(!f) return;
+  const rd = new FileReader();
+  rd.onload = () => {
+    const buf = rd.result;
+    let txt = new TextDecoder('utf-8').decode(buf);
+    let how = 'UTF-8';
+    if(txt.includes('�')){                    /* 글자가 깨졌으면 CP949 로 다시 */
+      try{ txt = new TextDecoder('euc-kr').decode(buf); how = 'CP949(엑셀 한글)'; }catch(e){}
+    }
+    cur.adPaste = txt; render();
+    toast(`${f.name} 을 ${how} 로 읽었습니다 — 내용을 확인하고 「실사 반영」을 누르세요`);
+  };
+  rd.readAsArrayBuffer(f);
+  el.value = '';
 }
 
 /* 출고 현황 — 택배로 보내거나 손으로 내보낸 것을 직접 적습니다
@@ -2131,6 +2289,8 @@ function viewDetail(id){
     <h2>${esc(t.title)}</h2>
     <div class="meta">
       <span>오더 담당 <b style="color:var(--navy)">${t.owners&&t.owners.length?t.owners.map(esc).join(', '):'미지정'}</b></span>
+      <span>업무일 <b>${esc(t.date||'')}${t.time?` ${esc(t.time)}`:''}</b>${
+        isNightTime(t.time) ? ' <span class="cat" style="color:var(--orange-600)">야간</span>' : ''}</span>
     </div>
     <div class="desc">${esc(t.body)}</div>
     ${t.mine ? '' : (iAcked(t)
@@ -2610,7 +2770,7 @@ function openNew(asPlan){
   $('#fCat').innerHTML  = WORK_CATS.map(c=>`<option>${c}</option>`).join('');
   /* 관리자도 담당자로 고를 수 있게 본인 포함 전원을 띄웁니다
      (김기홍 팀장 요청 2026-08-02 3차: "업무등록 할 때 관리자는 안 보입니다") */
-  $('#people').innerHTML = TEAM.map(t=>
+  $('#people').innerHTML = activeTeam().map(t=>
     `<label><input type="checkbox" value="${esc(t.name)}">${esc(t.name)}${t.name===ME?' <span class="cat k1">나</span>':''}${ROOKIES.has(t.name)?' <span class="cat k3">신입</span>':''}</label>`).join('');
   markNewDate();
   fillChecks();
@@ -2619,6 +2779,8 @@ function openNew(asPlan){
   if(p) p.checked = !!asPlan;
   const mn = document.getElementById('fManual');
   if(mn) mn.checked = true;
+  const ab = document.getElementById('fAs');
+  if(ab) ab.checked = false;
   $('#mask').classList.add('on');
 }
 /* ===== 등록 모달의 체크리스트 고르기 (김기홍 팀장 요청 2026-08-02) ===== */
@@ -2649,8 +2811,9 @@ function pickedChecks(){
 }
 function closeNew(){ $('#mask').classList.remove('on'); }
 function clearNewForm(){
-  ['fTitle','fBody','fRecv','fStore'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  ['fTitle','fBody','fRecv','fStore','fTime'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
   const p = document.getElementById('fPlan'); if(p) p.checked = false;
+  const a = document.getElementById('fAs'); if(a) a.checked = false;
 }
 /* 고른 날이 휴일이면 그 자리에서 알려줍니다 (공휴일 메뉴를 따로 두지 않는 대신) */
 function markNewDate(){
@@ -2689,8 +2852,9 @@ function createTask(){
   }
   if(!owners.length){ toast('오더 담당자를 1명 이상 선택해주세요'); return; }
   const targets = staffNames().filter(n => n !== ME);   // 내용은 전원 공유
+  const time = ($('#fTime').value || '').trim();
   TASKS.unshift({
-    id: Date.now(), store,
+    id: Date.now(), store, time,
     kind: $('#fKind').value, cat: $('#fCat').value, title,
     body: (recv ? `[접수내역] ${recv}\n` : '') + ($('#fBody').value.trim() || '(내용 없음)'),
     author: ME, date, due: date,
@@ -2700,9 +2864,20 @@ function createTask(){
     checks: pickedChecks(),
     manual: !document.getElementById('fManual') || document.getElementById('fManual').checked
   });
+  /* AS 외근으로 체크하면 경비 정산의 AS 외근 내역에도 함께 올립니다
+     (김기홍 팀장 요청 2026-08-02 4차 — 시각이 야간이면 당직비 지급 대상) */
+  let asNote = '';
+  const asBox = document.getElementById('fAs');
+  if(asBox && asBox.checked){
+    const night = isNightTime(time);
+    DUTY_AS.push({ d:date, tm:time, who:owners[0], t:`${store} — ${title}`,
+                   pay:night, why: night ? '야간(18시 이후) 방문 — 당직비 지급 대상' : '' });
+    asNote = night ? ` · AS 외근 등록 (${time} 야간 — 지급 대상)`
+                   : ` · AS 외근 등록${time ? ` (${time})` : ' (시각 미입력)'}`;
+  }
   closeNew(); clearNewForm();
   const rk = owners.filter(n=>ROOKIES.has(n));
-  const holNote = isHoliday(date) ? ' · 휴일 업무라 당직비 대상입니다' : '';
+  const holNote = (isHoliday(date) ? ' · 휴일 업무라 당직비 대상입니다' : '') + asNote;
   toast(rk.length
     ? `등록 완료 — 오더 ${owners.join(', ')} 알림 발송 · 신입 ${rk.join(',')}에게 매뉴얼 자동 첨부${holNote}`
     : `등록 완료 — 오더 ${owners.join(', ')}에게 알림 발송${holNote}`);
@@ -3098,6 +3273,24 @@ function spreadDuty(wk, name){
   return n;
 }
 
+/* ================= 엑셀 내려받기 =================
+   화면에 보이는 표를 그대로 파일로 만들어 내려받습니다 (.csv — 엑셀에서 바로 열립니다).
+   맨 앞에 BOM 을 붙여야 한글이 깨지지 않습니다.
+   (김기홍 팀장 요청 2026-08-02 4차: "엑셀 내려받기 — 경비 · 업무량 집계") */
+function csvCell(v){
+  const s = String(v == null ? '' : v);
+  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+}
+function downloadCsv(filename, rows){
+  const body = rows.map(r => r.map(csvCell).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob(['﻿' + body], {type:'text/csv;charset=utf-8'}));
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  toast(`${filename} 내려받았습니다 — 엑셀에서 바로 열립니다`);
+}
+
 /* ================= 경비 정산 =================
    「포스온 AS부서 N월 당직현황」 표를 화면으로 옮긴 것입니다.
    (1) 주당직 수당 — 당직 일정에서 자동으로 옵니다 (그 달에 든 금요일마다 한 주기)
@@ -3158,6 +3351,18 @@ function toggleAsPay(i){
   toast(DUTY_AS[i].pay ? 'AS 수당 지급 대상으로 올림' : '지급 대상에서 뺐습니다');
   render();
 }
+/* 옛 AS 내역에는 방문 시각이 없습니다 — 여기서 채워 넣습니다
+   (김기홍 팀장 요청 2026-08-02 4차) */
+function setAsTime(i){
+  const a = DUTY_AS[i]; if(!a) return;
+  const v = prompt(`${a.t}\n\n방문 시각을 24시간으로 적어주세요 (예: 19:30)`, a.tm || '');
+  if(v === null) return;
+  const t = v.trim();
+  if(t && !/^\d{1,2}:\d{2}$/.test(t)){ toast('시:분 형식으로 적어주세요 — 예) 19:30'); return; }
+  a.tm = t ? (t.length === 4 ? '0' + t : t) : '';
+  toast(a.tm ? `방문 시각 ${a.tm}${isNightTime(a.tm) ? ' — 야간이라 당직비 지급 대상입니다' : ''}` : '방문 시각을 비웠습니다');
+  render();
+}
 function setPayRate(k, v){
   DUTY_PAY[k] = Number(String(v).replace(/[^0-9]/g, '')) || 0;
   toast('단가 수정 — ' + DUTY_PAY[k].toLocaleString() + '원');
@@ -3179,21 +3384,15 @@ function taskExpensesOf(ym){
   return out.sort((a, b) => a.d < b.d ? -1 : 1);
 }
 
-function viewExpense(){
-  const ym = cur.em;
-  const [yy, mm] = ym.split('-').map(Number);
+/* 그 달 정산에 들어갈 값을 한 번에 계산합니다 — 화면과 엑셀 내려받기가 같은 값을 씁니다 */
+function expenseData(ym){
   /* 관리자와 회계담당자만 전 직원 것을 봅니다. 나머지는 본인 것만 (김기홍 팀장 요청 2026-08-02) */
   const seeAll  = canSeeAllExpense();
-  const canEdit = seeAll;
-  const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
-  const won = n => n.toLocaleString() + '원';
-
-  const dc     = dutyWeekCount(ym);   /* 이름 -> { weeks, fd[] } — 금~목 한 주기가 1 */
-  const asList = DUTY_AS.filter(a => a.d.startsWith(ym) && (seeAll || a.who === ME));
+  const dc      = dutyWeekCount(ym);   /* 이름 -> { weeks, fd[] } — 금~목 한 주기가 1 */
+  const asList  = DUTY_AS.filter(a => a.d.startsWith(ym) && (seeAll || a.who === ME));
   /* 매장에 청구하는 항목(출장비·부품비)은 경비에서 아예 뺐습니다
      (김기홍 팀장 요청 2026-08-02 3차) — 남은 것은 전부 회사가 주는 경비입니다 */
   const expCorp = taskExpensesOf(ym).filter(e => seeAll || e.who === ME);
-  const exps    = expCorp;
 
   /* 그 달에 당직을 섰거나 · AS를 나갔거나 · 업무 경비를 쓴 사람을 모두 올립니다
      (김기홍 팀장 요청: 인원별로 받을 돈을 한 줄에서 보게) */
@@ -3212,8 +3411,57 @@ function viewExpense(){
              exAmt: ex.reduce((s, e) => s + e.amt, 0),
              duty: d.weeks * DUTY_PAY.week + asPay.length * DUTY_PAY.asVisit };
   });
-  const totDuty = rows.reduce((s, r) => s + r.duty, 0);
-  const totExp  = expCorp.reduce((s, e) => s + e.amt, 0);
+  return { seeAll, rows, exps: expCorp,
+           totDuty: rows.reduce((s, r) => s + r.duty, 0),
+           totExp : expCorp.reduce((s, e) => s + e.amt, 0) };
+}
+
+/* 경비 정산을 엑셀 파일로 — 인원별 지급액과 업무 경비 내역을 한 파일에 담습니다
+   (김기홍 팀장 요청 2026-08-02 4차) */
+function downloadExpenseCsv(){
+  const ym = cur.em;
+  const { seeAll, rows, exps, totDuty, totExp } = expenseData(ym);
+  const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
+  const out = [];
+  out.push([`포스온 경비 정산 — ${ym.replace('-', '년 ')}월`, seeAll ? '전 직원' : `${ME} 님`]);
+  out.push([]);
+  out.push(['당직자', '주당직 기간(금~목)', '주기 수', 'AS 외근 (일자 · 시각 · 내용 · 지급)', '지급 건수', '업무 경비', '지급액', '지급현황']);
+  rows.forEach(r => {
+    out.push([
+      r.n,
+      r.d.fd.map(dutyWeekRange).join(' / '),
+      r.d.weeks,
+      r.as.map(a => `${fmt(a.d)} ${a.tm || '시각없음'} ${a.t}${a.pay ? ' [지급]' : ''}`).join(' / '),
+      r.asPay.length,
+      r.exAmt,
+      r.duty + r.exAmt,
+      PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'
+    ]);
+  });
+  out.push(['합계', '', rows.reduce((s, r) => s + r.d.weeks, 0), '',
+            rows.reduce((s, r) => s + r.asPay.length, 0), totExp, totDuty + totExp, '']);
+  out.push([]);
+  out.push(['업무에 등록된 경비']);
+  out.push(['일자', '매장', '업무', '담당', '항목', '금액', '영수증']);
+  exps.forEach(e => out.push([fmt(e.d), e.store, e.title, e.who, e.kind, e.amt, e.receipt ? '첨부됨' : '없음']));
+  out.push(['합계', '', '', '', '', totExp, '']);
+  const notes = payNotesOf(ym);
+  if(notes.length){
+    out.push([]);
+    out.push(['지급 특이사항']);
+    notes.forEach(r => out.push([r.t, r.n, r.b]));
+  }
+  downloadCsv(`포스온_경비정산_${ym}.csv`, out);
+}
+
+function viewExpense(){
+  const ym = cur.em;
+  const [yy, mm] = ym.split('-').map(Number);
+  const canEdit = canSeeAllExpense();
+  const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
+  const won = n => n.toLocaleString() + '원';
+
+  const { seeAll, rows, exps, totDuty, totExp } = expenseData(ym);
 
   const rate = (k, label, note) => `
     <div class="stot"><div class="k">${label} <span style="font-weight:500">${note}</span></div>
@@ -3221,10 +3469,16 @@ function viewExpense(){
         ? `<input class="rate-in" value="${DUTY_PAY[k].toLocaleString()}" onchange="setPayRate('${k}', this.value)">`
         : DUTY_PAY[k].toLocaleString()}<small>원</small></div></div>`;
 
+  /* AS 외근 한 건 — 방문 시각을 함께 보여줍니다. 야간(18시~08시)은 눈에 띄게 표시합니다
+     (김기홍 팀장 요청 2026-08-02 4차: 주당직자 야간 외근은 당직비 지급 대상) */
   const asCell = (a) => {
     const i = DUTY_AS.indexOf(a);
+    const night = isNightTime(a.tm);
     return `<div class="asrow">
-      <span class="asd">${fmt(a.d)}</span>
+      <span class="asd">${fmt(a.d)}
+        ${a.tm ? `<b class="astm ${night ? 'night' : ''}">${esc(a.tm)}${night ? ' 야간' : ''}</b>`
+               : (canEdit ? `<button class="astm none" onclick="setAsTime(${i})">시각 입력</button>`
+                          : `<b class="astm none">시각 없음</b>`)}</span>
       <span class="ast">${esc(a.t)}${a.why ? `<span class="aswhy">${esc(a.why)}</span>` : ''}</span>
       ${canEdit
         ? `<button class="btn sm ${a.pay ? 'is-on' : ''}" onclick="toggleAsPay(${i})">${a.pay ? '지급함' : '지급 안 함'}</button>`
@@ -3266,13 +3520,16 @@ function viewExpense(){
     <p class="swipe only-mo">옆으로 밀면 지급액 · 지급현황까지 보입니다</p>
     <div class="tabwrap">
       <table class="ktab exp">
-        <tr><th>당직자</th><th>주당직</th><th>AS 외근 (주당직자 제외)</th><th>건수</th>
+        <tr><th>당직자</th><th>주당직 기간 (금~목)</th><th>AS 외근 (주당직자 제외)</th><th>건수</th>
             <th>업무 경비</th><th>지급액</th><th>지급현황</th></tr>
         ${rows.map(r => `
         <tr>
           <td>${esc(r.n)}</td>
-          <td class="tot" style="text-align:center" title="${r.d.fd.map(fmt).join(' · ')} 시작">${
-            r.d.weeks ? r.d.weeks + '주' : '<span class="dt-none">—</span>'}</td>
+          <td class="tot" style="text-align:center">${
+            r.d.weeks
+              ? `<span class="wkdays">${r.d.fd.map(f => `<span class="wk">${dutyWeekRange(f)}</span>`).join('')}
+                   <small>${r.d.weeks}주기 · ${won(r.d.weeks * DUTY_PAY.week)}</small></span>`
+              : '<span class="dt-none">—</span>'}</td>
           <td>${r.as.length ? r.as.map(asCell).join('') : '<span class="dt-none">—</span>'}</td>
           <td class="tot" style="text-align:center">${r.asPay.length}</td>
           <td class="tot" style="text-align:right">${r.exAmt ? won(r.exAmt) : '<span class="dt-none">—</span>'}</td>
@@ -3282,7 +3539,7 @@ function viewExpense(){
             : `<span class="cat ${PAY_STATE[payKey(ym, r.n)] ? 'k1' : 'k3'}">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</span>`}</td>
         </tr>`).join('')}
         <tr><td class="tot">TOT</td>
-            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.weeks, 0)}주</td>
+            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.weeks, 0)}주기</td>
             <td class="tot"></td>
             <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.asPay.length, 0)}</td>
             <td class="tot" style="text-align:right">${won(rows.reduce((s, r) => s + r.exAmt, 0))}</td>
@@ -3329,7 +3586,7 @@ function viewExpense(){
     </div>
     ${payNotePanel(ym, canEdit)}
     <div class="repbtns">
-      <button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>
+      <button class="btn" onclick="downloadExpenseCsv()">엑셀 내려받기</button>
       <button class="btn" onclick="window.print()">인쇄 · PDF 저장</button>
     </div>
   </div>`;
@@ -3744,13 +4001,15 @@ function delStore(code){
 /* ===== 엑셀 붙여넣기 · CSV 올리기 (김기홍 팀장 요청 2026-08-02)
    한 줄 = 거래처코드 / 거래처명 / 주소. 탭 · 쉼표 둘 다 받습니다. ===== */
 /* 한 줄을 칸으로 나눕니다. 탭이 있으면 탭 기준(엑셀 복사),
-   없으면 쉼표 기준인데 큰따옴표 안의 쉼표는 주소의 일부로 봅니다 — "서울시 중구, 1층" */
+   없으면 쉼표 기준인데 큰따옴표 안의 쉼표는 주소의 일부로 봅니다 — "서울시 중구, 1층"
+   ⚠️ 큰따옴표는 칸의 맨 앞에 올 때만 묶음 표시로 봅니다.
+      품목명 가운데 들어간 인치 표기(일체형 POS 15")를 글자 그대로 살리기 위해서입니다. */
 function splitRow(line){
   if(line.includes('\t')) return line.split('\t');
   const out = []; let cur = '', inQ = false;
   for(let i = 0; i < line.length; i++){
     const c = line[i];
-    if(c === '"'){
+    if(c === '"' && (inQ || cur === '')){
       if(inQ && line[i+1] === '"'){ cur += '"'; i++; }   /* "" 는 따옴표 한 개 */
       else inQ = !inQ;
     }
@@ -3824,6 +4083,33 @@ function addStore(){
 }
 
 /* ================= 월 업무량 집계 (관리자 전용) ================= */
+/* 집계표를 엑셀로 (김기홍 팀장 요청 2026-08-02 4차) */
+function downloadReportCsv(){
+  const ym = '2026-04';
+  const m = MONTHLY[ym];
+  const kinds = ['콜업무', 'AS방문', '당직'];
+  const out = [];
+  out.push(['포스온 월 업무량 집계 — 2026년 4월', `${m.from} ~ ${m.to}`]);
+  out.push([]);
+  out.push(['직원별 업무량']);
+  out.push(['직원', '콜업무', 'AS방문', '당직', '당직 중 방문', '합계 (콜+방문)']);
+  Object.keys(m.people).forEach(p => {
+    const c = m.people[p]['콜업무'].TOT, v = m.people[p]['AS방문'].TOT;
+    out.push([p, c, v, m.people[p]['당직'].TOT, m.dutyVisit[p] || 0, c + v]);
+  });
+  out.push([]);
+  const block = (title, src) => {
+    out.push([title]);
+    out.push(['구분', 'TOT', ...REPORT_COLS]);
+    kinds.forEach(k => out.push([k, src[k].TOT, ...REPORT_COLS.map(c => src[k][c] || 0)]));
+    out.push([]);
+  };
+  block('AS 전체', m.all);
+  Object.keys(m.people).forEach(p => block(p, m.people[p]));
+  out.push(['주요 이슈']);
+  m.issues.forEach(s => out.push([s]));
+  downloadCsv(`포스온_업무량집계_${ym}.csv`, out);
+}
 function viewReport(){
   if(!isAdmin()){
     return `<div class="empty"><div class="em"><svg class="ic ic-lg"><use href="#i-lock"/></svg></div>
@@ -3897,7 +4183,7 @@ function viewReport(){
   </div>
 
   <div class="stockbar" style="margin-top:14px">
-    <button class="btn" onclick="toast('월간 리포트를 엑셀로 내려받습니다')">엑셀 내려받기</button>
+    <button class="btn" onclick="downloadReportCsv()">엑셀 내려받기</button>
     <button class="btn" onclick="window.print()">인쇄 · PDF</button>
     
   </div>`;
@@ -4091,20 +4377,22 @@ function viewErp(){
 }
 const ROLE_LABEL = {admin:'관리자', accounting:'회계담당자', engineer:'뷰어'};
 function viewMembers(){
-  const admins = TEAM.filter(t=>t.role==='admin').length;
-  const cars = TEAM.filter(t=>t.car).length;
+  const live = activeTeam();
+  const admins = live.filter(t=>t.role==='admin').length;
+  const cars = live.filter(t=>t.car).length;
   return `
   ${isAdmin() ? '' : lockNote('계정 만들기 · 권한 변경 · 신입 지정 · 당직 대상 지정')}
 
   <div class="stotal">
     <div class="stot"><div class="k">사용 인원</div>
-      <div class="v">${TEAM.length}<small>/ ${LIMITS.seats}명</small></div></div>
+      <div class="v">${live.length}<small>/ ${LIMITS.seats}명</small></div>
+      ${TEAM.length - live.length ? `<div class="k" style="margin-top:2px">미사용 ${TEAM.length - live.length}명</div>` : ''}</div>
     <div class="stot"><div class="k">관리자</div>
       <div class="v">${admins}<small>/ ${LIMITS.admins}명</small></div></div>
     <div class="stot car"><div class="k">당직 대상</div>
       <div class="v">${dutyMembers().length}<small>명</small></div></div>
     <div class="stot"><div class="k">회계담당자</div>
-      <div class="v">${TEAM.filter(t=>t.role==='accounting').length}<small>명</small></div></div>
+      <div class="v">${live.filter(t=>t.role==='accounting').length}<small>명</small></div></div>
   </div>
 
   ${signupPanel()}
@@ -4144,12 +4432,13 @@ function viewMembers(){
   </div>`:''}
 
   <div class="panel">
-    <h4>AS부서 ${TEAM.length}명 — 관리자가 승인해야 가입됩니다 (외부인 가입 차단)</h4>
+    <h4>AS부서 ${live.length}명${TEAM.length - live.length ? ` <span style="color:var(--t3);font-weight:500">— 미사용 ${TEAM.length - live.length}명 포함해 아래에 모두 보입니다</span>` : ''}</h4>
     <div class="plist">
-      ${TEAM.map(t=>`<div class="prow">
+      ${TEAM.map(t=>`<div class="prow ${t.off?'is-off':''}">
         <span class="av">${esc(t.name[0])}</span>
         <span class="nm" style="min-width:86px">${esc(t.name)} ${esc(t.rank)}${t.name===ME?' (나)':''}</span>
         <span class="rolebadge ${t.role==='admin'?'adm':'viw'}">${ROLE_LABEL[t.role]||'뷰어'}</span>
+        ${t.off?'<span class="cat k3">미사용 — 퇴사 처리</span>':''}
         ${t.car?`<span class="cat" style="color:var(--navy);border-color:var(--navy-line);background:var(--navy-50)">차량</span>`:''}
         ${t.duty?'<span class="cat" style="color:var(--navy);border-color:var(--navy-line);background:var(--navy-50)">당직</span>':''}
         ${ROOKIES.has(t.name)?'<span class="cat" style="color:var(--navy);border-color:var(--navy-line)">신입</span>':''}
@@ -4159,12 +4448,16 @@ function viewMembers(){
           <button class="btn sm ${t.car?'is-on':''}" onclick="toggleCar('${t.id}')">${t.car?'차량 재고 해제':'차량 재고 지정'}</button>
           <button class="btn sm" onclick="toggleRookie('${jsq(t.name)}')">${ROOKIES.has(t.name)?'신입 해제':'신입 지정'}</button>
           <button class="btn sm" onclick="toggleRole('${t.id}')">권한 바꾸기</button>
+          <button class="btn sm ${t.off?'is-on':''}" onclick="toggleOff('${t.id}')">${t.off?'다시 사용':'미사용 처리'}</button>
+          <button class="btn sm" onclick="delMember('${t.id}')">삭제</button>
         </span>`:''}
       </div>`).join('')}
     </div>
     ${isAdmin()?`<p style="font-size:12px;color:var(--t3);margin-top:10px">
       「권한 바꾸기」를 누를 때마다 뷰어 → 회계담당자 → 관리자 순으로 돕니다.
-      당직 대상으로 지정한 사람만 당직 일정 표에서 고를 수 있습니다.</p>`:''}
+      당직 대상으로 지정한 사람만 당직 일정 표에서 고를 수 있습니다.<br>
+      <b>퇴사자는 「미사용 처리」</b>를 쓰세요 — 로그인과 담당자 선택에서 빠지고 지난 기록은 그대로 남습니다.
+      「삭제」는 기록에서 이름만 남고 계정이 아주 없어집니다.</p>`:''}
   </div>
 
   <div class="panel">
@@ -4210,18 +4503,40 @@ function signupPanel(){
       <div class="f"><label>아이디</label><input type="text" id="acId" placeholder="예) psj"></div>
       <div class="f"><label>임시 암호</label><input type="text" id="acPw" placeholder="비우면 1234 로 만듭니다"></div>
     </div>
+    <!-- 입사일 (김기홍 팀장 요청 2026-08-02 4차) -->
+    <div class="grid2">
+      <div class="f"><label>입사일 <span style="font-weight:500;color:var(--t3)">— 비워도 됨</span></label>
+        <input type="date" id="acHire"></div>
+      <div class="f"></div>
+    </div>
     <button class="btn pri" onclick="addAccount()">계정 만들기</button>` : ''}
 
     <div class="plist" style="margin-top:12px">
-      ${TEAM.map(t=>`<div class="prow">
+      ${TEAM.map(t=>`<div class="prow ${t.off?'is-off':''}">
         <span class="av">${esc(t.name[0])}</span>
         <span class="nm" style="min-width:86px">${esc(t.name)} ${esc(t.rank)}</span>
         <span class="cat k1">${esc(t.uid || '아이디 없음')}</span>
-        <span class="tm">${ROLE_LABEL[t.role]||'뷰어'}${t.name===ME?' · 지금 로그인 중':''}</span>
-        ${can?`<span class="rm"><button class="btn sm" onclick="resetPw('${jsq(t.id)}')">암호 초기화</button></span>`:''}
+        ${t.off?'<span class="cat k3">미사용</span>':''}
+        <span class="tm">${ROLE_LABEL[t.role]||'뷰어'}${t.name===ME?' · 지금 로그인 중':''}
+          · 입사일 ${t.hire ? esc(t.hire) : '미등록'}</span>
+        ${can?`<span class="rm">
+          <button class="btn sm" onclick="setHire('${jsq(t.id)}')">입사일</button>
+          <button class="btn sm" onclick="resetPw('${jsq(t.id)}')">암호 초기화</button></span>`:''}
       </div>`).join('')}
     </div>
   </div>`;
+}
+/* 입사일 — 이미 있는 직원은 여기서 채웁니다 (김기홍 팀장 요청 2026-08-02 4차) */
+function setHire(id){
+  if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
+  const t = TEAM.find(x => x.id === id); if(!t) return;
+  const v = prompt(`${t.name} 님의 입사일을 적어주세요 (예: 2019-03-04)`, t.hire || '');
+  if(v === null) return;
+  const s = v.trim();
+  if(s && !/^\d{4}-\d{2}-\d{2}$/.test(s)){ toast('연-월-일 형식으로 적어주세요 — 예) 2019-03-04'); return; }
+  t.hire = s;
+  toast(s ? `${t.name} 입사일 ${s}` : `${t.name} 입사일을 비웠습니다`);
+  render();
 }
 function addAccount(){
   if(!isAdmin()){ toast('관리자만 계정을 만들 수 있습니다'); return; }
@@ -4231,12 +4546,13 @@ function addAccount(){
   const uid = ($('#acId').value||'').trim();
   if(!uid){ toast('아이디를 입력해주세요'); return; }
   if(TEAM.some(t=>t.uid===uid)){ toast(`아이디 ${uid} 는 이미 쓰고 있습니다`); return; }
-  if(TEAM.length >= LIMITS.seats){
+  if(activeTeam().length >= LIMITS.seats){
     toast(`사용 인원 한도 ${LIMITS.seats}명입니다. 위에서 한도를 올리세요`); return;
   }
   const pw = ($('#acPw').value||'').trim() || '1234';
+  const hire = (($('#acHire') && $('#acHire').value) || '').trim();
   TEAM.push({id:'u'+Date.now(), name, rank:($('#acRank').value||'').trim() || '사원',
-             role:'engineer', car:false, duty:false, uid, pw});
+             role:'engineer', car:false, duty:false, uid, pw, hire, off:false});
   NOTIS.unshift({ic:'i-members', b:name, t:'님의 계정을 만들었습니다', time:'방금', isNew:true});
   toast(`계정 생성 — 아이디 ${uid} · 암호 ${pw} 를 ${name} 님에게 전달하세요 (뷰어 권한으로 시작)`);
   bump(); render();
@@ -4250,6 +4566,48 @@ function resetPw(id){
   toast(`${t.name} 암호를 ${t.pw} 로 바꿨습니다`);
   render();
 }
+/* ===== 퇴사자 처리 (김기홍 팀장 요청 2026-08-02 4차)
+   기본은 「미사용」입니다 — 로그인과 담당자 선택에서만 빠지고 지난 기록은 그대로 둡니다.
+   아주 지우는 「삭제」는 되돌릴 수 없어 따로 확인을 받습니다. ===== */
+function toggleOff(id){
+  if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
+  const t = TEAM.find(x => x.id === id); if(!t) return;
+  if(!t.off){
+    if(t.name === ME){ toast('지금 로그인한 계정은 미사용으로 바꿀 수 없습니다'); return; }
+    if(t.role === 'admin' && TEAM.filter(x => x.role === 'admin' && !x.off).length <= 1){
+      toast('관리자가 최소 1명은 남아 있어야 합니다'); return;
+    }
+    const stock = ITEMS.reduce((s, i) => s + (i.q[t.id] || 0), 0);
+    const warn = stock ? `\n\n차량에 재고 ${stock}개가 남아 있습니다. 미사용으로 바꾸면 재고 표에서 그 칸이 사라집니다.\n먼저 사무실로 옮기시는 편이 좋습니다.` : '';
+    if(!confirm(`${t.name} 님을 미사용(퇴사)으로 바꿉니다.\n로그인과 담당자 선택에서 빠집니다. 지난 업무·당직 기록은 그대로 남습니다.${warn}`)) return;
+    t.off = true;
+    toast(`${t.name} 미사용 처리 — 로그인과 담당자 선택에서 빠집니다`);
+  } else {
+    t.off = false;
+    toast(`${t.name} 다시 사용 — 로그인과 담당자 선택에 다시 나옵니다`);
+  }
+  rebuildLocations();
+  render();
+}
+function delMember(id){
+  if(!isAdmin()){ toast('관리자만 지울 수 있습니다'); return; }
+  const t = TEAM.find(x => x.id === id); if(!t) return;
+  if(t.name === ME){ toast('지금 로그인한 계정은 지울 수 없습니다'); return; }
+  if(t.role === 'admin' && TEAM.filter(x => x.role === 'admin' && !x.off).length <= 1){
+    toast('관리자가 최소 1명은 남아 있어야 합니다'); return;
+  }
+  const jobs  = TASKS.filter(x => (x.owners || []).includes(t.name)).length;
+  const stock = ITEMS.reduce((s, i) => s + (i.q[t.id] || 0), 0);
+  const warn = (jobs ? `\n· 이 분이 맡은 업무가 ${jobs}건 있습니다 — 업무는 지워지지 않고 이름만 남습니다.` : '')
+             + (stock ? `\n· 차량에 재고 ${stock}개가 남아 있습니다 — 그 수량은 표에서 사라집니다.` : '');
+  if(!confirm(`${t.name} 님의 계정을 아주 지웁니다.\n되돌릴 수 없습니다. 퇴사자라면 「미사용 처리」를 권합니다.${warn}\n\n계속할까요?`)) return;
+  const i = TEAM.indexOf(t);
+  TEAM.splice(i, 1);
+  rebuildLocations();
+  toast(`${t.name} 계정 삭제`);
+  render();
+}
+
 /* 당직 대상자 — 켠 사람만 당직 일정 표의 선택지에 나옵니다 */
 function toggleDuty(id){
   const t = TEAM.find(x=>x.id===id);
@@ -4280,7 +4638,7 @@ function toggleCar(id){
 /* 뷰어 → 회계담당자 → 관리자 → 뷰어 순으로 돕니다 */
 function toggleRole(id){
   const t = TEAM.find(x=>x.id===id);
-  const admins = TEAM.filter(x=>x.role==='admin').length;
+  const admins = activeTeam().filter(x=>x.role==='admin').length;
   const next = {engineer:'accounting', accounting:'admin', admin:'engineer'}[t.role] || 'accounting';
   if(next === 'admin' && admins >= LIMITS.admins){
     toast(`관리자 한도 ${LIMITS.admins}명입니다. 위에서 한도를 올리세요`); return;
@@ -4293,7 +4651,7 @@ function toggleRole(id){
 /* 파일럿 인원 · 관리자 수 한도 — 관리자가 직접 올립니다 */
 const LIMITS = {seats:20, admins:5};
 function setLimit(k, d){
-  const min = k==='admins' ? TEAM.filter(t=>t.role==='admin').length : TEAM.length;
+  const min = k==='admins' ? activeTeam().filter(t=>t.role==='admin').length : activeTeam().length;
   const next = LIMITS[k] + d;
   if(next < min){ toast(`현재 ${min}명이라 그 아래로는 못 내립니다`); return; }
   if(next > 200){ toast('200명까지 설정할 수 있습니다'); return; }
@@ -4633,6 +4991,8 @@ function doLogin(){
   const err = $('#lgErr');
   const t = TEAM.find(x => (x.uid || '') === uid && (x.pw || '') === pw);
   if(!t){ err.textContent = '아이디나 암호가 맞지 않습니다.'; return; }
+  /* 퇴사 처리(미사용)한 계정은 못 들어옵니다 (김기홍 팀장 요청 2026-08-02 4차) */
+  if(t.off){ err.textContent = '미사용으로 바뀐 계정입니다. 관리자에게 문의해주세요.'; return; }
   err.textContent = '';
   ME = t.name;
   const auto = $('#lgAuto').checked;

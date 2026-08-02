@@ -28,7 +28,8 @@ function rebuildLocations(){
   LOCATIONS.length = 1;                              /* 사무실만 남기고 */
   for(const id of CAR_ORDER){
     const t = TEAM.find(x => x.id === id);
-    if(t && t.car) LOCATIONS.push({id:t.id, name:t.name, kind:'차량'});
+    /* 미사용(퇴사) 처리한 사람의 차량 칸은 빼둡니다 (김기홍 팀장 요청 2026-08-02 4차) */
+    if(t && t.car && !t.off) LOCATIONS.push({id:t.id, name:t.name, kind:'차량'});
   }
   return LOCATIONS;
 }
