@@ -2622,19 +2622,23 @@ function viewDuty(){
   <div class="mprog">
     <div class="r">
       <button class="btn sm" onclick="moveDutyMonth(-1)"><svg class="ic"><use href="#i-chevron-left"/></svg></button>
-      <b>전화 당직 일정 — ${yy}년 ${mm}월</b>
+      <b>당직 일정 — ${yy}년 ${mm}월</b>
       <button class="btn sm" onclick="moveDutyMonth(1)"><svg class="ic"><use href="#i-chevron-right"/></svg></button>
       ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">당직 인원 ${DUTY_MEMBERS.length}명</span></div>
     <div style="font-size:12px;color:var(--t3)">
       ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주말당직은 토·일에 섭니다.
+      주당직은 금요일에 시작해 다음 목요일까지 한 주기입니다 — 수당은 주기당 ${DUTY_PAY.week.toLocaleString()}원.
       ${canEdit?'칸을 눌러 담당자를 바꿀 수 있습니다.':'변경은 관리자만 가능합니다.'}
     </div>
   </div>`;
 
   if(!m) return head + `
   <div class="panel" style="margin-top:14px">
-    <div class="desc" style="margin:0">${yy}년 ${mm}월 당직 일정은 아직 등록되지 않았습니다.</div>
+    <div class="desc" style="margin:0 0 12px">${yy}년 ${mm}월 당직 일정은 아직 등록되지 않았습니다.</div>
+    ${canEdit
+      ? `<button class="btn" onclick="newDutyMonth()">${mm}월 표 만들기</button>`
+      : `<div class="desc" style="margin:0">관리자가 표를 만들면 여기에 나옵니다.</div>`}
   </div>`;
 
   return head + `
@@ -2678,6 +2682,12 @@ function viewDuty(){
   </div>`;
 }
 function moveDutyMonth(n){ cur.dm = shiftMonth(cur.dm, n); render(); }
+function newDutyMonth(){
+  makeDutyMonth(cur.dm);
+  const [y, m] = cur.dm.split('-').map(Number);
+  toast(`${y}년 ${m}월 당직표를 만들었습니다 — 칸을 눌러 배정하세요`);
+  render();
+}
 function setDuty(wk, kind, i, name){
   const w = DUTY[cur.dm].weeks.find(x=>x.no===wk);
   w[kind][i] = name || null;
@@ -2688,8 +2698,8 @@ function saveDutyNote(){ DUTY[cur.dm].note = $('#dtNote').value; toast('특이�
 
 /* ================= 경비 정산 =================
    「포스온 AS부서 N월 당직현황」 표를 화면으로 옮긴 것입니다.
-   (1) 주당직 수당 — 당직 일정에서 자동으로 옵니다 (그 달에 온전히 들어간 주만)
-   (2) AS 방문 수당 — 주당직 기간 밖 방문 중 관리자가 지급으로 켠 건만
+   (1) 주당직 수당 — 당직 일정에서 자동으로 옵니다 (그 달에 든 금요일마다 한 주기)
+   (2) AS 외근 수당 — 주당직 기간 밖 방문 중 관리자가 지급으로 켠 건만
    (3) 업무 경비   — 업무 상세에서 등록한 출장비·주차/톨비 등을 모읍니다 */
 let PAY_STATE = {};   /* 'YYYY-MM|이름' -> true(지급 완료) */
 
@@ -2733,29 +2743,34 @@ function viewExpense(){
   const fmt = d => { const x = d.split('-'); return `${Number(x[1])}/${Number(x[2])}`; };
   const won = n => n.toLocaleString() + '원';
 
-  const dc     = dutyDayCount(ym);   /* 이름 -> { night, weekend, nd[], wd[] } */
+  const dc     = dutyWeekCount(ym);   /* 이름 -> { weeks, fd[] } — 금~목 한 주기가 1 */
   const asList = DUTY_AS.filter(a => a.d.startsWith(ym));
   const exps   = taskExpensesOf(ym);
+  /* 매장에서 받는 돈(출장비·부품비)은 회사가 주는 경비가 아니라 따로 셉니다 */
+  const isBilled = k => STORE_BILLED.includes(k);
+  const expCorp  = exps.filter(e => !isBilled(e.kind));
+  const expBill  = exps.filter(e =>  isBilled(e.kind));
 
-  /* 당직 수당 표에는 그 달에 당직을 섰거나 AS를 나간 사람만 올립니다
-     (업무 경비만 있는 사람은 아래 경비 표에서 봅니다) */
+  /* 그 달에 당직을 섰거나 · AS를 나갔거나 · 업무 경비를 쓴 사람을 모두 올립니다
+     (김기홍 팀장 요청: 인원별로 받을 돈을 한 줄에서 보게) */
   const names = [...new Set([
     ...Object.keys(dc),
-    ...asList.map(a => a.who)
+    ...asList.map(a => a.who),
+    ...expCorp.map(e => e.who)
   ])];
 
   const rows = names.map(n => {
-    const d = dc[n] || { night:0, weekend:0, nd:[], wd:[] };
+    const d = dc[n] || { weeks:0, fd:[] };
     const as = asList.filter(a => a.who === n);
     const asPay = as.filter(a => a.pay);
-    const ex = exps.filter(e => e.who === n);
+    const ex = expCorp.filter(e => e.who === n);
     return { n, d, as, asPay, ex,
              exAmt: ex.reduce((s, e) => s + e.amt, 0),
-             duty: d.night * DUTY_PAY.night + d.weekend * DUTY_PAY.weekend
-                   + asPay.length * DUTY_PAY.asVisit };
+             duty: d.weeks * DUTY_PAY.week + asPay.length * DUTY_PAY.asVisit };
   });
   const totDuty = rows.reduce((s, r) => s + r.duty, 0);
-  const totExp  = exps.reduce((s, e) => s + e.amt, 0);
+  const totExp  = expCorp.reduce((s, e) => s + e.amt, 0);
+  const totBill = expBill.reduce((s, e) => s + e.amt, 0);
 
   const rate = (k, label, note) => `
     <div class="stot"><div class="k">${label} <span style="font-weight:500">${note}</span></div>
@@ -2792,41 +2807,40 @@ function viewExpense(){
   ${canEdit ? '' : lockNote('단가 수정·지급 처리')}
 
   <div class="stotal">
-    ${rate('night', '야간당직', '1일')}
-    ${rate('weekend', '주말당직', '1일')}
-    ${rate('asVisit', 'AS 방문', '1건 · 당직 제외')}
+    ${rate('week', '주당직', '한 주기(금~목)')}
+    ${rate('asVisit', 'AS 외근', '1건 · 주당직자 제외')}
     <div class="stot car"><div class="k">${mm}월 지급액 합계</div>
       <div class="v">${(totDuty + totExp).toLocaleString()}<small>원</small></div></div>
   </div>
 
   <div class="panel">
-    <h4>당직 · AS 수당</h4>
+    <h4>인원별 지급액 <span style="color:var(--t3);font-weight:500">— 주당직 · AS 외근 · 업무 경비를 합친 금액입니다</span></h4>
     ${rows.length ? `
     <p class="swipe only-mo">옆으로 밀면 지급액 · 지급현황까지 보입니다</p>
     <div class="tabwrap">
       <table class="ktab exp">
-        <tr><th>당직자</th><th>야간당직</th><th>주말당직</th><th>AS 방문 (당직 제외)</th><th>수</th>
-            <th>지급액</th><th>지급현황</th></tr>
+        <tr><th>당직자</th><th>주당직</th><th>AS 외근 (주당직자 제외)</th><th>건수</th>
+            <th>업무 경비</th><th>지급액</th><th>지급현황</th></tr>
         ${rows.map(r => `
         <tr>
           <td>${esc(r.n)}</td>
-          <td class="tot" style="text-align:center" title="${r.d.nd.map(fmt).join(' · ')}">${
-            r.d.night ? r.d.night + '일' : '<span class="dt-none">—</span>'}</td>
-          <td class="tot" style="text-align:center" title="${r.d.wd.map(fmt).join(' · ')}">${
-            r.d.weekend ? r.d.weekend + '일' : '<span class="dt-none">—</span>'}</td>
+          <td class="tot" style="text-align:center" title="${r.d.fd.map(fmt).join(' · ')} 시작">${
+            r.d.weeks ? r.d.weeks + '주' : '<span class="dt-none">—</span>'}</td>
           <td>${r.as.length ? r.as.map(asCell).join('') : '<span class="dt-none">—</span>'}</td>
           <td class="tot" style="text-align:center">${r.asPay.length}</td>
-          <td class="tot" style="text-align:right">${won(r.duty)}</td>
+          <td class="tot" style="text-align:right">${r.exAmt ? won(r.exAmt) : '<span class="dt-none">—</span>'}</td>
+          <td class="tot" style="text-align:right">${won(r.duty + r.exAmt)}</td>
           <td style="text-align:center">${canEdit
             ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'is-on' : ''}" onclick="togglePaid('${ym}','${esc(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
             : `<span class="cat ${PAY_STATE[payKey(ym, r.n)] ? 'k1' : 'k3'}">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</span>`}</td>
         </tr>`).join('')}
         <tr><td class="tot">TOT</td>
-            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.night, 0)}일</td>
-            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.weekend, 0)}일</td>
+            <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.d.weeks, 0)}주</td>
             <td class="tot"></td>
             <td class="tot" style="text-align:center">${rows.reduce((s, r) => s + r.asPay.length, 0)}</td>
-            <td class="tot" style="text-align:right">${won(totDuty)}</td><td class="tot"></td></tr>
+            <td class="tot" style="text-align:right">${won(rows.reduce((s, r) => s + r.exAmt, 0))}</td>
+            <td class="tot" style="text-align:right">${won(totDuty + rows.reduce((s, r) => s + r.exAmt, 0))}</td>
+            <td class="tot"></td></tr>
       </table>
     </div>` : `<div class="desc" style="margin:0">이 달에 배정된 당직이 없습니다.</div>`}
   </div>
@@ -2843,12 +2857,14 @@ function viewExpense(){
           <td>${fmt(e.d)}</td>
           <td><button class="explink" onclick="openTask(${e.tid})">${esc(e.store)} — ${esc(e.title)}</button></td>
           <td>${esc(e.who)}</td>
-          <td>${esc(e.kind)}</td>
+          <td>${esc(e.kind)}${isBilled(e.kind) ? ` <span class="cat k3">매장 청구</span>` : ''}</td>
           <td class="tot" style="text-align:right">${won(e.amt)}</td>
           <td style="text-align:center"><span class="rcpt ${e.receipt ? 'ok' : 'no'}">${e.receipt ? '첨부됨' : '없음'}</span></td>
         </tr>`).join('')}
-        <tr><td class="tot">TOT</td><td class="tot"></td><td class="tot"></td><td class="tot"></td>
+        <tr><td class="tot">회사 경비</td><td class="tot"></td><td class="tot"></td><td class="tot"></td>
             <td class="tot" style="text-align:right">${won(totExp)}</td><td class="tot"></td></tr>
+        <tr><td class="tot">매장 청구</td><td class="tot"></td><td class="tot"></td><td class="tot"></td>
+            <td class="tot" style="text-align:right">${won(totBill)}</td><td class="tot"></td></tr>
       </table>
     </div>` : `<div class="empty" style="padding:28px 20px"><b>이 달에 등록된 경비가 없습니다</b>
       <p>업무 상세 화면의 <b>경비</b>에서 출장비·주차/톨비를 등록하면 여기에 모입니다.</p></div>`}
@@ -2857,12 +2873,16 @@ function viewExpense(){
   <div class="panel">
     <h4>${mm}월 총 지급액</h4>
     <div class="plist">
-      <div class="prow"><span class="nm" style="min-width:118px">당직 · AS 수당</span>
+      <div class="prow"><span class="nm" style="min-width:118px">주당직 · AS 수당</span>
         <span class="rm" style="font-weight:800">${won(totDuty)}</span></div>
       <div class="prow"><span class="nm" style="min-width:118px">업무 경비</span>
         <span class="rm" style="font-weight:800">${won(totExp)}</span></div>
       <div class="prow"><span class="nm" style="min-width:118px;color:var(--navy)">합계</span>
         <span class="rm" style="font-weight:800;font-size:16px;color:var(--navy)">${won(totDuty + totExp)}</span></div>
+    </div>
+    <div class="desc" style="margin:10px 0 0">
+      매장에 청구하는 ${STORE_BILLED.join(' · ')}는 회사가 주는 경비가 아니라서 합계에서 뺐습니다
+      — 이 달 매장 청구분은 ${won(totBill)} 입니다.
     </div>
     <div class="repbtns">
       <button class="btn" onclick="toast('엑셀 파일로 내려받습니다')">엑셀 내려받기</button>

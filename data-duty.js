@@ -63,8 +63,11 @@ const DUTY_2026_08 = {
 
 let DUTY = { '2026-07': DUTY_2026_07, '2026-08': DUTY_2026_08 };
 
-/* 지급 단가 — 야간·주말은 하루치, AS 방문은 한 건당 */
-let DUTY_PAY = { night: 15000, weekend: 30000, asVisit: 50000 };
+/* 지급 단가 (김기홍 팀장 확인 2026-08-02)
+   주당직은 금~목 한 주기당 10만원, AS 외근은 한 건당 5만원입니다.
+   주당직자는 그 주기의 AS 외근 수당에서 빠집니다 — 다만 업무에 따라 줄 수도 있어
+   건별로 켜고 끕니다(아래 DUTY_AS 의 pay). */
+let DUTY_PAY = { week: 100000, asVisit: 50000 };
 
 /* 당직 기간 밖에 나간 AS 방문 — 「7월 당직현황」 표의 AS 내역 그대로.
    pay:true 인 건만 수당 지급 대상입니다(관리자가 화면에서 켜고 끕니다). */
@@ -115,6 +118,49 @@ function dutyDayCount(ym){
         out[n][k === 'night' ? 'nd' : 'wd'].push(ds);
       });
     }
+  });
+  return out;
+}
+
+/* 아직 표가 없는 달을 빈 표로 만들어 둡니다 — 당직은 미리 짜두는 편이라
+   앞뒤 어느 달로 넘어가도 바로 배정할 수 있게 합니다.
+   그 달 1일이 든 주의 월요일부터 7일씩 끊습니다(기존 표와 같은 방식). */
+function makeDutyMonth(ym){
+  if(DUTY[ym]) return DUTY[ym];
+  const [y, m] = ym.split('-').map(Number);
+  const first = new Date(y, m - 1, 1);
+  const last  = new Date(y, m, 0);
+  const start = new Date(first);
+  start.setDate(first.getDate() - ((first.getDay() + 6) % 7));   /* 그 주 월요일 */
+  const weeks = [];
+  const d = new Date(start);
+  for(let no = 1; d <= last; no++){
+    weeks.push({ no, from: dyStr(d),
+                 night:  [null, null, null, null, null, null, null],
+                 weekend:[null, null, null, null, null, null, null] });
+    d.setDate(d.getDate() + 7);
+  }
+  DUTY[ym] = { month: ym, weeks, note: '' };
+  return DUTY[ym];
+}
+
+/* 사람별 주당직 주기 수 — 한 주기는 금요일에 시작해 다음 목요일에 끝납니다.
+   (김기홍 팀장 확인: 금요일에 지정된 사람이 토~목까지 이어서 섭니다)
+   그 달에 든 금요일만 세므로, 주가 달에 걸쳐도 두 번 계산되지 않습니다. */
+function dutyWeekCount(ym){
+  const m = DUTY[ym];
+  const out = {};
+  if(!m) return out;
+  m.weeks.forEach(w => {
+    const fri = new Date(w.from + 'T00:00:00');
+    fri.setDate(fri.getDate() + 4);           /* from 은 월요일 — +4 가 금요일 */
+    const ds = dyStr(fri);
+    if(ds.slice(0, 7) !== ym) return;
+    const n = w.night[4] || w.weekend[4];     /* 금요일 칸의 담당자 */
+    if(!n) return;
+    out[n] = out[n] || { weeks:0, fd:[] };
+    out[n].weeks++;
+    out[n].fd.push(ds);
   });
   return out;
 }
