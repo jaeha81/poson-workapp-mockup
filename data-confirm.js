@@ -1,11 +1,16 @@
 /* ===========================================================
    컨펌 체크리스트 — ⚠️ 임시 화면입니다. 컨펌이 끝나면 통째로 지웁니다.
 
-   지우는 법 (3곳):
+   지우는 법 (index.html 에서 "임시(컨펌용)" 으로 검색하면 다 나옵니다):
      ① 이 파일 삭제
-     ② index.html — <script src="data-confirm.js"></script> 한 줄
-     ③ index.html — 사이드바 <a data-view="confirm"> 와 그 위 nav-label 두 줄
-     ④ index.html — render() 의 else if(cur.view==='confirm') 한 줄
+     ② <script src="data-confirm.js"></script> 한 줄
+     ③ 사이드바 <a data-view="confirm"> 와 그 위 nav-label 두 줄
+     ④ render() 의 else if(cur.view==='confirm') 한 줄
+     ⑤ 겹침창 <div class="cfmask"> 블록 · 「컨펌으로 돌아가기」 <button class="cfback"> 한 줄
+        · 그 CSS 묶음 · openConfirmPanel/closeConfirmPanel/paintConfirmPanel 함수
+        · nav 클릭 처리의 confirm 예외 한 줄 · render() 안의 paintConfirmPanel 호출 한 줄
+   ⚠️ 화면 이동(cfGo)과 「컨펌으로 돌아가기」는 컨펌받을 때만 쓰는 일회성 기능입니다.
+      컨펌이 끝나면 위 순서대로 전부 지우면 원래 앱만 남습니다.
    =========================================================== */
 
 /* 지금은 3차입니다. 회차가 바뀌면 이 숫자를 올리세요 —
@@ -58,7 +63,7 @@ const CONFIRM_ITEMS = [
   { sec:'3차 반영 (13건) — 이번에 새로 넣은 것',
     desc:'2026-08-02 저녁에 주신 2차 답변을 전부 반영했습니다. 아래 질문은 이것들이 실제와 맞는지만 봐주시면 됩니다.',
     done:[
-      { t:'로그인을 아이디 · 암호 방식으로', w:'첫 화면',
+      { t:'로그인을 아이디 · 암호 방식으로', w:'로그인',
         d:'앱을 열면 로그인 화면이 먼저 나옵니다. 「자동 로그인」을 켜두면 다음부터 바로 들어옵니다. 오른쪽 위에 로그아웃 버튼을 뒀습니다. (시연 계정 — 아이디 kkh · 암호 1234)' },
       { t:'가입 신청 방식을 없애고 관리자가 계정을 만들어 전달', w:'직원 · 권한',
         d:'말씀대로 이메일 연동은 뺐습니다. 관리자가 이름 · 직급 · 아이디 · 임시 암호를 넣어 계정을 만들고, 그것을 직원에게 알려주면 됩니다. 암호 초기화도 관리자가 합니다.' },
@@ -191,17 +196,50 @@ function goConfirm(e){
   openConfirmPanel();
 }
 
+/* 화면 이름 → 실제 메뉴. 완료 항목의 화면 딱지를 누르면 그 화면으로 넘어갑니다. */
+const CF_VIEW = {
+  '오늘 업무':'tasks', '업무 상세':'tasks', '업무 등록':'tasks:new',
+  '예정 업무':'plan', '당직 일정':'duty', '경비 정산':'expense',
+  '재고 현황':'stock', '입고 등록':'inbound', '출고 현황':'outbound', '재고 실사':'audit',
+  '거래처 관리':'stores', '직원 · 권한':'members', '공휴일':'holiday'
+};
+/* 이름 전체로 먼저 찾고, 없으면 '업무 등록 · 직원 · 권한' 처럼 여럿일 때 앞의 것으로 갑니다.
+   ('직원 · 권한' 은 그 자체가 한 화면 이름이라 전체를 먼저 봐야 합니다) */
+function cfViewOf(w){
+  if(!w) return null;
+  const s = String(w).trim();
+  if(CF_VIEW[s]) return CF_VIEW[s];
+  return CF_VIEW[s.split(' · ')[0].trim()] || null;
+}
+/* 그 화면으로 넘어가고 창은 닫습니다. 오른쪽 아래에 「컨펌으로 돌아가기」가 뜹니다. */
+function cfGo(v){
+  closeConfirmPanel();
+  const p = String(v).split(':');
+  cur.view = p[0]; cur.filter = null; cur.taskId = null;
+  cur.mchap = null; cur.msec = null;
+  render(); markNav();
+  if(p[1] === 'new' && typeof openNew === 'function') openNew();
+  const b = document.getElementById('cfback');
+  if(b) b.classList.add('on');
+}
+
 /* 처리 완료 목록 — 팀장님이 "무엇이 이미 됐는지" 를 바로 알아보게 합니다 */
 function doneBlock(list){
   return `<div class="panel cf-done">
-    ${list.map(d => `
+    ${list.map(d => {
+      const v = cfViewOf(d.w);
+      return `
       <div class="cf-d">
         <span class="cf-dk">완료</span>
         <div class="cf-db">
-          <b>${esc(d.t)}</b>${d.w ? `<span class="cf-dw">${esc(d.w)} 화면</span>` : ''}
+          <b>${esc(d.t)}</b>${d.w
+            ? (v ? `<button class="cf-dw go" onclick="cfGo('${jsq(v)}')">${esc(d.w)} 화면 보기 ›</button>`
+                 : `<span class="cf-dw">${esc(d.w)} 화면</span>`)
+            : ''}
           <div>${esc(d.d)}</div>
         </div>
-      </div>`).join('')}
+      </div>`;
+    }).join('')}
   </div>`;
 }
 
@@ -246,6 +284,8 @@ function viewConfirm(){
     .cf-db>div{color:var(--t3);font-size:12.5px;margin-top:3px}
     .cf-dw{margin-left:7px;font-size:11px;color:var(--navy);border:1px solid var(--navy-line);
            background:var(--navy-50);border-radius:999px;padding:2px 7px;white-space:nowrap}
+    button.cf-dw{cursor:pointer;font-family:inherit;font-weight:600}
+    button.cf-dw:hover{background:var(--navy);color:#fff;border-color:var(--navy)}
     .cf-out{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;font-size:12.5px;
             line-height:1.7;background:var(--surface-3);border:1px solid var(--line);
             border-radius:8px;padding:14px;max-height:520px;overflow:auto}
