@@ -2607,10 +2607,12 @@ function viewDuty(){
   const canEdit = isAdmin();
 
   const cell = (name, i, w, kind) => {
-    if(i < 5 && kind === 'weekend') return `<td class="dt-x"></td>`;
     /* 주가 달에 걸치면 다른 달 날짜도 표에 나옵니다. 그 칸은 읽기 전용 —
        같은 날이 두 달 표에 따로 저장돼 있어, 여기서 고치면 한쪽만 바뀝니다. */
     const d = new Date(w.from + 'T00:00:00'); d.setDate(d.getDate() + i);
+    /* 주간당직은 토·일에 섭니다. 법정공휴일은 주간도 서야 해서 평일이어도 칸을 엽니다
+       (김기홍 팀장 요청 2026-08-02) */
+    if(i < 5 && kind === 'weekend' && !holidayName(ymd(d))) return `<td class="dt-x"></td>`;
     const inM = d.getMonth() === mm - 1;
     const cls = `${name ? (name === ME ? 'dt-me' : '') : 'dt-none'}${inM ? '' : ' off'}`;
     return (canEdit && inM)
@@ -2630,7 +2632,7 @@ function viewDuty(){
       ${ym !== '2026-07' ? `<button class="btn sm" onclick="cur.dm='2026-07';render()">이번 달</button>` : ''}
       <span class="pc">당직 인원 ${DUTY_MEMBERS.length}명</span></div>
     <div style="font-size:12px;color:var(--t3)">
-      ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주말당직은 토·일에 섭니다.
+      ${DUTY_MEMBERS.join(' · ')} · 야간당직은 매일, 주간당직은 토·일과 법정공휴일에 섭니다.
       주당직은 금요일에 시작해 다음 목요일까지 한 주기입니다 — 수당은 주기당 ${DUTY_PAY.week.toLocaleString()}원.
       ${canEdit?'칸을 눌러 담당자를 바꿀 수 있습니다.':'변경은 관리자만 가능합니다.'}
     </div>
@@ -2669,7 +2671,7 @@ function viewDuty(){
                       title="${hn?esc(hn):''}">${d.getDate()}${hn?'<i class="hdot"></i>':''}</td>`;
           }).join('')}
         </tr>
-        <tr><td class="dt-h">주말당직</td>${w.weekend.map((n,i)=>cell(n,i,w,'weekend')).join('')}</tr>
+        <tr><td class="dt-h">주간당직</td>${w.weekend.map((n,i)=>cell(n,i,w,'weekend')).join('')}</tr>
         <tr><td class="dt-h">야간당직</td>${w.night.map((n,i)=>cell(n,i,w,'night')).join('')}</tr>`;
       }).join('')}
     </table>
@@ -2694,8 +2696,30 @@ function newDutyMonth(){
 function setDuty(wk, kind, i, name){
   const w = DUTY[cur.dm].weeks.find(x=>x.no===wk);
   w[kind][i] = name || null;
-  toast(name ? `${wk}주차 ${kind==='night'?'야간':'주말'}당직 → ${name}` : '당직 해제');
+  /* 금요일 칸을 정하면 그 주기(토 ~ 다음 주 목)를 같은 사람으로 채웁니다.
+     (김기홍 팀장 요청) 채운 뒤에도 칸마다 따로 고칠 수 있습니다. */
+  const spread = (i === 4 && name) ? spreadDuty(wk, name) : 0;
+  toast(name
+    ? `${wk}주차 ${kind==='night'?'야간':'주간'}당직 → ${name}` + (spread ? ` · 이어지는 ${spread}칸을 함께 채웠습니다` : '')
+    : '당직 해제');
   render();
+}
+/* 금요일에 정한 사람을 그 주기 끝(다음 주 목요일)까지 이어서 넣습니다.
+   토·일과 공휴일은 주간당직까지 같이 넣습니다. 다음 주 표가 이 달에 없으면 거기서 멈춥니다. */
+function spreadDuty(wk, name){
+  const m = DUTY[cur.dm];
+  const w  = m.weeks.find(x => x.no === wk);
+  const nw = m.weeks.find(x => x.no === wk + 1);
+  let n = 0;
+  const put = (week, idx) => {
+    const d = new Date(week.from + 'T00:00:00'); d.setDate(d.getDate() + idx);
+    const ds = ymd(d);
+    week.night[idx] = name; n++;
+    if(idx >= 5 || holidayName(ds)){ week.weekend[idx] = name; n++; }
+  };
+  [5, 6].forEach(idx => put(w, idx));                 /* 그 주 토·일 */
+  if(nw) [0, 1, 2, 3].forEach(idx => put(nw, idx));   /* 다음 주 월~목 */
+  return n;
 }
 function saveDutyNote(){ DUTY[cur.dm].note = $('#dtNote').value; toast('특이사항 저장'); render(); }
 
