@@ -4877,27 +4877,19 @@ function paintConfirmPanel(){
       이 묶음 · <div class="updbar"> 블록 · <script src="data-alarm.js"> 한 줄을 지우면 됩니다.
 
    앱을 고쳐 올리면 data-alarm.js 의 APP_VERSION 이 바뀝니다. 팀장님이 앱을 열거나
-   열어둔 채로 새 버전이 올라오면 "컨펌 요청드립니다" 라고 음성으로 알리고 위에 띠를 띄웁니다. */
+   열어둔 채로 새 버전이 올라오면 짧은 알림음과 함께 위에 띠를 띄웁니다. */
 const ALARM_SEEN_KEY = 'poson_seen_ver';
 let ALARM_LIVE = (typeof APP_VERSION !== 'undefined') ? APP_VERSION : '';
 let alarmArmed = false;
 
 function alarmOn(){ return typeof ALARM_ON !== 'undefined' && ALARM_ON; }
 
-/* 음성 — 브라우저에 들어 있는 한국어 목소리를 씁니다 (따로 받는 파일 없음) */
+/* 알림 — 짧은 알림음만 냅니다 (음성 읽어주기는 뺐습니다 · 재하님 요청 2026-08-03) */
 function alarmSpeak(){
   if(!alarmOn()) return;
-  try{
-    const s = window.speechSynthesis;
-    if(s && typeof SpeechSynthesisUtterance === 'function'){
-      const u = new SpeechSynthesisUtterance(ALARM_SAY);
-      u.lang = 'ko-KR'; u.rate = 0.95;
-      s.cancel(); s.speak(u);
-    }
-  }catch(e){}
   alarmBeep();
 }
-/* 음성이 막힌 브라우저를 위해 짧은 알림음도 같이 냅니다 */
+/* 짧은 알림음 — 끄려면 아래 함수 첫 줄에 return; 을 넣으면 됩니다 */
 function alarmBeep(){
   try{
     const C = window.AudioContext || window.webkitAudioContext; if(!C) return;
