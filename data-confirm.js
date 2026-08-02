@@ -184,12 +184,11 @@ function confirmDoneCount(){
          (CONFIRM_ANS[it.id].pick || CONFIRM_ANS[it.id].note)).length;
 }
 
-/* 상단 띠의 「의견 남기기」 버튼 — 어느 화면에서든 컨펌 화면으로 들어갑니다 */
+/* 상단 띠의 「의견 남기기」 버튼 — 화면을 옮기지 않고 위에 겹쳐 띄웁니다.
+   보시던 화면이 그대로 남아 있어야 확인하면서 답하기 편합니다. */
 function goConfirm(e){
   if(e) e.preventDefault();
-  cur.view = 'confirm';
-  location.hash = '#confirm';
-  render(); markNav();
+  openConfirmPanel();
 }
 
 /* 처리 완료 목록 — 팀장님이 "무엇이 이미 됐는지" 를 바로 알아보게 합니다 */

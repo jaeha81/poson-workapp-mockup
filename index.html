@@ -997,6 +997,42 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .dt-day.cur,.dt-day.cur.red,.dt-day.cur.blue{background:var(--navy);color:var(--card);border-radius:5px}
 .dt-day.cur .hdot{background:var(--orange)}
 
+/* ===== 컨펌 체크리스트 겹침창 — 임시. 컨펌 끝나면 이 묶음을 지웁니다 ===== */
+.cfmask{position:fixed;inset:0;z-index:850;background:rgba(19,39,65,.55);display:none;
+  align-items:flex-start;justify-content:center;padding:28px 16px}
+.cfmask.on{display:flex}
+.cfmodal{width:100%;max-width:840px;max-height:calc(100vh - 56px);background:var(--bg);
+  border-radius:var(--r-card);display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 22px 54px rgba(0,0,0,.32)}
+.cfhead{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--card);
+  border-bottom:1px solid var(--line)}
+.cfhead b{font-size:15px}
+.cfhs{font-size:12px;color:var(--t3);margin-right:auto}
+.cfhead button{background:none;border:0;cursor:pointer;color:var(--t2);padding:4px;display:flex}
+.cfbody{overflow-y:auto;padding:18px}
+@media (max-width:640px){
+  .cfmask{padding:0}
+  .cfmodal{max-width:none;max-height:100vh;height:100vh;border-radius:0}
+  .cfhs{display:none}
+}
+
+/* ===== 컨펌 알람 띠 — 임시. 개발 끝나면 이 묶음과 data-alarm.js 를 지웁니다 ===== */
+.updbar{position:fixed;left:0;right:0;top:0;z-index:800;background:var(--orange,#E67E22);color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);display:none}
+.updbar.on{display:block}
+.ub-in{display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap}
+.ub-in .ic{width:20px;height:20px;flex:none}
+.ub-t{display:flex;flex-direction:column;line-height:1.35;margin-right:auto}
+.ub-t b{font-size:14px}
+.ub-t span{font-size:12px;opacity:.9}
+.updbar .btn{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35);color:#fff}
+.updbar .btn:hover{background:rgba(255,255,255,.28);border-color:#fff;color:#fff}
+.updbar .btn.pri{background:#fff;color:var(--navy);border-color:#fff;font-weight:700}
+.ub-x{background:none;border:0;color:#fff;cursor:pointer;padding:4px;display:flex}
+.ub-list{display:none;padding:0 16px 12px 46px;font-size:13px}
+.ub-list.on{display:block}
+.ub-list li{margin:3px 0}
+
 /* ===== 로그인 (김기홍 팀장 요청 2026-08-02 3차) ===== */
 .login{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;
   background:var(--navy-900);padding:20px}
@@ -1232,6 +1268,30 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
   </div>
 </div>
 
+<!-- 컨펌 체크리스트 겹침창 — 임시. 컨펌 끝나면 이 블록을 지웁니다 -->
+<div class="cfmask" id="cfmask" onclick="if(event.target===this)closeConfirmPanel()">
+  <div class="cfmodal">
+    <div class="cfhead"><b>컨펌 체크리스트</b>
+      <span class="cfhs">보시던 화면은 그대로 있습니다 — 닫으면 돌아갑니다</span>
+      <button onclick="closeConfirmPanel()" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button></div>
+    <div class="cfbody" id="cfBody"></div>
+  </div>
+</div>
+
+<!-- 컨펌 알람 띠 — 임시. 개발 끝나면 이 블록과 data-alarm.js 를 지웁니다 -->
+<div class="updbar" id="updbar">
+  <div class="ub-in">
+    <svg class="ic"><use href="#i-bell"/></svg>
+    <div class="ub-t"><b id="ubTitle">새로 고친 내용이 올라왔습니다</b>
+      <span id="ubSub">컨펌 요청드립니다</span></div>
+    <button class="btn sm" onclick="alarmSpeak()">다시 듣기</button>
+    <button class="btn sm" onclick="alarmOpenList()">무엇이 바뀌었나</button>
+    <button class="btn sm pri" id="ubGo" onclick="alarmGoConfirm()">컨펌하러 가기</button>
+    <button class="ub-x" onclick="alarmClose()" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button>
+  </div>
+  <div class="ub-list" id="ubList"></div>
+</div>
+
 <!-- 로그인 — 아이디 · 암호 · 자동 로그인 (김기홍 팀장 요청 2026-08-02 3차) -->
 <div class="login" id="login">
   <div class="lgbox">
@@ -1242,7 +1302,8 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
       <input type="text" id="lgId" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="f"><label>암호</label>
       <input type="password" id="lgPw" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
-    <label class="lauto"><input type="checkbox" id="lgAuto" checked> 자동 로그인</label>
+    <label class="lauto"><input type="checkbox" id="lgAuto"> 자동 로그인
+      <span style="color:var(--t3);font-size:12px">— 켜면 다음부터 암호 없이 바로 들어옵니다</span></label>
     <p class="lerr" id="lgErr"></p>
     <button class="btn pri lbtn" onclick="doLogin()">로그인</button>
     <p class="lhint">시연용 계정 — 아이디 <b>kkh</b> · 암호 <b>1234</b> (김기홍 팀장 · 관리자)</p>
@@ -1367,6 +1428,7 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 <script src="data-holiday.js"></script>
 <script src="data-duty.js"></script>
 <script src="data-confirm.js"></script><!-- 임시(컨펌용) — 컨펌 끝나면 이 줄과 파일을 지웁니다 -->
+<script src="data-alarm.js"></script><!-- 임시(컨펌 알람) — 개발 끝나면 이 줄과 파일을 지웁니다 -->
 <script>
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
@@ -1519,6 +1581,9 @@ function dotsOf(t){
 document.getElementById('nav').addEventListener('click', e => {
   const a = e.target.closest('a'); if(!a) return;
   e.preventDefault();
+  /* 임시(컨펌용) — 컨펌 체크리스트는 화면을 옮기지 않고 위에 겹쳐 띄웁니다.
+     보던 화면이 그대로 남아 있어야 확인하면서 답하기 편합니다. */
+  if(a.dataset.view === 'confirm'){ closeSide(); openConfirmPanel(); return; }
   document.querySelectorAll('#nav a').forEach(x=>x.classList.remove('on'));
   a.classList.add('on');
   cur.view = a.dataset.view; cur.filter = a.dataset.filter || null; cur.taskId = null;
@@ -1569,6 +1634,7 @@ function render(){
 
   window.scrollTo(0, stay ? y : 0);
   lastScreen = screen;
+  if(typeof cfOpen !== 'undefined' && cfOpen) paintConfirmPanel();  /* 임시(컨펌용) */
   if(cur.view==='audit')    adNow();     /* 고른 품목·위치의 현재고를 채워 넣습니다 */
   if(cur.view==='outbound') obNow();
   renderNoti(); renderWho();
@@ -4411,6 +4477,130 @@ function resetAll(){
   location.reload();
 }
 
+/* ===== 컨펌 체크리스트 겹침창 — 임시. 컨펌 끝나면 이 묶음을 지웁니다 =====
+   메뉴로 화면을 옮기면 보던 것을 잃어버려서, 위에 겹쳐 띄웁니다. */
+let cfOpen = false;
+function openConfirmPanel(){
+  cfOpen = true;
+  document.getElementById('cfmask').classList.add('on');
+  paintConfirmPanel();
+}
+function closeConfirmPanel(){
+  cfOpen = false;
+  document.getElementById('cfmask').classList.remove('on');
+}
+function paintConfirmPanel(){
+  const b = document.getElementById('cfBody'); if(!b) return;
+  const y = b.scrollTop;
+  b.innerHTML = viewConfirm();
+  b.scrollTop = y;                    /* 답을 고를 때마다 맨 위로 튀지 않게 */
+}
+
+/* ================= 컨펌 알람 =================
+   ⚠️ 임시 기능입니다. 개발이 끝나면 data-alarm.js 의 ALARM_ON 을 false 로 두거나,
+      이 묶음 · <div class="updbar"> 블록 · <script src="data-alarm.js"> 한 줄을 지우면 됩니다.
+
+   앱을 고쳐 올리면 data-alarm.js 의 APP_VERSION 이 바뀝니다. 팀장님이 앱을 열거나
+   열어둔 채로 새 버전이 올라오면 "컨펌 요청드립니다" 라고 음성으로 알리고 위에 띠를 띄웁니다. */
+const ALARM_SEEN_KEY = 'poson_seen_ver';
+let ALARM_LIVE = (typeof APP_VERSION !== 'undefined') ? APP_VERSION : '';
+let alarmArmed = false;
+
+function alarmOn(){ return typeof ALARM_ON !== 'undefined' && ALARM_ON; }
+
+/* 음성 — 브라우저에 들어 있는 한국어 목소리를 씁니다 (따로 받는 파일 없음) */
+function alarmSpeak(){
+  if(!alarmOn()) return;
+  try{
+    const s = window.speechSynthesis;
+    if(s && typeof SpeechSynthesisUtterance === 'function'){
+      const u = new SpeechSynthesisUtterance(ALARM_SAY);
+      u.lang = 'ko-KR'; u.rate = 0.95;
+      s.cancel(); s.speak(u);
+    }
+  }catch(e){}
+  alarmBeep();
+}
+/* 음성이 막힌 브라우저를 위해 짧은 알림음도 같이 냅니다 */
+function alarmBeep(){
+  try{
+    const C = window.AudioContext || window.webkitAudioContext; if(!C) return;
+    const ctx = new C();
+    [880, 1245].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      const t0 = ctx.currentTime + i * 0.16;
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.14);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t0); o.stop(t0 + 0.16);
+    });
+  }catch(e){}
+}
+/* 자동 로그인으로 들어와 아직 아무것도 누르지 않았으면, 처음 누를 때 소리를 냅니다
+   (브라우저가 손대지 않은 화면에서는 소리를 막습니다) */
+function alarmArm(){
+  if(alarmArmed) return;
+  alarmArmed = true;
+  const fire = () => {
+    document.removeEventListener('click', fire);
+    document.removeEventListener('keydown', fire);
+    alarmSpeak();
+  };
+  document.addEventListener('click', fire);
+  document.addEventListener('keydown', fire);
+}
+function alarmShow(sub){
+  const bar = document.getElementById('updbar'); if(!bar) return;
+  const s = document.getElementById('ubSub');
+  if(s) s.textContent = sub || `${CHANGELOG.t} · ${ALARM_SAY}`;
+  bar.classList.add('on');
+}
+function alarmClose(){
+  const bar = document.getElementById('updbar'); if(bar) bar.classList.remove('on');
+  try{ localStorage.setItem(ALARM_SEEN_KEY, ALARM_LIVE); }catch(e){}
+}
+function alarmOpenList(){
+  const box = document.getElementById('ubList'); if(!box) return;
+  if(!box.innerHTML){
+    box.innerHTML = `<b>${esc(CHANGELOG.t)}</b>
+      <ul>${CHANGELOG.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
+  }
+  box.classList.toggle('on');
+}
+function alarmGoConfirm(){
+  alarmClose();
+  openConfirmPanel();
+}
+/* 로그인 직후 · 앱 시작 직후에 부릅니다 */
+function alarmAfterLogin(hasGesture){
+  if(!alarmOn()) return;
+  let seen = '';
+  try{ seen = localStorage.getItem(ALARM_SEEN_KEY) || ''; }catch(e){}
+  if(seen === ALARM_LIVE) return;              /* 이미 본 회차면 조용히 넘어갑니다 */
+  if(hasGesture) alarmSpeak(); else alarmArm();
+  alarmShow();
+  NOTIS.unshift({ic:'i-bell', b:'포스온',
+                 t:` 앱을 고쳤습니다 — ${CHANGELOG.t}. ${ALARM_SAY}`, time:'방금', isNew:true});
+  renderNoti();
+}
+/* 앱을 켜둔 채로 새 내용이 올라오면 잡아냅니다 (1분마다 확인) */
+function alarmPoll(){
+  if(!alarmOn()) return;
+  fetch('data-alarm.js?cb=' + new Date().getTime(), {cache:'no-store'})
+    .then(r => r.text())
+    .then(txt => {
+      const m = txt.match(/APP_VERSION\s*=\s*'([^']+)'/);
+      if(!m || m[1] === ALARM_LIVE) return;
+      ALARM_LIVE = m[1];
+      alarmSpeak();
+      alarmShow(`새 내용이 올라왔습니다 — 새로고침(F5) 하시면 보입니다 · ${ALARM_SAY}`);
+    })
+    .catch(() => {});      /* 파일을 직접 열어본 경우에는 확인하지 않습니다 */
+}
+if(typeof window !== 'undefined') setInterval(alarmPoll, 60000);
+
 /* ================= 로그인 =================
    아이디 · 암호로 들어옵니다. 계정은 관리자가 만들어 전달합니다.
    「자동 로그인」을 켜면 이 브라우저에 남아 다음에 바로 들어옵니다 —
@@ -4435,6 +4625,7 @@ function doLogin(){
   hideLogin();
   toast(`${t.name} ${t.rank} 님, 안녕하세요`);
   render(); markNav();
+  alarmAfterLogin(true);   /* 임시(컨펌 알람) — 개발 끝나면 이 한 줄을 지웁니다 */
 }
 function logout(){
   try{ localStorage.removeItem(AUTH_KEY); sessionStorage.removeItem(AUTH_KEY); }catch(e){}
@@ -4461,6 +4652,9 @@ loadAll();
 restoreLogin();
 applyHash();
 bump(); render(); markNav(); paintAgo();
+/* 자동 로그인으로 바로 들어온 경우에도 알람을 띄웁니다
+   임시(컨펌 알람) — 개발 끝나면 이 두 줄을 지웁니다 */
+if(document.getElementById('login').classList.contains('off')) alarmAfterLogin(false);
 </script>
 </body>
 </html>
