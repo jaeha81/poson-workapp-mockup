@@ -4,13 +4,20 @@
    - 재고 실사 시트의 열 구조(사무실 + 담당자별)를 그대로 옮김
    =========================================================== */
 
-/* 팀 — 시트 담당자 열 순서 그대로 */
+/* 팀 — 시트 담당자 열 순서 그대로
+   role  : admin(관리자) · accounting(회계담당자) · engineer(뷰어)
+   duty  : 당직 대상자 — 관리자가 직원 등록 후 켭니다 (김기홍 팀장 요청 2026-08-02) */
 const TEAM = [
-  {id:'kkh', name:'김기홍', rank:'팀장', role:'admin',    car:true },
-  {id:'kdh', name:'김두혁', rank:'과장', role:'admin',    car:true },
-  {id:'lyj', name:'임영준', rank:'대리', role:'engineer', car:true },
-  {id:'jdh', name:'장두환', rank:'대리', role:'engineer', car:true },
-  {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true }
+  {id:'kkh', name:'김기홍', rank:'팀장', role:'admin',    car:true, duty:true },
+  {id:'kdh', name:'김두혁', rank:'과장', role:'admin',    car:true, duty:true },
+  {id:'lyj', name:'임영준', rank:'대리', role:'engineer', car:true, duty:true },
+  {id:'jdh', name:'장두환', rank:'대리', role:'engineer', car:true, duty:false },
+  {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true, duty:false }
+];
+
+/* 가입 신청 — 관리자가 승인해야 직원이 됩니다 (김기홍 팀장 요청 2026-08-02) */
+let SIGNUPS = [
+  {id:'sg1', name:'박서준', rank:'사원', email:'seojun@poson.co.kr', at:'2026-08-01 17:20'}
 ];
 
 /* 재고 보관 위치 = 창고(사무실) + 차량(담당자별)
