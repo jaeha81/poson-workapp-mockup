@@ -3421,7 +3421,7 @@ function viewStores(){
       <span class="n">${esc(s.name)}</span>
       <span class="cat k1">${esc(s.kind)}</span>
       <span class="m">${s.addr ? esc(s.addr) : '주소 미등록'}</span>
-      <span class="rm"><button class="btn sm" onclick="delStore('${esc(s.code)}')">삭제</button></span>
+      <span class="rm" style="margin-left:auto"><button class="btn sm" onclick="delStore('${esc(s.code)}')">삭제</button></span>
     </div>`).join('')}`;
 }
 /* 거래처 삭제 — 업무에 이미 쓰인 곳은 먼저 알려주고 확인을 받습니다 */
