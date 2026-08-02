@@ -1454,6 +1454,8 @@ function moveDate(d){
 /* ================= 유틸 ================= */
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* onclick="fn('...')" 안에 이름을 넣을 때 씁니다. 따옴표가 든 이름이 들어와도 버튼이 깨지지 않습니다 */
+const jsq = s => esc(String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'"));
 
 function toast(msg){
   const t = $('#toast'); t.textContent = msg; t.classList.add('on');
@@ -1539,7 +1541,7 @@ function renderWho(){
   const m = meObj();
   $('#who').innerHTML = `
     <select onchange="switchUser(this.value)" title="계정 전환">
-      ${TEAM.map(t=>`<option value="${t.name}" ${t.name===ME?'selected':''}>${t.name} ${t.rank}</option>`).join('')}
+      ${TEAM.map(t=>`<option value="${esc(t.name)}" ${t.name===ME?'selected':''}>${esc(t.name)} ${esc(t.rank)}</option>`).join('')}
     </select>
     <span class="rolebadge ${m.role==='admin'?'adm':'viw'}">${ROLE_LABEL[m.role]||'뷰어'}</span>`;
   /* 관리자 전용 메뉴는 일반 직원에게 아예 보이지 않습니다 */
@@ -1891,7 +1893,7 @@ function viewDetail(id){
     const a = t.acks.find(x=>x.n===n);
     return a
       ? `<span class="who-chip done" title="${esc(a.t)} 확인${a.note?' · '+esc(a.note):''}">${esc(n)}${n===ME?' (나)':''}</span>`
-      : `<button class="who-chip wait" onclick="remind('${esc(n)}')" title="눌러서 리마인드">${esc(n)}${n===ME?' (나)':''}</button>`;
+      : `<button class="who-chip wait" onclick="remind('${jsq(n)}')" title="눌러서 리마인드">${esc(n)}${n===ME?' (나)':''}</button>`;
   }).join('');
 
   /* 등록한 사람 · 오더 담당 · 관리자만 내용을 고칠 수 있습니다 */
@@ -2360,11 +2362,11 @@ function acSearch(q){
   const hit = searchStores(q, 8);
   if(!hit.length){
     box.innerHTML = `<div class="ac-none">"${esc(q)}" 로 찾은 거래처가 없습니다 ·
-      <button class="btn sm" onclick="quickStore('${esc(q)}')">이 이름으로 등록</button></div>`;
+      <button class="btn sm" onclick="quickStore('${jsq(q)}')">이 이름으로 등록</button></div>`;
     box.classList.add('on'); return;
   }
   box.innerHTML = hit.map(s=>`
-    <button class="ac-i" onclick="acPick('${esc(s.name).replace(/'/g,"\\'")}')">
+    <button class="ac-i" onclick="acPick('${jsq(s.name)}')">
       <span class="ac-n">${esc(s.name)}</span>
       <span class="ac-m">${esc(s.kind)} · ${esc(s.code)}${s.addr?' · '+esc(s.addr):''}</span>
     </button>`).join('');
@@ -2386,7 +2388,7 @@ function openNew(asPlan){
   $('#fKind').innerHTML = WORK_KINDS.map(k=>`<option>${k}</option>`).join('');
   $('#fCat').innerHTML  = WORK_CATS.map(c=>`<option>${c}</option>`).join('');
   $('#people').innerHTML = TEAM.filter(t=>t.name!==ME).map(t=>
-    `<label><input type="checkbox" value="${t.name}">${t.name}${ROOKIES.has(t.name)?' <span class="cat k3">신입</span>':''}</label>`).join('');
+    `<label><input type="checkbox" value="${esc(t.name)}">${esc(t.name)}${ROOKIES.has(t.name)?' <span class="cat k3">신입</span>':''}</label>`).join('');
   markNewDate();
   fillChecks();
   /* 예정 업무는 따로 만들지 않고 여기서 체크로 만듭니다 (김기홍 팀장 요청 2026-08-02) */
@@ -3015,7 +3017,7 @@ function viewExpense(){
           <td class="tot" style="text-align:right">${r.exAmt ? won(r.exAmt) : '<span class="dt-none">—</span>'}</td>
           <td class="tot" style="text-align:right">${won(r.duty + r.exAmt)}</td>
           <td style="text-align:center">${canEdit
-            ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'is-on' : ''}" onclick="togglePaid('${ym}','${esc(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
+            ? `<button class="btn sm ${PAY_STATE[payKey(ym, r.n)] ? 'is-on' : ''}" onclick="togglePaid('${ym}','${jsq(r.n)}')">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</button>`
             : `<span class="cat ${PAY_STATE[payKey(ym, r.n)] ? 'k1' : 'k3'}">${PAY_STATE[payKey(ym, r.n)] ? '지급 완료' : '대기'}</span>`}</td>
         </tr>`).join('')}
         <tr><td class="tot">TOT</td>
@@ -3275,7 +3277,7 @@ function planEdit(p, canEdit){
           <input type="text" id="pe_store" value="${esc(p.store)}"></div>
         <div class="f"><label>담당자 (비워두면 미정)</label>
           <select id="pe_owner"><option value="">미정</option>
-            ${TEAM.map(t=>`<option ${t.name===p.owner?'selected':''}>${t.name}</option>`).join('')}</select></div>
+            ${TEAM.map(t=>`<option ${t.name===p.owner?'selected':''}>${esc(t.name)}</option>`).join('')}</select></div>
       </div>
       <div class="f"><label>접수내역</label>
         <input type="text" id="pe_recv" value="${esc(p.recv)}"></div>
@@ -3438,12 +3440,29 @@ function delStore(code){
 
 /* ===== 엑셀 붙여넣기 · CSV 올리기 (김기홍 팀장 요청 2026-08-02)
    한 줄 = 거래처코드 / 거래처명 / 주소. 탭 · 쉼표 둘 다 받습니다. ===== */
+/* 한 줄을 칸으로 나눕니다. 탭이 있으면 탭 기준(엑셀 복사),
+   없으면 쉼표 기준인데 큰따옴표 안의 쉼표는 주소의 일부로 봅니다 — "서울시 중구, 1층" */
+function splitRow(line){
+  if(line.includes('\t')) return line.split('\t');
+  const out = []; let cur = '', inQ = false;
+  for(let i = 0; i < line.length; i++){
+    const c = line[i];
+    if(c === '"'){
+      if(inQ && line[i+1] === '"'){ cur += '"'; i++; }   /* "" 는 따옴표 한 개 */
+      else inQ = !inQ;
+    }
+    else if(c === ',' && !inQ){ out.push(cur); cur = ''; }
+    else cur += c;
+  }
+  out.push(cur);
+  return out;
+}
 function parseStoreRows(text){
   const out = [], bad = [];
   (text||'').split(/\r?\n/).forEach((line, i) => {
     const raw = line.trim();
     if(!raw) return;
-    const cell = raw.split(/\t|,/).map(x => x.trim().replace(/^"|"$/g, ''));
+    const cell = splitRow(raw).map(x => x.trim());
     const code = (cell[0]||'').replace(/[^0-9]/g, '');
     const name = cell[1]||'';
     /* 제목 줄 건너뛰기 */
@@ -3462,19 +3481,30 @@ function uploadStores(){
   let add = 0, upd = 0;
   out.forEach(r => {
     const old = STORES.find(s => s.code === r.code);
-    if(old){ old.name = r.name; old.addr = r.addr; old.kind = r.kind; upd++; }
+    /* 주소 칸을 비워서 올린 줄은 원래 주소를 지우지 않고 그대로 둡니다 */
+    if(old){ old.name = r.name; if(r.addr) old.addr = r.addr; old.kind = r.kind; upd++; }
     else { STORES.unshift(r); add++; }
   });
   cur.stPaste = '';
   toast(`엑셀 올리기 완료 — 새로 ${add}곳 · 덮어쓴 곳 ${upd}곳${bad.length?` · 못 읽은 줄 ${bad.length}`:''}`);
   render();
 }
+/* 엑셀에서 저장한 CSV 는 한글 윈도우에서 CP949(euc-kr) 로 저장됩니다.
+   UTF-8 로 먼저 읽어보고 글자가 깨졌으면 CP949 로 다시 읽습니다. */
 function readStoreFile(el){
   const f = el.files && el.files[0]; if(!f) return;
   const rd = new FileReader();
-  rd.onload = () => { cur.stPaste = String(rd.result || ''); render();
-    toast(`${f.name} 을 읽었습니다 — 내용을 확인하고 「올리기」를 누르세요`); };
-  rd.readAsText(f, 'utf-8');
+  rd.onload = () => {
+    const buf = rd.result;
+    let txt = new TextDecoder('utf-8').decode(buf);
+    let how = 'UTF-8';
+    if(txt.includes('�')){                       /* 깨진 글자가 있으면 */
+      try{ txt = new TextDecoder('euc-kr').decode(buf); how = 'CP949(엑셀 한글)'; }catch(e){}
+    }
+    cur.stPaste = txt; render();
+    toast(`${f.name} 을 ${how} 로 읽었습니다 — 내용을 확인하고 「올리기」를 누르세요`);
+  };
+  rd.readAsArrayBuffer(f);
   el.value = '';
 }
 function addStore(){
@@ -3824,7 +3854,7 @@ function viewMembers(){
         ${isAdmin()?`<span class="rm">
           <button class="btn sm ${t.duty?'is-on':''}" onclick="toggleDuty('${t.id}')">${t.duty?'당직 대상 해제':'당직 대상 지정'}</button>
           <button class="btn sm ${t.car?'is-on':''}" onclick="toggleCar('${t.id}')">${t.car?'차량 재고 해제':'차량 재고 지정'}</button>
-          <button class="btn sm" onclick="toggleRookie('${t.name}')">${ROOKIES.has(t.name)?'신입 해제':'신입 지정'}</button>
+          <button class="btn sm" onclick="toggleRookie('${jsq(t.name)}')">${ROOKIES.has(t.name)?'신입 해제':'신입 지정'}</button>
           <button class="btn sm" onclick="toggleRole('${t.id}')">권한 바꾸기</button>
         </span>`:''}
       </div>`).join('')}
@@ -4132,7 +4162,14 @@ function loadAll(){
   refill(ITEMS, s.ITEMS);
   refill(INBOUND, s.INBOUND);
   refill(CHECKLISTS, s.CHECKLISTS);
-  if(s.TEAM && s.TEAM.length){ refill(TEAM, s.TEAM); rebuildLocations(); }
+  if(s.TEAM && s.TEAM.length){
+    /* 당직 대상 표시가 없는 옛 저장본이면 그때 당직을 서던 3명을 켜 둡니다 */
+    if(!s.TEAM.some(t => 'duty' in t)){
+      const was = ['김기홍','김두혁','임영준'];
+      s.TEAM.forEach(t => { t.duty = was.includes(t.name); });
+    }
+    refill(TEAM, s.TEAM); rebuildLocations();
+  }
   saveOn = true;
 }
 
