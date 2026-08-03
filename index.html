@@ -1261,7 +1261,10 @@ b.astm.none{color:var(--t4);font-weight:600}
       <span style="color:var(--t3);font-size:12px">— 켜면 다음부터 암호 없이 바로 들어옵니다</span></label>
     <p class="lerr" id="lgErr"></p>
     <button class="btn pri lbtn" onclick="doLogin()">로그인</button>
-    <p class="lhint">시연용 계정 — 아이디 <b>kkh</b> · 암호 <b>1234</b> (김기홍 팀장 · 관리자)</p>
+    <!-- ⛔ 아이디·암호를 이 화면에 적어두지 않습니다 (재하님 지시 2026-08-03).
+         계정은 관리자가 「직원 · 권한」에서 만들어 직원에게 전달합니다. -->
+    <p class="lhint">아이디와 암호는 <b>관리자에게 받으세요</b>. 가입 신청은 따로 없습니다.<br>
+      암호를 잊으셨으면 관리자가 새로 정해 드립니다.</p>
   </div>
 </div>
 
@@ -1433,9 +1436,11 @@ b.astm.none{color:var(--t4);font-weight:600}
 2. 아이디 · 암호를 넣습니다 — 계정은 **팀장님이 만들어 전달**합니다. 따로 가입 신청하지 않습니다
 3. **자동 로그인**에 체크하면 다음부터 암호 없이 바로 들어옵니다 (본인 폰에서만 켜세요)
 
-> 시연용 계정 — 아이디 `kkh` · 암호 `1234` (김기홍 팀장 · 관리자)
+> **가입 신청은 없습니다.** 관리자(팀장님)가 「직원 · 권한」 화면에서 계정을 만들어
+> **아이디와 임시 암호를 카카오톡으로 보내드립니다.** 그것으로 들어오시면 됩니다.
 
-암호를 잊으면 팀장님께 말씀하세요. 「직원 · 권한」 화면에서 **임시 암호를 다시 발급**해 드립니다.
+암호를 잊으면 팀장님께 말씀하세요. 「직원 · 권한」 화면에서 **새 암호를 정해** 전달해 드립니다.
+로그인 화면에는 아이디·암호가 적혀 있지 않습니다 — 아무나 보면 안 되기 때문입니다.
 
 ## 1-2. 화면은 세 덩어리입니다
 
@@ -1715,7 +1720,22 @@ b.astm.none{color:var(--t4);font-weight:600}
 
 ## 3-15. 【관리자 전용】 직원 · 권한
 
-**계정 만들기** — 직원이 가입 신청하지 않습니다. 관리자가 **아이디 + 임시 암호**를 만들어 전달합니다.
+### 계정 만들기 · 아이디 · 암호
+
+직원이 가입 신청하지 않습니다. **관리자가 만들어 전달**합니다.
+
+1. 이름 · 직급 · **아이디** · **임시 암호** · 입사일을 넣고 **「계정 만들기」**
+   - 임시 암호를 비우면 **8자리 임시 암호를 자동으로 만들어** 줍니다 (0·O·1·l 처럼 헷갈리는 글자는 뺍니다)
+2. 목록에서 **「전달 문구 복사」** → 카카오톡에 그대로 붙여넣어 본인에게 보냅니다
+3. 나중에 바꾸려면 그 사람 줄의 **「아이디 · 암호」** 를 누릅니다
+   - 아이디를 고치거나, 새 암호를 넣고 **「저장」**
+   - **새 암호 칸을 비우면 암호는 그대로** 둡니다 (아이디만 바꿀 때)
+
+> 🔒 **암호는 목록에 보여주지 않습니다.** 「암호 설정됨」 표시만 나옵니다.
+> 직원이 암호를 잊으면 **새로 정해서 전달**하는 방식입니다 — 예전 암호를 알아낼 방법은 없습니다.
+> (실제 서버에서는 암호를 암호화해 저장하므로 관리자도 원래 암호를 볼 수 없습니다.)
+
+**그 밖 버튼**
 
 **버튼 여섯 개**
 
@@ -1860,7 +1880,7 @@ b.astm.none{color:var(--t4);font-weight:600}
 | 매장 주소·관리업체를 알고 싶다 | 업무 등록 칸에서 **이름 일부 검색**, 또는 **거래처 관리**(관리자) |
 | 신입이 들어왔다 | **직원 · 권한** → 계정 만들기 + **신입 지정** |
 | 직원이 그만뒀다 | **직원 · 권한** → **미사용 처리** (삭제 아님) |
-| 암호를 잊었다 | 팀장님께 → **직원 · 권한**에서 임시 암호 재발급 |
+| 암호를 잊었다 | 팀장님께 → **직원 · 권한** → 그 사람 줄 **「아이디 · 암호」** 로 새로 정함 |
 | 앱에 고칠 게 있다 | 팀장님께 → **관리자 페이지 › 컨펌 체크리스트** |
 | 이 가이드북을 다시 보려면 | **관리자 페이지 › 앱 관리 › 가이드북** |
 | 실제 서버로 올리려면 | **관리자 페이지 › 앱 관리 › 세팅 경로** |
@@ -2085,7 +2105,8 @@ const CHAPTERS = [
 let cur = {view:'tasks', filter:'today', taskId:null, tedit:false, planId:null, mchap:null, msec:null,
            mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
            em:'2026-07', dm:'2026-07', hy:'2026', hq:'', scat:null,
-           atab:'confirm', gq:'', sqlOpen:false};   /* 관리자 페이지 — 탭 · 가이드북 검색 · SQL 펼침 */
+           atab:'confirm', gq:'', sqlOpen:false,    /* 관리자 페이지 — 탭 · 가이드북 검색 · SQL 펼침 */
+           acEdit:''};                              /* 아이디·암호를 고치고 있는 직원 */
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -5022,7 +5043,7 @@ function signupPanel(){
     </div>
     <div class="grid2">
       <div class="f"><label>아이디</label><input type="text" id="acId" placeholder="예) psj"></div>
-      <div class="f"><label>임시 암호</label><input type="text" id="acPw" placeholder="비우면 1234 로 만듭니다"></div>
+      <div class="f"><label>임시 암호</label><input type="text" id="acPw" placeholder="비우면 임시 암호를 만들어 드립니다"></div>
     </div>
     <!-- 입사일 (김기홍 팀장 요청 2026-08-02 4차) -->
     <div class="grid2">
@@ -5033,19 +5054,82 @@ function signupPanel(){
     <button class="btn pri" onclick="addAccount()">계정 만들기</button>` : ''}
 
     <div class="plist" style="margin-top:12px">
-      ${TEAM.map(t=>`<div class="prow ${t.off?'is-off':''}">
+      ${TEAM.map(t => (can && cur.acEdit === t.id) ? acEditRow(t) : `
+      <div class="prow ${t.off?'is-off':''}">
         <span class="av">${esc(t.name[0])}</span>
         <span class="nm" style="min-width:86px">${esc(t.name)} ${esc(t.rank)}</span>
         <span class="cat k1">${esc(t.uid || '아이디 없음')}</span>
+        <span class="cat k3">암호 ${t.pw ? '설정됨' : '없음'}</span>
         ${t.off?'<span class="cat k3">미사용</span>':''}
         <span class="tm">${ROLE_LABEL[t.role]||'뷰어'}${t.name===ME?' · 지금 로그인 중':''}
           · 입사일 ${t.hire ? esc(t.hire) : '미등록'}</span>
         ${can?`<span class="rm">
+          <button class="btn sm" onclick="editAccount('${jsq(t.id)}')">아이디 · 암호</button>
           <button class="btn sm" onclick="setHire('${jsq(t.id)}')">입사일</button>
-          <button class="btn sm" onclick="resetPw('${jsq(t.id)}')">암호 초기화</button></span>`:''}
+          <button class="btn sm" onclick="copyAccountNote('${jsq(t.id)}')">전달 문구 복사</button></span>`:''}
       </div>`).join('')}
     </div>
+    ${can ? `<p style="font-size:12px;color:var(--t3);margin-top:10px">
+      암호는 화면에 보여주지 않습니다. 잊으셨으면 <b>새로 정해</b> 본인에게 전달하세요.
+      「전달 문구 복사」를 누르면 카카오톡에 붙여넣을 안내문이 만들어집니다.</p>` : ''}
   </div>`;
+}
+/* 아이디·암호를 관리자가 직접 정합니다 (재하님 지시 2026-08-03)
+   ⚠️ 목업이라 암호를 그대로 보관합니다. 실서비스에서는 서버가 암호화해 저장합니다. */
+function acEditRow(t){
+  return `
+  <div class="prow" style="flex-wrap:wrap;align-items:flex-end;gap:9px;background:var(--bg)">
+    <span class="nm" style="min-width:86px;font-weight:700">${esc(t.name)} ${esc(t.rank)}</span>
+    <div class="f" style="flex:0 0 150px;margin:0"><label>아이디</label>
+      <input type="text" id="edUid" value="${esc(t.uid || '')}" placeholder="예) psj"></div>
+    <div class="f" style="flex:0 0 170px;margin:0"><label>새 암호</label>
+      <input type="text" id="edPw" placeholder="비우면 그대로 둡니다"></div>
+    <span class="rm">
+      <button class="btn sm pri" onclick="saveAccountEdit('${jsq(t.id)}')">저장</button>
+      <button class="btn sm" onclick="cur.acEdit='';render()">취소</button>
+    </span>
+  </div>`;
+}
+function editAccount(id){
+  if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
+  cur.acEdit = id; render();
+}
+function saveAccountEdit(id){
+  if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
+  const t = TEAM.find(x => x.id === id); if(!t) return;
+  const uid = ($('#edUid').value || '').trim();
+  const pw  = ($('#edPw').value || '').trim();
+  if(!uid){ toast('아이디를 입력해주세요'); return; }
+  if(TEAM.some(x => x.id !== id && (x.uid || '') === uid)){ toast(`아이디 ${uid} 는 이미 쓰고 있습니다`); return; }
+  const wasMe = (t.uid === (meObj().uid || ''));
+  t.uid = uid;
+  if(pw) t.pw = pw;
+  cur.acEdit = '';
+  /* 지금 로그인한 사람의 아이디가 바뀌면 저장해 둔 로그인 표시도 함께 고칩니다 */
+  if(wasMe && t.name === ME){
+    try{
+      const st = localStorage.getItem(AUTH_KEY) ? localStorage : sessionStorage;
+      if(st.getItem(AUTH_KEY)) st.setItem(AUTH_KEY, JSON.stringify({uid}));
+    }catch(e){}
+  }
+  toast(pw ? `${t.name} — 아이디 ${uid} · 새 암호를 본인에게 전달하세요`
+           : `${t.name} — 아이디를 ${uid} 로 바꿨습니다`);
+  render();
+}
+/* 카카오톡·문자에 그대로 붙여넣을 안내문 */
+function copyAccountNote(id){
+  const t = TEAM.find(x => x.id === id); if(!t) return;
+  const txt = [
+    '[포스온 업무관리] 계정 안내',
+    `이름: ${t.name} ${t.rank}`,
+    `아이디: ${t.uid || '(미지정)'}`,
+    '임시 암호: (관리자가 정한 암호를 여기에 적어 보내세요)',
+    '주소: https://jaeha81.github.io/poson-workapp-mockup/',
+    '',
+    '※ 처음 들어가시면 「자동 로그인」을 켜두시면 다음부터 바로 열립니다.'
+  ].join('\n');
+  if(typeof copyText === 'function') copyText(txt, '전달 문구를 복사했습니다 — 카카오톡에 붙여넣으세요');
+  else toast('복사 기능을 불러오지 못했습니다');
 }
 /* 입사일 — 이미 있는 직원은 여기서 채웁니다 (김기홍 팀장 요청 2026-08-02 4차) */
 function setHire(id){
@@ -5070,7 +5154,7 @@ function addAccount(){
   if(activeTeam().length >= LIMITS.seats){
     toast(`사용 인원 한도 ${LIMITS.seats}명입니다. 위에서 한도를 올리세요`); return;
   }
-  const pw = ($('#acPw').value||'').trim() || '1234';
+  const pw = ($('#acPw').value||'').trim() || tempPw();
   const hire = (($('#acHire') && $('#acHire').value) || '').trim();
   TEAM.push({id:'u'+Date.now(), name, rank:($('#acRank').value||'').trim() || '사원',
              role:'engineer', car:false, duty:false, uid, pw, hire, off:false});
@@ -5078,14 +5162,12 @@ function addAccount(){
   toast(`계정 생성 — 아이디 ${uid} · 암호 ${pw} 를 ${name} 님에게 전달하세요 (뷰어 권한으로 시작)`);
   bump(); render();
 }
-function resetPw(id){
-  if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
-  const t = TEAM.find(x=>x.id===id); if(!t) return;
-  const pw = prompt(`${t.name} 님의 새 암호를 정해주세요 — 본인에게 전달하시면 됩니다`, '1234');
-  if(pw === null) return;
-  t.pw = pw.trim() || '1234';
-  toast(`${t.name} 암호를 ${t.pw} 로 바꿨습니다`);
-  render();
+/* 임시 암호 — 헷갈리는 글자(0·O·1·l)는 빼고 8자리로 만듭니다 */
+function tempPw(){
+  const s = 'abcdefghjkmnpqrstuvwxyz23456789';
+  let out = '';
+  for(let i = 0; i < 8; i++) out += s[Math.floor(Math.random() * s.length)];
+  return out;
 }
 /* ===== 퇴사자 처리 (김기홍 팀장 요청 2026-08-02 4차)
    기본은 「미사용」입니다 — 로그인과 담당자 선택에서만 빠지고 지난 기록은 그대로 둡니다.
