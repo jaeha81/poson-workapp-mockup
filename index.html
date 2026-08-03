@@ -997,48 +997,6 @@ input,select,textarea{font-family:inherit;font-size:14px;letter-spacing:inherit}
 .dt-day.cur,.dt-day.cur.red,.dt-day.cur.blue{background:var(--navy);color:var(--card);border-radius:5px}
 .dt-day.cur .hdot{background:var(--orange)}
 
-/* ===== 컨펌 체크리스트 겹침창 — 임시. 컨펌 끝나면 이 묶음을 지웁니다 ===== */
-.cfmask{position:fixed;inset:0;z-index:850;background:rgba(19,39,65,.55);display:none;
-  align-items:flex-start;justify-content:center;padding:28px 16px}
-.cfmask.on{display:flex}
-.cfmodal{width:100%;max-width:840px;max-height:calc(100vh - 56px);background:var(--bg);
-  border-radius:var(--r-card);display:flex;flex-direction:column;overflow:hidden;
-  box-shadow:0 22px 54px rgba(0,0,0,.32)}
-.cfhead{display:flex;align-items:center;gap:10px;padding:14px 18px;background:var(--card);
-  border-bottom:1px solid var(--line)}
-.cfhead b{font-size:15px}
-.cfhs{font-size:12px;color:var(--t3);margin-right:auto}
-.cfhead button{background:none;border:0;cursor:pointer;color:var(--t2);padding:4px;display:flex}
-.cfbody{overflow-y:auto;padding:18px}
-.cfback{position:fixed;right:18px;bottom:18px;z-index:840;display:none;align-items:center;gap:7px;
-  background:var(--navy);color:#fff;border:0;border-radius:999px;padding:11px 18px;cursor:pointer;
-  font-size:14px;font-weight:700;box-shadow:0 8px 22px rgba(19,39,65,.35)}
-.cfback.on{display:flex}
-.cfback:hover{background:var(--navy-700)}
-.cfback .ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}
-@media (max-width:640px){
-  .cfmask{padding:0}
-  .cfmodal{max-width:none;max-height:100vh;height:100vh;border-radius:0}
-  .cfhs{display:none}
-}
-
-/* ===== 컨펌 알람 띠 — 임시. 개발 끝나면 이 묶음과 data-alarm.js 를 지웁니다 ===== */
-.updbar{position:fixed;left:0;right:0;top:0;z-index:800;background:var(--orange,#E67E22);color:#fff;
-  box-shadow:0 6px 18px rgba(0,0,0,.18);display:none}
-.updbar.on{display:block}
-.ub-in{display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap}
-.ub-in .ic{width:20px;height:20px;flex:none}
-.ub-t{display:flex;flex-direction:column;line-height:1.35;margin-right:auto}
-.ub-t b{font-size:14px}
-.ub-t span{font-size:12px;opacity:.9}
-.updbar .btn{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.35);color:#fff}
-.updbar .btn:hover{background:rgba(255,255,255,.28);border-color:#fff;color:#fff}
-.updbar .btn.pri{background:#fff;color:var(--navy);border-color:#fff;font-weight:700}
-.ub-x{background:none;border:0;color:#fff;cursor:pointer;padding:4px;display:flex}
-.ub-list{display:none;padding:0 16px 12px 46px;font-size:13px}
-.ub-list.on{display:block}
-.ub-list li{margin:3px 0}
-
 /* ===== 로그인 (김기홍 팀장 요청 2026-08-02 3차) ===== */
 .login{position:fixed;inset:0;z-index:900;display:flex;align-items:center;justify-content:center;
   background:var(--navy-900);padding:20px}
@@ -1224,9 +1182,6 @@ b.astm.none{color:var(--t4);font-weight:600}
   <span>실제 데이터 아님 · 넣으신 내용은 <b>이 브라우저에 저장</b>돼 새로고침해도 남습니다
     <button onclick="resetAll()" style="margin-left:8px;border:1px solid rgba(255,255,255,.5);background:none;
       color:inherit;border-radius:6px;padding:2px 8px;font:inherit;cursor:pointer">처음으로 되돌리기</button></span>
-  <!-- 임시(컨펌용) — 컨펌 끝나면 아래 한 줄을 지웁니다 -->
-  <a href="#confirm" onclick="goConfirm(event)" style="margin-left:auto;flex:none;background:var(--orange);
-     color:#fff;border-radius:6px;padding:3px 11px;font-weight:700;text-decoration:none">의견 남기기</a>
 </div>
 
 <div class="app">
@@ -1259,9 +1214,7 @@ b.astm.none{color:var(--t4);font-weight:600}
       <a href="#" data-view="report" id="navReport"><svg class="ic"><use href="#i-report"/></svg>월 업무량 집계</a>
       <a href="#" data-view="stores" id="navStores"><svg class="ic"><use href="#i-stores"/></svg>거래처 관리</a>
       <a href="#" data-view="members" id="navMembers"><svg class="ic"><use href="#i-members"/></svg>직원 · 권한</a>
-      <!-- 임시(컨펌용) — 컨펌 끝나면 아래 두 줄을 지웁니다 -->
-      <div class="nav-label">컨펌 (임시)</div>
-      <a href="#" data-view="confirm"><svg class="ic"><use href="#i-check-circle"/></svg>컨펌 체크리스트</a>
+      <a href="#" data-view="confirm" id="navConfirm"><svg class="ic"><use href="#i-check-circle"/></svg>수정 요청 보내기</a>
     </nav>
     <div class="side-foot">
       <button class="btn-new" onclick="openNew()">+ 업무 등록</button>
@@ -1292,34 +1245,6 @@ b.astm.none{color:var(--t4);font-weight:600}
 
     <div class="body" id="view"></div>
   </div>
-</div>
-
-<!-- 컨펌 체크리스트 겹침창 — 임시. 컨펌 끝나면 이 블록을 지웁니다 -->
-<div class="cfmask" id="cfmask" onclick="if(event.target===this)closeConfirmPanel()">
-  <div class="cfmodal">
-    <div class="cfhead"><b>컨펌 체크리스트</b>
-      <span class="cfhs">보시던 화면은 그대로 있습니다 — 닫으면 돌아갑니다</span>
-      <button onclick="closeConfirmPanel()" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button></div>
-    <div class="cfbody" id="cfBody"></div>
-  </div>
-</div>
-
-<!-- 컨펌으로 돌아가기 — 임시. 체크리스트에서 화면을 보러 나갔을 때만 뜹니다 -->
-<button class="cfback" id="cfback" onclick="openConfirmPanel()">
-  <svg class="ic"><use href="#i-check-circle"/></svg>컨펌으로 돌아가기</button>
-
-<!-- 컨펌 알람 띠 — 임시. 개발 끝나면 이 블록과 data-alarm.js 를 지웁니다 -->
-<div class="updbar" id="updbar">
-  <div class="ub-in">
-    <svg class="ic"><use href="#i-bell"/></svg>
-    <div class="ub-t"><b id="ubTitle">새로 고친 내용이 올라왔습니다</b>
-      <span id="ubSub">컨펌 요청드립니다</span></div>
-    <button class="btn sm" onclick="alarmSpeak()">다시 듣기</button>
-    <button class="btn sm" onclick="alarmOpenList()">무엇이 바뀌었나</button>
-    <button class="btn sm pri" id="ubGo" onclick="alarmGoConfirm()">컨펌하러 가기</button>
-    <button class="ub-x" onclick="alarmClose()" aria-label="닫기"><svg class="ic"><use href="#i-close"/></svg></button>
-  </div>
-  <div class="ub-list" id="ubList"></div>
 </div>
 
 <!-- 로그인 — 아이디 · 암호 · 자동 로그인 (김기홍 팀장 요청 2026-08-02 3차) -->
@@ -1469,7 +1394,6 @@ b.astm.none{color:var(--t4);font-weight:600}
 <script src="data-holiday.js"></script>
 <script src="data-duty.js"></script>
 <script src="data-confirm.js"></script><!-- 임시(컨펌용) — 컨펌 끝나면 이 줄과 파일을 지웁니다 -->
-<script src="data-alarm.js"></script><!-- 임시(컨펌 알람) — 개발 끝나면 이 줄과 파일을 지웁니다 -->
 <script>
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
@@ -1624,9 +1548,6 @@ function dotsOf(t){
 document.getElementById('nav').addEventListener('click', e => {
   const a = e.target.closest('a'); if(!a) return;
   e.preventDefault();
-  /* 임시(컨펌용) — 컨펌 체크리스트는 화면을 옮기지 않고 위에 겹쳐 띄웁니다.
-     보던 화면이 그대로 남아 있어야 확인하면서 답하기 편합니다. */
-  if(a.dataset.view === 'confirm'){ closeSide(); openConfirmPanel(); return; }
   document.querySelectorAll('#nav a').forEach(x=>x.classList.remove('on'));
   a.classList.add('on');
   cur.view = a.dataset.view; cur.filter = a.dataset.filter || null; cur.taskId = null;
@@ -1677,7 +1598,6 @@ function render(){
 
   window.scrollTo(0, stay ? y : 0);
   lastScreen = screen;
-  if(typeof cfOpen !== 'undefined' && cfOpen) paintConfirmPanel();  /* 임시(컨펌용) */
   if(cur.view==='audit')    adNow();     /* 고른 품목·위치의 현재고를 채워 넣습니다 */
   if(cur.view==='outbound') obNow();
   renderNoti(); renderWho();
@@ -1696,7 +1616,7 @@ function renderWho(){
     <button class="btn sm" onclick="logout()" title="로그아웃">로그아웃</button>`;
   /* 관리자 전용 메뉴는 일반 직원에게 아예 보이지 않습니다 */
   const show = isAdmin() ? '' : 'none';
-  ['admLabel','navReport','navStores','navMembers'].forEach(id=>{
+  ['admLabel','navReport','navStores','navMembers','navConfirm'].forEach(id=>{
     const el = document.getElementById(id); if(el) el.style.display = show;
   });
 }
@@ -2749,14 +2669,14 @@ function acSearch(q){
   box.innerHTML = hit.map(s=>`
     <button class="ac-i" onclick="acPick('${jsq(s.name)}')">
       <span class="ac-n">${esc(s.name)}</span>
-      <span class="ac-m">${esc(s.kind)} · ${esc(s.code)}${s.addr?' · '+esc(s.addr):''}</span>
+      <span class="ac-m">${esc(s.kind)} · ${esc(s.code)}${s.mgr?' · '+esc(s.mgr):''}${s.addr?' · '+esc(s.addr):''}</span>
     </button>`).join('');
   box.classList.add('on');
 }
 function acPick(name){ $('#fStore').value = name; $('#acList').classList.remove('on'); }
 function quickStore(name){
   if(!name.trim()) return;
-  const s = {code:nextStoreCode('매장'), name:name.trim(), kind:'매장', addr:''};
+  const s = {code:nextStoreCode('매장'), name:name.trim(), kind:'매장', addr:'', mgr:''};
   STORES.push(s); acPick(s.name);
   toast(`거래처 등록 — ${s.name} (${s.code})`);
 }
@@ -3882,7 +3802,11 @@ function viewStores(){
       <p>거래처 등록·수정은 관리자 계정에서만 열립니다.</p></div>`;
   }
   const q = (cur.stq||'').trim();
-  const list = q ? searchStores(q, 999) : STORES;
+  /* 거래처가 1,300곳이 넘어 전부 그리면 화면이 느려집니다 —
+     검색 없이 들어오면 앞 200곳만 보여주고 나머지는 검색으로 찾게 합니다 */
+  const found = q ? searchStores(q, 999) : STORES;
+  const LIST_MAX = 200;
+  const list = found.slice(0, LIST_MAX);
   /* 수정 중인 거래처가 있으면 같은 칸을 「수정」으로 씁니다
      (김기홍 팀장 요청 2026-08-02 3차: "등록된 거래처 수정할 수 있어야 됨") */
   const ed = cur.stEdit ? STORES.find(s => s.code === cur.stEdit) : null;
@@ -3893,10 +3817,13 @@ function viewStores(){
       <div class="f"><label>거래처 구분</label>
         <select id="stKind">${STORE_KINDS.map(k=>`<option ${ed && ed.kind===k?'selected':''}>${k}</option>`).join('')}</select></div>
       <div class="f"><label>거래처 코드</label>
-        <input type="text" id="stCode" value="${ed?esc(ed.code):''}" placeholder="비우면 자동 채번 (숫자 5자리)"></div>
+        <input type="text" id="stCode" value="${ed?esc(ed.code):''}" placeholder="비우면 자동 채번"></div>
     </div>
-    <div class="f"><label>거래처명</label><input type="text" id="stName" value="${ed?esc(ed.name):''}" placeholder="예) OK마트 (수내)"></div>
+    <div class="f"><label>거래처명</label><input type="text" id="stName" value="${ed?esc(ed.name):''}" placeholder="예) OK마트(수내점)"></div>
     <div class="f"><label>주소</label><input type="text" id="stAddr" value="${ed?esc(ed.addr||''):''}" placeholder="예) 용마산로 96길 33"></div>
+    <div class="f"><label>관리업체 <span style="color:var(--t3);font-weight:400">— 이 거래처를 관리하는 대리점</span></label>
+      <input type="text" id="stMgr" value="${ed?esc(ed.mgr||''):''}" list="stMgrList" placeholder="예) 태일테크닉스">
+      <datalist id="stMgrList">${STORES.filter(s=>s.kind==='대리점').map(s=>`<option value="${esc(s.name)}">`).join('')}</datalist></div>
     ${ed
       ? `<div class="formbtns" style="margin-top:0">
            <button class="btn pri" onclick="saveStoreEdit()">수정 저장</button>
@@ -3906,15 +3833,15 @@ function viewStores(){
   </div>
 
   <div class="panel">
-    <h4>엑셀로 한 번에 올리기 <span style="color:var(--t3);font-weight:500">— 거래처코드 · 거래처명 · 주소 순서</span></h4>
+    <h4>엑셀로 한 번에 올리기 <span style="color:var(--t3);font-weight:500">— 거래처코드 · 거래처명 · 주소 · 관리업체 순서</span></h4>
     <div class="desc" style="margin:0 0 12px">
-      엑셀에서 <b>세 칸(코드 · 거래처명 · 주소)을 통째로 복사</b>해 아래에 붙여넣고 「올리기」를 누르세요.
-      CSV 파일을 골라도 됩니다. 첫 줄이 제목 줄이면 알아서 건너뜁니다.<br>
+      엑셀에서 <b>네 칸(코드 · 거래처명 · 주소 · 관리업체)을 통째로 복사</b>해 아래에 붙여넣고 「올리기」를 누르세요.
+      관리업체 칸은 없어도 됩니다. CSV 파일을 골라도 됩니다. 첫 줄이 제목 줄이면 알아서 건너뜁니다.<br>
       코드가 이미 있는 거래처는 <b>이름과 주소를 덮어씁니다</b> — 없던 곳은 새로 등록됩니다.
     </div>
     <div class="f"><label>엑셀에서 복사한 내용 붙여넣기</label>
       <textarea id="stPaste" style="min-height:110px;font-family:ui-monospace,monospace;font-size:12px"
-        placeholder="10045&#9;행복마트 성남점&#9;성남대로 100&#10;20011&#9;한빛정보통신&#9;"
+        placeholder="0003733&#9;행복마트 성남점&#9;성남대로 100&#9;태일테크닉스&#10;200083&#9;한빛정보통신&#9;&#9;"
         oninput="cur.stPaste=this.value">${esc(cur.stPaste||'')}</textarea></div>
     <div class="formbtns" style="margin-top:0">
       <button class="btn pri" onclick="uploadStores()">올리기</button>
@@ -3933,19 +3860,21 @@ function viewStores(){
 
   <div class="msearch">
     <svg class="ic"><use href="#i-search"/></svg>
-    <input value="${esc(cur.stq||'')}" placeholder="이름 일부 · 코드 · 주소로 검색 (예: 수내, 다팜)"
+    <input value="${esc(cur.stq||'')}" placeholder="이름 일부 · 코드 · 주소 · 관리업체로 검색 (예: 수내, 태일테크닉스)"
            oninput="cur.stq=this.value" onkeydown="if(event.key==='Enter')render()">
     ${q?`<button class="btn sm" onclick="cur.stq='';render()">지우기</button>`:''}
   </div>
 
   <p style="font-size:12px;color:var(--t3);margin-bottom:10px">
-    ${list.length}곳 · 매장 ${STORES.filter(s=>s.kind==='매장').length} · 대리점 ${STORES.filter(s=>s.kind==='대리점').length}</p>
+    ${q ? `찾은 곳 ${found.length}곳` : `전체 ${STORES.length}곳`} · 매장 ${STORES.filter(s=>s.kind==='매장').length} · 대리점 ${STORES.filter(s=>s.kind==='대리점').length}
+    ${found.length > LIST_MAX ? ` — 아래에는 ${LIST_MAX}곳만 보여드립니다. 위 검색칸에 이름·코드·관리업체를 넣어 찾아주세요.` : ''}</p>
 
   ${list.map(s=>`
     <div class="inrow">
       <span class="d">${esc(s.code)}</span>
       <span class="n">${esc(s.name)}</span>
       <span class="cat k1">${esc(s.kind)}</span>
+      ${s.mgr ? `<span class="cat">${esc(s.mgr)}</span>` : ''}
       <span class="m">${s.addr ? esc(s.addr) : '주소 미등록'}</span>
       <span class="rm" style="margin-left:auto">
         <button class="btn sm" onclick="editStore('${jsq(s.code)}')">수정</button>
@@ -3963,6 +3892,7 @@ function saveStoreEdit(){
   if(code !== s.code && STORES.some(x => x.code === code)){ toast(`거래처 코드 ${code} 는 이미 쓰고 있습니다`); return; }
   const was = s.name;
   s.code = code; s.name = name; s.addr = ($('#stAddr').value || '').trim(); s.kind = $('#stKind').value;
+  s.mgr = ($('#stMgr').value || '').trim();
   /* 이름이 바뀌면 이미 등록된 업무·예정 업무의 매장 이름도 함께 고칩니다 */
   if(was !== name){
     TASKS.forEach(t => { if(t.store === was) t.store = name; });
@@ -4030,7 +3960,8 @@ function parseStoreRows(text){
     /* 제목 줄 건너뛰기 */
     if(i === 0 && !code && /코드|거래처|상호/.test(raw)) return;
     if(!code || !name){ bad.push(raw); return; }
-    out.push({code, name, addr:(cell[2]||''), kind: code.startsWith('2') ? '대리점' : '매장'});
+    out.push({code, name, addr:(cell[2]||''), mgr:(cell[3]||''),
+              kind: code.startsWith('2') ? '대리점' : '매장'});
   });
   return {out, bad};
 }
@@ -4044,7 +3975,7 @@ function uploadStores(){
   out.forEach(r => {
     const old = STORES.find(s => s.code === r.code);
     /* 주소 칸을 비워서 올린 줄은 원래 주소를 지우지 않고 그대로 둡니다 */
-    if(old){ old.name = r.name; if(r.addr) old.addr = r.addr; old.kind = r.kind; upd++; }
+    if(old){ old.name = r.name; if(r.addr) old.addr = r.addr; if(r.mgr) old.mgr = r.mgr; old.kind = r.kind; upd++; }
     else { STORES.unshift(r); add++; }
   });
   cur.stPaste = '';
@@ -4076,8 +4007,8 @@ function addStore(){
   let code = $('#stCode').value.trim().replace(/[^0-9]/g,'');
   if(!code) code = nextStoreCode(kind);
   if(STORES.some(s=>s.code===code)){ toast(`코드 ${code} 는 이미 있습니다`); return; }
-  STORES.unshift({code, name, kind, addr:$('#stAddr').value.trim()});
-  $('#stName').value=''; $('#stAddr').value=''; $('#stCode').value='';
+  STORES.unshift({code, name, kind, addr:$('#stAddr').value.trim(), mgr:($('#stMgr').value||'').trim()});
+  $('#stName').value=''; $('#stAddr').value=''; $('#stCode').value=''; $('#stMgr').value='';
   toast(`거래처 등록 — ${name} (${code})`);
   render();
 }
@@ -4807,7 +4738,10 @@ function loadAll(){
   if(s.DUTY)      DUTY     = s.DUTY;
   if(s.DUTY_PAY)  DUTY_PAY = s.DUTY_PAY;
   if(s.DUTY_AS)   DUTY_AS  = s.DUTY_AS;
-  if(s.STORES)    STORES   = s.STORES;
+  /* 옛 저장본에는 4월 리포트에서 뽑아 쓰던 목업 거래처 54곳이 들어 있습니다.
+     실제 거래처 목록(1,377곳)을 받았으니 옛 목록은 버리고 새 목록으로 시작합니다.
+     (관리업체 칸 mgr 이 있으면 실데이터 이후에 저장된 것 — 그대로 씁니다) */
+  if(s.STORES && s.STORES.some(x => x && x.mgr !== undefined)) STORES = s.STORES;
   if(s.USAGE)     USAGE    = s.USAGE;
   if(typeof s.NOTICE === 'string') NOTICE = s.NOTICE;
   if(typeof s.MANUAL_ON === 'boolean') MANUAL_ON = s.MANUAL_ON;
@@ -4852,123 +4786,6 @@ function resetAll(){
   location.reload();
 }
 
-/* ===== 컨펌 체크리스트 겹침창 — 임시. 컨펌 끝나면 이 묶음을 지웁니다 =====
-   메뉴로 화면을 옮기면 보던 것을 잃어버려서, 위에 겹쳐 띄웁니다. */
-let cfOpen = false;
-function openConfirmPanel(){
-  cfOpen = true;
-  document.getElementById('cfmask').classList.add('on');
-  const b = document.getElementById('cfback'); if(b) b.classList.remove('on');
-  paintConfirmPanel();
-}
-function closeConfirmPanel(){
-  cfOpen = false;
-  document.getElementById('cfmask').classList.remove('on');
-}
-function paintConfirmPanel(){
-  const b = document.getElementById('cfBody'); if(!b) return;
-  const y = b.scrollTop;
-  b.innerHTML = viewConfirm();
-  b.scrollTop = y;                    /* 답을 고를 때마다 맨 위로 튀지 않게 */
-}
-
-/* ================= 컨펌 알람 =================
-   ⚠️ 임시 기능입니다. 개발이 끝나면 data-alarm.js 의 ALARM_ON 을 false 로 두거나,
-      이 묶음 · <div class="updbar"> 블록 · <script src="data-alarm.js"> 한 줄을 지우면 됩니다.
-
-   앱을 고쳐 올리면 data-alarm.js 의 APP_VERSION 이 바뀝니다. 팀장님이 앱을 열거나
-   열어둔 채로 새 버전이 올라오면 짧은 알림음과 함께 위에 띠를 띄웁니다. */
-const ALARM_SEEN_KEY = 'poson_seen_ver';
-let ALARM_LIVE = (typeof APP_VERSION !== 'undefined') ? APP_VERSION : '';
-let alarmArmed = false;
-
-function alarmOn(){ return typeof ALARM_ON !== 'undefined' && ALARM_ON; }
-
-/* 알림 — 짧은 알림음만 냅니다 (음성 읽어주기는 뺐습니다 · 재하님 요청 2026-08-03) */
-function alarmSpeak(){
-  if(!alarmOn()) return;
-  alarmBeep();
-}
-/* 짧은 알림음 — 끄려면 아래 함수 첫 줄에 return; 을 넣으면 됩니다 */
-function alarmBeep(){
-  try{
-    const C = window.AudioContext || window.webkitAudioContext; if(!C) return;
-    const ctx = new C();
-    [880, 1245].forEach((f, i) => {
-      const o = ctx.createOscillator(), g = ctx.createGain();
-      const t0 = ctx.currentTime + i * 0.16;
-      o.type = 'sine'; o.frequency.value = f;
-      g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.14);
-      o.connect(g); g.connect(ctx.destination);
-      o.start(t0); o.stop(t0 + 0.16);
-    });
-  }catch(e){}
-}
-/* 자동 로그인으로 들어와 아직 아무것도 누르지 않았으면, 처음 누를 때 소리를 냅니다
-   (브라우저가 손대지 않은 화면에서는 소리를 막습니다) */
-function alarmArm(){
-  if(alarmArmed) return;
-  alarmArmed = true;
-  const fire = () => {
-    document.removeEventListener('click', fire);
-    document.removeEventListener('keydown', fire);
-    alarmSpeak();
-  };
-  document.addEventListener('click', fire);
-  document.addEventListener('keydown', fire);
-}
-function alarmShow(sub){
-  const bar = document.getElementById('updbar'); if(!bar) return;
-  const s = document.getElementById('ubSub');
-  if(s) s.textContent = sub || `${CHANGELOG.t} · ${ALARM_SAY}`;
-  bar.classList.add('on');
-}
-function alarmClose(){
-  const bar = document.getElementById('updbar'); if(bar) bar.classList.remove('on');
-  try{ localStorage.setItem(ALARM_SEEN_KEY, ALARM_LIVE); }catch(e){}
-}
-function alarmOpenList(){
-  const box = document.getElementById('ubList'); if(!box) return;
-  if(!box.innerHTML){
-    box.innerHTML = `<b>${esc(CHANGELOG.t)}</b>
-      <ul>${CHANGELOG.items.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`;
-  }
-  box.classList.toggle('on');
-}
-function alarmGoConfirm(){
-  alarmClose();
-  openConfirmPanel();
-}
-/* 로그인 직후 · 앱 시작 직후에 부릅니다 */
-function alarmAfterLogin(hasGesture){
-  if(!alarmOn()) return;
-  let seen = '';
-  try{ seen = localStorage.getItem(ALARM_SEEN_KEY) || ''; }catch(e){}
-  if(seen === ALARM_LIVE) return;              /* 이미 본 회차면 조용히 넘어갑니다 */
-  if(hasGesture) alarmSpeak(); else alarmArm();
-  alarmShow();
-  NOTIS.unshift({ic:'i-bell', b:'포스온',
-                 t:` 앱을 고쳤습니다 — ${CHANGELOG.t}. ${ALARM_SAY}`, time:'방금', isNew:true});
-  renderNoti();
-}
-/* 앱을 켜둔 채로 새 내용이 올라오면 잡아냅니다 (1분마다 확인) */
-function alarmPoll(){
-  if(!alarmOn()) return;
-  fetch('data-alarm.js?cb=' + new Date().getTime(), {cache:'no-store'})
-    .then(r => r.text())
-    .then(txt => {
-      const m = txt.match(/APP_VERSION\s*=\s*'([^']+)'/);
-      if(!m || m[1] === ALARM_LIVE) return;
-      ALARM_LIVE = m[1];
-      alarmSpeak();
-      alarmShow(`새 내용이 올라왔습니다 — 새로고침(F5) 하시면 보입니다 · ${ALARM_SAY}`);
-    })
-    .catch(() => {});      /* 파일을 직접 열어본 경우에는 확인하지 않습니다 */
-}
-if(typeof window !== 'undefined') setInterval(alarmPoll, 60000);
-
 /* ================= 로그인 =================
    아이디 · 암호로 들어옵니다. 계정은 관리자가 만들어 전달합니다.
    「자동 로그인」을 켜면 이 브라우저에 남아 다음에 바로 들어옵니다 —
@@ -4995,7 +4812,6 @@ function doLogin(){
   hideLogin();
   toast(`${t.name} ${t.rank} 님, 안녕하세요`);
   render(); markNav();
-  alarmAfterLogin(true);   /* 임시(컨펌 알람) — 개발 끝나면 이 한 줄을 지웁니다 */
 }
 function logout(){
   try{ localStorage.removeItem(AUTH_KEY); sessionStorage.removeItem(AUTH_KEY); }catch(e){}
@@ -5022,10 +4838,6 @@ loadAll();
 restoreLogin();
 applyHash();
 bump(); render(); markNav(); paintAgo();
-/* 자동 로그인으로 바로 들어온 경우에도 알람을 띄웁니다
-   임시(컨펌 알람) — 개발 끝나면 이 두 줄을 지웁니다 */
-const lgEl = document.getElementById('login');
-if(lgEl && lgEl.classList.contains('off')) alarmAfterLogin(false);
 </script>
 </body>
 </html>
