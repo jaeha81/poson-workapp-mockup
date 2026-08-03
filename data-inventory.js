@@ -7,15 +7,16 @@
 /* 팀 — 시트 담당자 열 순서 그대로
    role  : admin(관리자) · accounting(회계담당자) · engineer(뷰어)
    duty  : 당직 대상자 — 관리자가 직원 등록 후 켭니다 (김기홍 팀장 요청 2026-08-02)
-   uid/pw: 로그인 아이디와 암호. 관리자가 계정을 만들어 직원에게 전달합니다
+   uid   : 로그인 아이디. 관리자가 계정을 만들어 직원에게 전달합니다
            (김기홍 팀장 요청 2026-08-02 3차)
-   ⚠️ 아래 암호는 시연용 임시값입니다. 실서비스에서는 서버에 암호화해서 보관합니다. */
+   암호는 사람마다 두지 않습니다 — 전 직원이 사내 공통 암호 1개를 씁니다
+   (재하님 지시 2026-08-03). 그 값은 index.html 의 COMMON_PW 에 있습니다. */
 const TEAM = [
-  {id:'kkh', name:'김기홍', rank:'팀장', role:'admin',    car:true, duty:true,  uid:'kkh', pw:'1234'},
-  {id:'kdh', name:'김두혁', rank:'과장', role:'admin',    car:true, duty:true,  uid:'kdh', pw:'1234'},
-  {id:'lyj', name:'임영준', rank:'대리', role:'engineer', car:true, duty:true,  uid:'lyj', pw:'1234'},
-  {id:'jdh', name:'장두환', rank:'대리', role:'engineer', car:true, duty:false, uid:'jdh', pw:'1234'},
-  {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true, duty:false, uid:'kdw', pw:'1234'}
+  {id:'kkh', name:'김기홍', rank:'팀장', role:'admin',    car:true, duty:true,  uid:'kkh'},
+  {id:'kdh', name:'김두혁', rank:'과장', role:'admin',    car:true, duty:true,  uid:'kdh'},
+  {id:'lyj', name:'임영준', rank:'대리', role:'engineer', car:true, duty:true,  uid:'lyj'},
+  {id:'jdh', name:'장두환', rank:'대리', role:'engineer', car:true, duty:false, uid:'jdh'},
+  {id:'kdw', name:'김동화', rank:'주임', role:'engineer', car:true, duty:false, uid:'kdw'}
 ];
 
 

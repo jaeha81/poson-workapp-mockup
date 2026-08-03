@@ -1177,9 +1177,11 @@ b.astm.none{color:var(--t4);font-weight:600}
   <symbol id="i-members" viewBox="0 0 24 24"><circle cx="9.4" cy="8" r="3.5"/><path d="M3.4 20.2c0-3.4 2.7-5.7 6-5.7s6 2.3 6 5.7"/><path d="M16.4 5.3a3.5 3.5 0 0 1 0 6.6"/><path d="M18.1 14.9c2.2.7 3.5 2.6 3.5 5.3"/></symbol>
 </defs></svg>
 
+<!-- 시연용임을 첫눈에 알 수 있게 (재하님 지시 2026-08-03) — 실제 업무는 별도 실서버 앱에서 씁니다 -->
 <div class="mockbar">
-  <b>화면 초안 (Mockup v1)</b>
-  <span>실제 데이터 아님 · 넣으신 내용은 <b>이 브라우저에 저장</b>돼 새로고침해도 남습니다
+  <b style="font-size:13.5px">⚠️ 시연용 견본 — 실제 업무를 넣지 마세요</b>
+  <span>적으신 내용은 <b>이 브라우저에만</b> 남습니다. 다른 직원에게 보이지 않고 회사 서버에도 쌓이지 않습니다.
+    실제 업무용 앱은 <b>준비 중</b>입니다.
     <button onclick="resetAll()" style="margin-left:8px;border:1px solid rgba(255,255,255,.5);background:none;
       color:inherit;border-radius:6px;padding:2px 8px;font:inherit;cursor:pointer">처음으로 되돌리기</button></span>
 </div>
@@ -1252,7 +1254,7 @@ b.astm.none{color:var(--t4);font-weight:600}
   <div class="lgbox">
     <div class="lmark">POSON</div>
     <h2>업무관리 로그인</h2>
-    <p class="ldesc">계정은 관리자가 만들어 전달합니다.</p>
+    <p class="ldesc">아이디는 관리자가 만들어 전달합니다. 암호는 <b>사내 공통 암호 1개</b>입니다.</p>
     <div class="f"><label>아이디</label>
       <input type="text" id="lgId" autocomplete="username" onkeydown="if(event.key==='Enter')doLogin()"></div>
     <div class="f"><label>암호</label>
@@ -1263,8 +1265,8 @@ b.astm.none{color:var(--t4);font-weight:600}
     <button class="btn pri lbtn" onclick="doLogin()">로그인</button>
     <!-- ⛔ 아이디·암호를 이 화면에 적어두지 않습니다 (재하님 지시 2026-08-03).
          계정은 관리자가 「직원 · 권한」에서 만들어 직원에게 전달합니다. -->
-    <p class="lhint">아이디와 암호는 <b>관리자에게 받으세요</b>. 가입 신청은 따로 없습니다.<br>
-      암호를 잊으셨으면 관리자가 새로 정해 드립니다.</p>
+    <p class="lhint">아이디와 공통 암호는 <b>관리자에게 받으세요</b>. 가입 신청은 따로 없습니다.<br>
+      암호는 전 직원이 같은 것을 씁니다 — 회사 밖으로 알려주지 마세요.</p>
   </div>
 </div>
 
@@ -1433,13 +1435,15 @@ b.astm.none{color:var(--t4);font-weight:600}
 ## 1-1. 로그인
 
 1. 앱 주소를 엽니다 (휴대폰도 같은 주소)
-2. 아이디 · 암호를 넣습니다 — 계정은 **팀장님이 만들어 전달**합니다. 따로 가입 신청하지 않습니다
+2. **아이디**는 사람마다 다르고, **암호는 전 직원이 같은 것 하나**를 씁니다
+   — 둘 다 **팀장님이 알려줍니다.** 따로 가입 신청하지 않습니다
 3. **자동 로그인**에 체크하면 다음부터 암호 없이 바로 들어옵니다 (본인 폰에서만 켜세요)
 
-> **가입 신청은 없습니다.** 관리자(팀장님)가 「직원 · 권한」 화면에서 계정을 만들어
-> **아이디와 임시 암호를 카카오톡으로 보내드립니다.** 그것으로 들어오시면 됩니다.
+> **가입 신청은 없습니다.** 관리자(팀장님)가 「직원 · 권한」 화면에서 아이디를 만들어
+> **아이디와 사내 공통 암호를 카카오톡으로 보내드립니다.** 그것으로 들어오시면 됩니다.
 
-암호를 잊으면 팀장님께 말씀하세요. 「직원 · 권한」 화면에서 **새 암호를 정해** 전달해 드립니다.
+⛔ **공통 암호는 회사 밖으로 나가면 안 됩니다.** 남의 아이디를 알면 그 사람으로 들어갈 수 있습니다.
+암호를 잊으면 팀장님께 물어보세요 — 사람마다 다른 암호는 없으므로 새로 정할 일도 없습니다.
 로그인 화면에는 아이디·암호가 적혀 있지 않습니다 — 아무나 보면 안 되기 때문입니다.
 
 ## 1-2. 화면은 세 덩어리입니다
@@ -1720,20 +1724,25 @@ b.astm.none{color:var(--t4);font-weight:600}
 
 ## 3-15. 【관리자 전용】 직원 · 권한
 
-### 계정 만들기 · 아이디 · 암호
+### 사내 공통 암호 — 먼저 한 번만 정합니다
 
-직원이 가입 신청하지 않습니다. **관리자가 만들어 전달**합니다.
+**암호는 사람마다 두지 않습니다. 전 직원(팀장님 포함)이 같은 암호 하나를 씁니다.**
 
-1. 이름 · 직급 · **아이디** · **임시 암호** · 입사일을 넣고 **「계정 만들기」**
-   - 임시 암호를 비우면 **8자리 임시 암호를 자동으로 만들어** 줍니다 (0·O·1·l 처럼 헷갈리는 글자는 뺍니다)
+1. 화면 맨 위 **「사내 공통 암호」** 칸에 쓸 암호를 적고 **「저장」** (4자 이상)
+2. **「직원 안내 문구 복사」** → 카카오톡 단체방에 붙여넣어 전 직원에게 알립니다
+
+> ⛔ **알고 계셔야 할 것** — 암호가 하나라서 **남의 아이디를 알면 그 사람으로 들어갈 수 있습니다.**
+> 그래서 **팀장님(관리자) 아이디는 직원에게 알려주지 마세요.** 이것이 유일한 방어입니다.
+> 퇴사자는 암호를 바꾸지 않고 그 사람 줄의 **「미사용 처리」** 로 막습니다.
+
+### 계정 만들기 · 아이디
+
+직원이 가입 신청하지 않습니다. **관리자가 아이디를 만들어 전달**합니다.
+
+1. 이름 · 직급 · **아이디** · 입사일을 넣고 **「계정 만들기」**
 2. 목록에서 **「전달 문구 복사」** → 카카오톡에 그대로 붙여넣어 본인에게 보냅니다
-3. 나중에 바꾸려면 그 사람 줄의 **「아이디 · 암호」** 를 누릅니다
-   - 아이디를 고치거나, 새 암호를 넣고 **「저장」**
-   - **새 암호 칸을 비우면 암호는 그대로** 둡니다 (아이디만 바꿀 때)
-
-> 🔒 **암호는 목록에 보여주지 않습니다.** 「암호 설정됨」 표시만 나옵니다.
-> 직원이 암호를 잊으면 **새로 정해서 전달**하는 방식입니다 — 예전 암호를 알아낼 방법은 없습니다.
-> (실제 서버에서는 암호를 암호화해 저장하므로 관리자도 원래 암호를 볼 수 없습니다.)
+   (아이디와 공통 암호가 함께 들어갑니다)
+3. 나중에 아이디를 고치려면 그 사람 줄의 **「아이디」** → 고치고 **「저장」**
 
 **그 밖 버튼**
 
@@ -1756,14 +1765,13 @@ b.astm.none{color:var(--t4);font-weight:600}
 
 ## 3-16. 【관리자 전용】 관리자 페이지
 
-메뉴 맨 아래 **「관리자 페이지」** 하나에 팀장님만 쓰는 것 세 가지가 들어 있습니다.
+메뉴 맨 아래 **「관리자 페이지」** 하나에 팀장님만 쓰는 것 두 가지가 들어 있습니다.
 일반 직원 화면에는 **이 메뉴 자체가 보이지 않습니다.**
 
 | 탭 | 무엇 |
 |---|---|
-| **컨펌 체크리스트** | 고칠 곳을 적어 **개발자에게 바로 보내는** 창구 |
+| **컨펌 체크리스트** | ① **실서버 세팅 — 정해주셔야 할 것** 5가지 ② 고칠 곳을 개발자에게 보내는 창구 |
 | **앱 관리 › 가이드북** | 지금 보고 계신 이 책. 앱 안에서 읽고 **인쇄 · 파일로 내려받기** |
-| **앱 관리 › 세팅 경로** | Vercel · Supabase **가입부터 표 만들기까지 8단계** |
 
 ### ① 컨펌 체크리스트
 
@@ -1783,25 +1791,25 @@ b.astm.none{color:var(--t4);font-weight:600}
 - **「파일로 내려받기」** — 파일로 받아 회사 공유 폴더에 두거나 카톡으로 보낼 수 있습니다
 - 목차 단추를 누르면 그 장으로 바로 내려갑니다
 
-### ③ 앱 관리 › 세팅 경로 — 실제 서버로 올릴 때
+### ③ 실서버 세팅 — 정해주셔야 할 것 (컨펌 체크리스트 맨 위)
 
-지금은 화면 초안이라 자료가 **각자 브라우저에만** 남습니다.
-전 직원이 같은 자료를 보려면 아래 8단계를 마쳐야 합니다. **버튼이 대신 해줍니다.**
+지금 보고 계신 것은 **견본**입니다. 적으신 내용은 **각자 브라우저에만** 남고 회사 서버에 쌓이지 않습니다.
+전 직원이 같은 자료를 보려면 자료가 쌓일 곳을 따로 마련해야 합니다.
 
-| 단계 | 하는 일 | 버튼이 해주는 것 |
+**팀장님이 정해주실 것은 다섯 가지뿐입니다.** 나머지는 개발자가 합니다.
+
+| # | 여쭙는 것 | 왜 |
 |---|---|---|
-| 1 | Vercel 가입 (앱이 도는 곳) | 가입 페이지 바로 열기 |
-| 2 | Supabase 가입 (자료가 쌓이는 곳) | 가입 페이지 바로 열기 |
-| 3 | 프로젝트 만들기 — **지역은 꼭 서울** | 이름 복사 · 만든 뒤 주소를 넣으면 **다음 단계 링크가 그 프로젝트로 바로** 갑니다 |
-| 4 | **표 23개 자동으로 만들기** | **「SQL 전체 복사」 → 붙여넣고 Run** 이 끝입니다 |
-| 5 | 앱 올리기 | 환경변수 이름 복사 + Vercel 새 프로젝트 열기 |
-| 6 | `work.poson.co.kr` 연결 | 도메인 관리 화면에 넣을 **한 줄 복사** |
-| 7 | 관리자 · 직원 계정 만들기 | 「직원 · 권한」 화면으로 이동 |
-| 8 | 백업 확인 | Supabase 백업 화면 열기 |
+| 1 | 계정을 **누구 이름**으로 만들까요 | ⛔ 개발자 개인 계정으로 만들면 나중에 회사로 넘기는 동안 앱이 멈춥니다 |
+| 2 | 가입에 쓸 **회사 이메일** | 가입 확인 메일과 요금 청구서가 갑니다 |
+| 3 | **월 6~7만원** 을 승인해 주시겠습니까 | 앱 도는 곳 약 2.8만 + 자료 쌓이는 곳 약 3.5만 |
+| 4 | **언제** 시작할까요 | 계정이 오면 표 만들기·앱 올리기·주소 연결까지 3~4주 |
+| 5 | **접속 주소** 는 무엇으로 (예: `work.poson.co.kr`) | 직원들이 주소창에 칠 주소 |
 
-- 체크한 것은 **저장되니** 중간에 닫으셔도 됩니다. 위에 진행률이 나옵니다
-- 맨 아래 **「개발자에게 알리기」** — 어디까지 하셨는지 한 번에 전달됩니다
-- 비용은 **월 6~7만원** (Vercel 약 3만 + Supabase 약 3.5만). 10명이든 20명이든 거의 같습니다
+- 고르신 것은 **저장되니** 중간에 닫으셔도 됩니다. 위에 「몇 개 답함」 이 나옵니다
+- **「개발자에게 보내기」** 를 누르면 메일로 갑니다. 막히면 **「복사하기」** 로 카톡에 붙여넣어 주세요
+- **지금 여기서 가입하실 것은 없습니다.** 견본에서 진짜 회사 계정이 만들어지면 안 되기 때문입니다
+- 실제 가입 8단계 화면은 **실서버 앱**에 붙어 있습니다 (개발자가 안내합니다)
 
 > 🔒 **키와 비밀번호는 이 앱 화면에 절대 넣지 마세요.**
 > 데이터베이스 비밀번호와 API 키는 **회사 비밀번호 관리함**에만 보관하고,
@@ -1880,10 +1888,10 @@ b.astm.none{color:var(--t4);font-weight:600}
 | 매장 주소·관리업체를 알고 싶다 | 업무 등록 칸에서 **이름 일부 검색**, 또는 **거래처 관리**(관리자) |
 | 신입이 들어왔다 | **직원 · 권한** → 계정 만들기 + **신입 지정** |
 | 직원이 그만뒀다 | **직원 · 권한** → **미사용 처리** (삭제 아님) |
-| 암호를 잊었다 | 팀장님께 → **직원 · 권한** → 그 사람 줄 **「아이디 · 암호」** 로 새로 정함 |
+| 암호를 잊었다 | 팀장님께 물어보면 됩니다 — **공통 암호 하나**라 새로 정할 것이 없습니다 |
 | 앱에 고칠 게 있다 | 팀장님께 → **관리자 페이지 › 컨펌 체크리스트** |
 | 이 가이드북을 다시 보려면 | **관리자 페이지 › 앱 관리 › 가이드북** |
-| 실제 서버로 올리려면 | **관리자 페이지 › 앱 관리 › 세팅 경로** |
+| 실제 서버로 올리려면 | **관리자 페이지 › 컨펌 체크리스트 › 실서버 세팅** 5가지에 답해주세요 |
 
 ---
 
@@ -2002,7 +2010,9 @@ b.astm.none{color:var(--t4);font-weight:600}
 *고칠 것이 있으면 팀장님께 말씀하시고, 팀장님은 앱의 **「관리자 페이지 › 컨펌 체크리스트」** 로 보내주세요.*
 </script>
 <script src="data-confirm.js"></script><!-- 수정 요청 창구 — 관리자 페이지 안에서 열립니다 -->
-<script src="data-admin.js"></script><!-- 관리자 페이지 — 컨펌 체크리스트 · 가이드북 · 세팅 경로 -->
+<script src="data-admin.js"></script><!-- 관리자 페이지 — 컨펌 체크리스트 · 가이드북 -->
+<!-- ⛔ setup-실앱용.js(Vercel·Supabase 가입 8단계)는 일부러 부르지 않습니다.
+     견본에서 진짜 회사 계정이 만들어지면 안 되기 때문입니다. 실서버 앱에서 씁니다. -->
 <script>
 /* ================= 목업 데이터 ================= */
 /* 로그인 사용자 — 우측 상단에서 바꿔가며 권한 차이를 볼 수 있습니다 */
@@ -2105,8 +2115,8 @@ const CHAPTERS = [
 let cur = {view:'tasks', filter:'today', taskId:null, tedit:false, planId:null, mchap:null, msec:null,
            mq:'', sq:'', fq:'', fcat:'전체', fcase:null, date:'2026-07-29',
            em:'2026-07', dm:'2026-07', hy:'2026', hq:'', scat:null,
-           atab:'confirm', gq:'', sqlOpen:false,    /* 관리자 페이지 — 탭 · 가이드북 검색 · SQL 펼침 */
-           acEdit:''};                              /* 아이디·암호를 고치고 있는 직원 */
+           atab:'confirm', gq:'',                   /* 관리자 페이지 — 탭 · 가이드북 검색 */
+           acEdit:''};                              /* 아이디를 고치고 있는 직원 */
 const ymd = dt => {
   const p = n => String(n).padStart(2,'0');
   return `${dt.getFullYear()}-${p(dt.getMonth()+1)}-${p(dt.getDate())}`;
@@ -5030,11 +5040,13 @@ function signupPanel(){
   const can = isAdmin();
   return `
   <div class="panel">
-    <h4>직원 계정 <span style="color:var(--t3);font-weight:500">— 관리자가 아이디와 임시 암호를 만들어 직원에게 전달합니다</span></h4>
+    <h4>직원 계정 <span style="color:var(--t3);font-weight:500">— 관리자가 아이디를 만들어 직원에게 전달합니다</span></h4>
     <div class="desc" style="margin:0 0 12px">
-      직원이 따로 가입 신청을 하지 않습니다. 관리자가 여기서 계정을 만들고
-      <b>아이디 · 암호를 알려주면</b> 직원이 그것으로 로그인합니다.
+      직원이 따로 가입 신청을 하지 않습니다. 관리자가 여기서 아이디를 만들고
+      <b>아이디와 아래 공통 암호를 알려주면</b> 직원이 그것으로 로그인합니다.
     </div>
+
+    ${can ? pwPanel() : ''}
 
     ${can ? `
     <div class="grid2">
@@ -5043,7 +5055,7 @@ function signupPanel(){
     </div>
     <div class="grid2">
       <div class="f"><label>아이디</label><input type="text" id="acId" placeholder="예) psj"></div>
-      <div class="f"><label>임시 암호</label><input type="text" id="acPw" placeholder="비우면 임시 암호를 만들어 드립니다"></div>
+      <div class="f"></div>
     </div>
     <!-- 입사일 (김기홍 팀장 요청 2026-08-02 4차) -->
     <div class="grid2">
@@ -5059,31 +5071,69 @@ function signupPanel(){
         <span class="av">${esc(t.name[0])}</span>
         <span class="nm" style="min-width:86px">${esc(t.name)} ${esc(t.rank)}</span>
         <span class="cat k1">${esc(t.uid || '아이디 없음')}</span>
-        <span class="cat k3">암호 ${t.pw ? '설정됨' : '없음'}</span>
         ${t.off?'<span class="cat k3">미사용</span>':''}
         <span class="tm">${ROLE_LABEL[t.role]||'뷰어'}${t.name===ME?' · 지금 로그인 중':''}
           · 입사일 ${t.hire ? esc(t.hire) : '미등록'}</span>
         ${can?`<span class="rm">
-          <button class="btn sm" onclick="editAccount('${jsq(t.id)}')">아이디 · 암호</button>
+          <button class="btn sm" onclick="editAccount('${jsq(t.id)}')">아이디</button>
           <button class="btn sm" onclick="setHire('${jsq(t.id)}')">입사일</button>
           <button class="btn sm" onclick="copyAccountNote('${jsq(t.id)}')">전달 문구 복사</button></span>`:''}
       </div>`).join('')}
     </div>
     ${can ? `<p style="font-size:12px;color:var(--t3);margin-top:10px">
-      암호는 화면에 보여주지 않습니다. 잊으셨으면 <b>새로 정해</b> 본인에게 전달하세요.
-      「전달 문구 복사」를 누르면 카카오톡에 붙여넣을 안내문이 만들어집니다.</p>` : ''}
+      암호는 위의 <b>공통 암호 1개</b>뿐입니다 — 사람마다 따로 정하지 않습니다.
+      「전달 문구 복사」를 누르면 아이디와 공통 암호가 담긴 안내문이 만들어집니다.</p>` : ''}
   </div>`;
 }
-/* 아이디·암호를 관리자가 직접 정합니다 (재하님 지시 2026-08-03)
-   ⚠️ 목업이라 암호를 그대로 보관합니다. 실서비스에서는 서버가 암호화해 저장합니다. */
+/* ===== 사내 공통 암호 — 관리자만 바꿉니다 (재하님 지시 2026-08-03) =====
+   ⚠️ 목업이라 브라우저 안에 그대로 둡니다. 실서비스에서는 서버가 암호화해 보관합니다. */
+function pwPanel(){
+  return `
+  <div class="note w" style="margin:0 0 14px">
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px">
+      <div class="f" style="flex:0 0 190px;margin:0"><label>사내 공통 암호</label>
+        <input type="text" id="cpw" value="${esc(COMMON_PW)}" placeholder="예) poson2026"></div>
+      <button class="btn sm pri" onclick="saveCommonPw()">저장</button>
+      <button class="btn sm" onclick="copyCommonPw()">직원 안내 문구 복사</button>
+    </div>
+    <!-- .note b 는 줄바꿈(display:block)이라 여기서만 한 줄로 되돌립니다 -->
+    <div style="font-size:12.5px;line-height:1.6;margin-top:9px" class="cpw-t">
+      <style>.cpw-t b{display:inline;margin:0}</style>
+      전 직원이 <b>이 암호 하나</b>를 씁니다 (관리자도 같습니다). 로그인은 <b>각자 아이디 + 이 암호</b>입니다.<br>
+      ⛔ 그래서 <b>남의 아이디를 알면 그 사람으로 들어갈 수 있습니다</b> —
+      관리자 아이디는 직원에게 알려주지 마세요.<br>
+      퇴사자는 암호를 바꾸지 않고 <b>「미사용 처리」</b>로 막습니다.
+    </div>
+  </div>`;
+}
+function saveCommonPw(){
+  if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
+  const v = ($('#cpw').value || '').trim();
+  if(v.length < 4){ toast('암호는 4자 이상으로 정해주세요'); return; }
+  COMMON_PW = v;
+  bump();
+  toast(`공통 암호를 바꿨습니다 — 전 직원에게 알려주세요`);
+  render();
+}
+function copyCommonPw(){
+  const txt = [
+    '[포스온 업무관리] 사내 공통 암호 안내',
+    `암호: ${COMMON_PW}`,
+    '아이디는 각자 다릅니다 — 모르시면 관리자에게 물어보세요.',
+    '주소: https://jaeha81.github.io/poson-workapp-mockup/',
+    '',
+    '※ 이 암호는 회사 밖으로 나가면 안 됩니다.'
+  ].join('\n');
+  if(typeof copyText === 'function') copyText(txt, '안내 문구를 복사했습니다');
+  else toast('복사 기능을 불러오지 못했습니다');
+}
+/* 아이디를 관리자가 직접 정합니다 (재하님 지시 2026-08-03) */
 function acEditRow(t){
   return `
   <div class="prow" style="flex-wrap:wrap;align-items:flex-end;gap:9px;background:var(--bg)">
     <span class="nm" style="min-width:86px;font-weight:700">${esc(t.name)} ${esc(t.rank)}</span>
     <div class="f" style="flex:0 0 150px;margin:0"><label>아이디</label>
       <input type="text" id="edUid" value="${esc(t.uid || '')}" placeholder="예) psj"></div>
-    <div class="f" style="flex:0 0 170px;margin:0"><label>새 암호</label>
-      <input type="text" id="edPw" placeholder="비우면 그대로 둡니다"></div>
     <span class="rm">
       <button class="btn sm pri" onclick="saveAccountEdit('${jsq(t.id)}')">저장</button>
       <button class="btn sm" onclick="cur.acEdit='';render()">취소</button>
@@ -5098,12 +5148,10 @@ function saveAccountEdit(id){
   if(!isAdmin()){ toast('관리자만 바꿀 수 있습니다'); return; }
   const t = TEAM.find(x => x.id === id); if(!t) return;
   const uid = ($('#edUid').value || '').trim();
-  const pw  = ($('#edPw').value || '').trim();
   if(!uid){ toast('아이디를 입력해주세요'); return; }
   if(TEAM.some(x => x.id !== id && (x.uid || '') === uid)){ toast(`아이디 ${uid} 는 이미 쓰고 있습니다`); return; }
   const wasMe = (t.uid === (meObj().uid || ''));
   t.uid = uid;
-  if(pw) t.pw = pw;
   cur.acEdit = '';
   /* 지금 로그인한 사람의 아이디가 바뀌면 저장해 둔 로그인 표시도 함께 고칩니다 */
   if(wasMe && t.name === ME){
@@ -5112,8 +5160,7 @@ function saveAccountEdit(id){
       if(st.getItem(AUTH_KEY)) st.setItem(AUTH_KEY, JSON.stringify({uid}));
     }catch(e){}
   }
-  toast(pw ? `${t.name} — 아이디 ${uid} · 새 암호를 본인에게 전달하세요`
-           : `${t.name} — 아이디를 ${uid} 로 바꿨습니다`);
+  toast(`${t.name} — 아이디를 ${uid} 로 바꿨습니다`);
   render();
 }
 /* 카카오톡·문자에 그대로 붙여넣을 안내문 */
@@ -5123,7 +5170,7 @@ function copyAccountNote(id){
     '[포스온 업무관리] 계정 안내',
     `이름: ${t.name} ${t.rank}`,
     `아이디: ${t.uid || '(미지정)'}`,
-    '임시 암호: (관리자가 정한 암호를 여기에 적어 보내세요)',
+    `암호: ${COMMON_PW}   ← 전 직원 공통입니다`,
     '주소: https://jaeha81.github.io/poson-workapp-mockup/',
     '',
     '※ 처음 들어가시면 「자동 로그인」을 켜두시면 다음부터 바로 열립니다.'
@@ -5154,20 +5201,12 @@ function addAccount(){
   if(activeTeam().length >= LIMITS.seats){
     toast(`사용 인원 한도 ${LIMITS.seats}명입니다. 위에서 한도를 올리세요`); return;
   }
-  const pw = ($('#acPw').value||'').trim() || tempPw();
   const hire = (($('#acHire') && $('#acHire').value) || '').trim();
   TEAM.push({id:'u'+Date.now(), name, rank:($('#acRank').value||'').trim() || '사원',
-             role:'engineer', car:false, duty:false, uid, pw, hire, off:false});
+             role:'engineer', car:false, duty:false, uid, hire, off:false});
   NOTIS.unshift({ic:'i-members', b:name, t:'님의 계정을 만들었습니다', time:'방금', isNew:true});
-  toast(`계정 생성 — 아이디 ${uid} · 암호 ${pw} 를 ${name} 님에게 전달하세요 (뷰어 권한으로 시작)`);
+  toast(`계정 생성 — 아이디 ${uid} · 공통 암호 ${COMMON_PW} 를 ${name} 님에게 전달하세요 (뷰어 권한으로 시작)`);
   bump(); render();
-}
-/* 임시 암호 — 헷갈리는 글자(0·O·1·l)는 빼고 8자리로 만듭니다 */
-function tempPw(){
-  const s = 'abcdefghjkmnpqrstuvwxyz23456789';
-  let out = '';
-  for(let i = 0; i < 8; i++) out += s[Math.floor(Math.random() * s.length)];
-  return out;
 }
 /* ===== 퇴사자 처리 (김기홍 팀장 요청 2026-08-02 4차)
    기본은 「미사용」입니다 — 로그인과 담당자 선택에서만 빠지고 지난 기록은 그대로 둡니다.
@@ -5253,6 +5292,14 @@ function toggleRole(id){
 }
 /* 파일럿 인원 · 관리자 수 한도 — 관리자가 직접 올립니다 */
 const LIMITS = {seats:20, admins:5};
+
+/* ===== 사내 공통 암호 (재하님 지시 2026-08-03) =====
+   사람마다 암호를 따로 두지 않습니다. 전 직원(관리자 포함)이 이 암호 1개를 씁니다.
+   로그인 = 각자 아이디 + 이 공통 암호.
+   ⛔ 알고 계실 점: 아이디를 아는 사람은 그 사람으로 들어갈 수 있습니다.
+      관리자 아이디를 직원에게 알려주지 않는 것으로만 막습니다.
+   퇴사자는 「미사용 처리」로 막습니다 — 공통 암호를 바꿀 필요가 없습니다. */
+let COMMON_PW = '1234';                 /* 시연용 기본값 */
 function setLimit(k, d){
   const min = k==='admins' ? activeTeam().filter(t=>t.role==='admin').length : activeTeam().length;
   const next = LIMITS[k] + d;
@@ -5389,7 +5436,7 @@ function saveAll(){
     localStorage.setItem(SAVE_KEY, JSON.stringify({
       v:2, ME, ROOKIES:[...ROOKIES], TASKS, NOTIS, PLANS, NOTICE, PAY_STATE,
       DUTY, DUTY_PAY, DUTY_AS, STORES, USAGE, ITEMS, INBOUND, OUTBOUND, AUDITS, CHECKLISTS,
-      TEAM, MANUAL_ON, PAY_NOTES
+      TEAM, MANUAL_ON, PAY_NOTES, COMMON_PW
     }));
   }catch(e){}                           /* 저장 공간이 꽉 차도 화면은 계속 씁니다 */
 }
@@ -5406,6 +5453,7 @@ function loadAll(){
   try{ s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null'); }catch(e){ return; }
   if(!s || !(s.v === 1 || s.v === 2)) return;
   saveOn = false;
+  if(s.COMMON_PW) COMMON_PW = s.COMMON_PW;
   if(s.ME)        ME       = s.ME;
   if(s.ROOKIES)   ROOKIES  = new Set(s.ROOKIES);
   if(s.TASKS)     TASKS    = s.TASKS;
@@ -5444,12 +5492,13 @@ function loadAll(){
       const was = ['김기홍','김두혁','임영준'];
       s.TEAM.forEach(t => { t.duty = was.includes(t.name); });
     }
-    /* 아이디·암호가 없던 옛 저장본이면 예전 계정에서 가져오고, 없으면 기본값을 넣습니다 */
+    /* 아이디가 없던 옛 저장본이면 예전 계정에서 가져오고, 없으면 사번을 아이디로 씁니다.
+       사람마다 있던 암호(t.pw)는 공통 암호로 바뀌었으니 버립니다 (재하님 지시 2026-08-03) */
     s.TEAM.forEach(t => {
+      delete t.pw;
       if(t.uid) return;
       const base = TEAM.find(x => x.name === t.name);
       t.uid = (base && base.uid) || t.id;
-      t.pw  = (base && base.pw)  || '1234';
     });
     refill(TEAM, s.TEAM); rebuildLocations();
   }
@@ -5464,7 +5513,7 @@ function resetAll(){
 }
 
 /* ================= 로그인 =================
-   아이디 · 암호로 들어옵니다. 계정은 관리자가 만들어 전달합니다.
+   아이디 + 사내 공통 암호 1개로 들어옵니다. 아이디는 관리자가 만들어 전달합니다.
    「자동 로그인」을 켜면 이 브라우저에 남아 다음에 바로 들어옵니다 —
    끄면 창을 닫을 때까지만 유지됩니다.
    (김기홍 팀장 요청 2026-08-02 3차)
@@ -5475,8 +5524,9 @@ function doLogin(){
   const uid = ($('#lgId').value || '').trim();
   const pw  = $('#lgPw').value || '';
   const err = $('#lgErr');
-  const t = TEAM.find(x => (x.uid || '') === uid && (x.pw || '') === pw);
-  if(!t){ err.textContent = '아이디나 암호가 맞지 않습니다.'; return; }
+  /* 암호는 전 직원 공통 1개입니다 (재하님 지시 2026-08-03) */
+  const t = TEAM.find(x => (x.uid || '') === uid);
+  if(!t || pw !== COMMON_PW){ err.textContent = '아이디나 암호가 맞지 않습니다.'; return; }
   /* 퇴사 처리(미사용)한 계정은 못 들어옵니다 (김기홍 팀장 요청 2026-08-02 4차) */
   if(t.off){ err.textContent = '미사용으로 바뀐 계정입니다. 관리자에게 문의해주세요.'; return; }
   err.textContent = '';
@@ -5506,8 +5556,14 @@ function hideLogin(){
 function restoreLogin(){
   let o = null;
   try{ o = JSON.parse(sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || 'null'); }catch(e){}
-  const t = o && TEAM.find(x => x.uid === o.uid);
-  if(t){ ME = t.name; hideLogin(); } else showLogin();
+  /* 미사용(퇴사) 처리한 계정은 자동 로그인으로도 들어오지 못합니다.
+     공통 암호 방식에서는 「미사용 처리」가 유일한 차단 수단입니다 (Codex 검수 2026-08-03) */
+  const t = o && TEAM.find(x => x.uid === o.uid && !x.off);
+  if(t){ ME = t.name; hideLogin(); }
+  else {
+    try{ localStorage.removeItem(AUTH_KEY); sessionStorage.removeItem(AUTH_KEY); }catch(e){}
+    showLogin();
+  }
 }
 
 /* ================= 시작 ================= */
